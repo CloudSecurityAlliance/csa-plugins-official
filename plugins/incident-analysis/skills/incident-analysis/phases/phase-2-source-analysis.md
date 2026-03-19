@@ -1,0 +1,69 @@
+# Phase 2: Source Analysis & Synthesis
+
+## Purpose
+
+Compare all collected sources. Classify confidence levels. Identify where sources agree, disagree, or leave gaps. Surface source biases.
+
+## Prerequisites
+
+Before starting this phase, read:
+- `references/confidence-framework.md` — the 6-level classification system
+- `references/bias-framework.md` — source motivation analysis
+
+## Process
+
+### Step 1: Extract Claims
+
+Go through each source and extract the key factual claims it makes. For each claim, note:
+- What is being claimed
+- Which source(s) make this claim
+- The date of the claim
+
+Focus on claims about:
+- What happened (attack vector, scope, data affected)
+- When things happened (discovery, disclosure, remediation dates)
+- Who was affected (number of users, types of data, geographic scope)
+- How it was discovered (internal detection, external researcher, attacker disclosure)
+- What was the response (remediation actions, customer notification, regulatory filing)
+
+### Step 2: Cross-Reference and Classify
+
+For each claim, determine its confidence level using the confidence framework:
+
+- Do multiple independent sources agree? → **Confirmed** or **Corroborated**
+- Is it from a single credible source? → **Reported**
+- Is it a logical deduction from other confirmed facts? → **Inferred**
+- Is it speculation or from an anonymous/unverifiable source? → **Speculative**
+- Do sources directly contradict each other? → **Disputed**
+
+### Step 3: Identify Conflicts
+
+Where sources disagree, create a conflicts table:
+- What they disagree about
+- Source A's version (with source name)
+- Source B's version (with source name)
+- Each source's possible motivation for their version (use bias framework)
+- Your assessment of which is more likely accurate, and why
+
+### Step 4: Assess Coverage
+
+Create a coverage matrix showing which aspects of the incident each source addresses. This reveals:
+- What everyone agrees on (high confidence)
+- What only one source covers (lower confidence, but potentially unique insight)
+- What nobody covers (gaps — input for Phase 3b)
+
+## Teaching Moment (if teaching mode is on)
+
+> **Why sources disagree:** Two honest sources can report different things because they have different access to information, different definitions of scope, or different incentive structures. A vendor saying "no customer data was accessed" and a researcher saying "we found customer records in the attacker's dump" might both be technically correct if the vendor defines "accessed" narrowly.
+>
+> **The bias question:** For every source, ask yourself: "Who benefits from this version of events?" A vendor minimizing scope benefits from lower liability. A researcher dramatizing severity benefits from attention. Neither is lying — they're selecting which truths to emphasize.
+
+## Output
+
+Present to the analyst:
+
+1. **Unified Fact Sheet** — every claim, tagged with confidence level and source(s)
+2. **Conflicts Table** — where sources disagree, with bias analysis
+3. **Coverage Matrix** — which sources cover which aspects
+
+Then pause: "Here's what the sources agree and disagree on. Do you want to adjust any confidence levels, add context, or flag anything before I proceed to deep analysis?"

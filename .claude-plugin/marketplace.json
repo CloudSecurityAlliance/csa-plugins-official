@@ -1,0 +1,22 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "csa-plugins-official",
+  "description": "Official Cloud Security Alliance plugins for Claude Code — security analysis, compliance, and cloud security tools",
+  "owner": {
+    "name": "Cloud Security Alliance",
+    "email": "research@cloudsecurityalliance.org"
+  },
+  "plugins": [
+    {
+      "name": "incident-analysis",
+      "description": "Comprehensive security incident analysis with OSINT collection, source cross-referencing, confidence classification, and deep analysis. Teaches analysts the methodology while producing structured reports.",
+      "author": {
+        "name": "Cloud Security Alliance",
+        "email": "research@cloudsecurityalliance.org"
+      },
+      "source": "./plugins/incident-analysis",
+      "category": "security",
+      "homepage": "https://github.com/CloudSecurityAlliance/csa-plugins-official/tree/main/plugins/incident-analysis"
+    }
+  ]
+}
