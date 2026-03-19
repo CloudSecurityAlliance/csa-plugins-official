@@ -1,4 +1,4 @@
-# Phase 2: Source Analysis & Synthesis
+# Phase 3: Source Analysis & Synthesis
 
 ## Purpose
 
@@ -50,7 +50,7 @@ Where sources disagree, create a conflicts table:
 Create a coverage matrix showing which aspects of the incident each source addresses. This reveals:
 - What everyone agrees on (high confidence)
 - What only one source covers (lower confidence, but potentially unique insight)
-- What nobody covers (gaps — input for Phase 3b)
+- What nobody covers (gaps — input for Phase 7)
 
 ## Teaching Moment (if teaching mode is on)
 

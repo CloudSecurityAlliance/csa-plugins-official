@@ -1,4 +1,4 @@
-# Phase 1b: Source Collection
+# Phase 2: Source Collection
 
 ## Purpose
 
@@ -6,7 +6,7 @@ Given a confirmed incident, gather all available sources comprehensively. The go
 
 ## Input
 
-An incident identified in Phase 1a, or provided directly by the analyst (name, CVE, company, URL).
+An incident identified in Phase 1, or provided directly by the analyst (name, CVE, company, URL).
 
 ## Collection Strategy
 
@@ -26,6 +26,17 @@ Search for each of these categories. Not every incident will have all of them.
 8. **Hacker News discussion** — search HN for the incident. Comments often contain technical insights and insider perspectives
 9. **Reddit discussion** — search relevant subreddits (r/netsec, r/cybersecurity, r/sysadmin, etc.)
 10. **Security forum discussions** — if applicable
+
+### Historical Context & Pattern Search
+
+After collecting current sources, research the broader pattern:
+
+1. **Prior incidents at the same vendor** — Has this vendor been breached before? What did they promise to fix last time? Did they follow through?
+2. **Pattern incidents at similar vendors** — Have competitors or similar products experienced comparable breaches? What does this suggest about systemic risk in this market segment?
+3. **Promised vs. delivered remediations** — If the vendor had prior incidents, compare their remediation commitments to what actually changed. Broken promises are analytically significant.
+4. **Regulatory history** — Check for prior FTC actions, state attorney general investigations, GDPR fines, or other regulatory enforcement against this vendor. A vendor with a regulatory track record faces different consequences than a first-time offender.
+
+This historical context feeds directly into later phases — timeline reconstruction, gap analysis, and impact assessment all benefit from knowing whether this is an isolated event or part of a pattern.
 
 ### Web Access Strategy
 
@@ -49,6 +60,8 @@ The analyst may have subscriptions, internal access, or cached copies.
 > **Why comprehensiveness matters:** Most analysts stop at the vendor disclosure and maybe one news article. But vendor disclosures are written to minimize damage. News articles are written to maximize engagement. The truth is usually somewhere in between, and you can only find it by comparing multiple perspectives.
 >
 > **Why I check community sources:** Hacker News and Reddit threads sometimes surface insider knowledge, technical details, or contextual information that doesn't appear in official disclosures. A comment from someone who "used to work at [company]" may be fabricated — or may be the most honest account available. You can't know without cross-referencing.
+>
+> **Why historical context matters:** A breach at a vendor with no prior incidents tells a different story than a breach at a vendor with a pattern of security failures. If the vendor promised MFA enforcement after their last breach and this breach exploited the lack of MFA, that's not just a finding — it's an indictment of their security program's follow-through.
 
 ## Output
 
@@ -65,4 +78,4 @@ For each source found:
 After presenting the inventory, pause and ask:
 - "I've collected N sources (M fully retrieved, P need your help). Would you like to add any sources I missed, or paste content for the ones I couldn't access?"
 
-Wait for the analyst's input before proceeding to Phase 2.
+Wait for the analyst's input before proceeding to Phase 3.

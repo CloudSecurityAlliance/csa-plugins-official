@@ -1,8 +1,8 @@
-# Phase 4: Report Generation
+# Phase 9: Report Generation
 
 ## Purpose
 
-Synthesize all work from Phases 1-3 into a comprehensive incident analysis report and write it to the dataset repo.
+Synthesize all work from Phases 1-8 into a comprehensive incident analysis report and write it to the dataset repo.
 
 ## Prerequisites
 
@@ -19,7 +19,7 @@ Determine where to save the report:
 
 ### Step 2: Generate the Report
 
-Using all the work from prior phases — source inventory, unified fact sheet, conflicts table, timeline, attack chain, and gap analysis — synthesize the report.
+Using all the work from prior phases — source inventory, unified fact sheet, conflicts table, vendor analysis, timeline, regulatory compliance overlay, impact assessment, gap analysis, and defensive recommendations — synthesize the report.
 
 **Key guidelines:**
 - The report should stand alone — a reader who wasn't part of the analysis should be able to understand it fully
@@ -33,6 +33,8 @@ Using all the work from prior phases — source inventory, unified fact sheet, c
 **Report quality bar:**
 - Could a CSA analyst who wasn't part of this analysis use this report to brief leadership? If not, it needs more context.
 - Could the controls mapping plugin take this report and map it to specific controls? If the attack chain and key findings aren't structured enough, improve them.
+- Are the defensive recommendations specific enough that a security team could start implementing them without further research? If they're vague, sharpen them.
+- Does the impact assessment clearly identify all affected populations and severity levels? If a reader can't tell who was harmed and how badly, the impact section needs work.
 
 ### Step 3: Check for Prior Analysis
 
@@ -55,6 +57,6 @@ After writing, tell the analyst:
 
 ## Teaching Moment (if teaching mode is on)
 
-> **Why reports are structured this way:** The executive summary comes first because most readers — especially leadership — won't read the whole report. They need the "so what" immediately. The timeline and technical analysis come next for readers who need to understand what happened. Source analysis and gap analysis are for readers who want to assess the reliability of the findings. Resources go last as a reference section.
+> **Why reports are structured this way:** The executive summary comes first because most readers — especially leadership — won't read the whole report. They need the "so what" immediately. The timeline and technical analysis come next for readers who need to understand what happened. Impact assessment and defensive recommendations follow for readers who need to decide what to do. Source analysis and gap analysis are for readers who want to assess the reliability of the findings. Resources go last as a reference section.
 >
 > **Why we track sources explicitly:** In incident analysis, provenance is everything. A claim without a source is just an opinion. Tracking access dates matters because sources change — vendors update disclosures, articles get corrections, community posts get edited. The report captures a point-in-time snapshot.

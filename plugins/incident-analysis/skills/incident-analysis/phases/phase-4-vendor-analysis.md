@@ -1,4 +1,4 @@
-# Phase 2b: Vendor & Integration Analysis
+# Phase 4: Vendor & Integration Analysis
 
 ## Purpose
 
@@ -76,6 +76,6 @@ Present to the analyst:
 3. **Customer Usage Assessment** — how the victim was using it and what safer alternatives existed
 4. **Shared Responsibility Assessment** — who bears what portion of the exposure
 
-This phase feeds directly into Phase 3b (gap analysis), where the over-permissioning findings become specific, actionable gap items.
+This phase feeds directly into Phase 7 (gap analysis), where the over-permissioning findings become specific, actionable gap items.
 
-Proceed to Phase 3a after presenting — no separate pause needed here since the analyst will review all of Phases 2b through 3b together at the Phase 3b pause.
+Proceed to Phase 5 after presenting — no separate pause needed here since the analyst will review all of Phases 4 through 7 together at the Phase 7 pause.

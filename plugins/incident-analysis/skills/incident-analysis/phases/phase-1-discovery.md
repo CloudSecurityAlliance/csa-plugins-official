@@ -1,4 +1,4 @@
-# Phase 1a: Incident Discovery
+# Phase 1: Incident Discovery
 
 ## Purpose
 
@@ -50,4 +50,4 @@ A confirmed incident selection:
 - **Incident type** (breach, vulnerability, supply chain, misconfiguration, etc.)
 - **Brief description** (2-3 sentences)
 
-Once confirmed, proceed to Phase 1b (source collection).
+Once confirmed, proceed to Phase 2 (source collection).

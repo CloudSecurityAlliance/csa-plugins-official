@@ -15,6 +15,8 @@ Every report should include these, but format and ordering are flexible:
 - **Technical analysis** — Attack chain, vectors, impact. Use MITRE ATT&CK terminology where applicable but keep it readable
 - **Source analysis** — What sources agree/disagree on, confidence assessments, bias notes
 - **Gap analysis** — What's not being said, inferences (all labeled "Analyst/AI assessment:")
+- **Impact assessment** — Affected populations with estimated size, impact types with severity ratings (Critical/High/Moderate/Low/Unknown), differential impact on vulnerable groups, and disclosed vs. actual impact gaps
+- **Defensive recommendations** — Prioritized, actionable recommendations organized by tier (immediate/short/medium/strategic) and category (preventive/detective/limiting/responsive/strategic), each traced to a specific finding
 - **Key findings** — Numbered list of most important takeaways, each with confidence level
 - **Resources** — Links to vendor disclosures, news, discussions, CVEs, advisories. Include access dates
 - **Implications for CSA controls** — Which AICM/CCM control domain families are relevant and briefly why. Do NOT do detailed control-by-control mapping — that is the job of the controls mapping plugin

@@ -1,4 +1,4 @@
-# Phase 3b: Gap & Inference Analysis
+# Phase 7: Gap & Inference Analysis
 
 ## Purpose
 
@@ -35,6 +35,13 @@ What would we normally expect to see in a disclosure of this type that's absent?
 - Third-party forensic investigation results
 - Insurance/legal implications
 
+### Disclosure vs. Impact Gaps
+
+Incorporate findings from Phase 6 (Impact & Downstream Effects). Where the impact assessment identified populations or severity levels not acknowledged in the vendor's disclosure, flag these as specific disclosure gaps:
+- **Unacknowledged populations** — groups identified in Phase 6 that the disclosure doesn't mention
+- **Downplayed severity** — impact types rated High or Critical in Phase 6 that the disclosure characterizes as minimal
+- **Missing cascading effects** — downstream impacts identified in Phase 6 that the disclosure ignores
+
 ### Careful Non-Answers
 What questions does the official statement carefully avoid answering?
 - Look for passive voice that obscures agency ("access was obtained" vs. "the attacker accessed")
@@ -55,9 +62,9 @@ What remediation actions are mentioned vs. what would be standard practice?
 
 ### Vendor Function & Least Privilege Analysis
 
-**This section builds on the findings from Phase 2b.** Take the access comparison table and shared responsibility assessment from Phase 2b and turn them into specific, actionable gap findings.
+**This section builds on the findings from Phase 4.** Take the access comparison table and shared responsibility assessment from Phase 4 and turn them into specific, actionable gap findings.
 
-For each over-permissioned access grant identified in Phase 2b:
+For each over-permissioned access grant identified in Phase 4:
 - What was the excess permission?
 - What damage did it enable in this specific incident?
 - What would the blast radius have been if least-privilege had been enforced?
@@ -69,7 +76,7 @@ Key questions to answer:
 - **Were platform-level controls available but unused?** (e.g., Salesforce Connected App IP restrictions, OAuth scope limitations, Bulk API disablement for integration users)
 - **What vendor risk management practices would have caught this before the breach?** (e.g., periodic OAuth scope reviews, integration inventories, automated permission drift detection)
 
-This is often the most actionable section of the entire analysis — it answers "what should we do differently tomorrow?"
+The detailed "what to do differently" recommendations will be developed in Phase 8 (Defensive Recommendations) — this section focuses on identifying the gaps; Phase 8 turns them into prioritized, actionable guidance.
 
 ### Non-Best-Practices
 What activities or configurations described in the incident are obvious deviations from security best practices?
@@ -95,6 +102,6 @@ Present to the analyst:
 2. **Pattern Assessment** — if this matches known incident patterns, name them
 3. **Key Inferences** — the 3-5 most significant "reading between the lines" findings
 
-Then pause: "Here's my deep analysis. These are explicitly speculative assessments — do you agree with these inferences, or would you like to revise any before I generate the report?"
+Then pause: "Here's my deep analysis. These are explicitly speculative assessments — do you agree with these inferences, or would you like to revise any before I proceed to defensive recommendations?"
 
 Skilled analysts may significantly revise this section based on domain knowledge. Follow their lead.

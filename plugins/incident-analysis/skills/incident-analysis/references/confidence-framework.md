@@ -14,7 +14,7 @@ Use this framework to classify every claim, fact, and assertion in the incident 
 ## Usage Rules
 
 1. Every factual claim in the analysis must have a confidence tag
-2. AI-generated inferences (Phases 3a, 3b) are always tagged **Inferred** or **Speculative** and prefixed with "Analyst/AI assessment:"
+2. AI-generated inferences and assessments (primarily Phases 6, 7, and 8) are always tagged **Inferred** or **Speculative** and prefixed with "Analyst/AI assessment:"
 3. When a claim's confidence changes based on new sources, update the tag and note why
 4. **Disputed** items should present both sides with reasoning about which is more credible
 5. Default to the lower confidence level when uncertain between two adjacent levels
