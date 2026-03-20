@@ -97,7 +97,8 @@ Each phase exists for a specific reason and is positioned deliberately in the se
 | **6. Impact** | Most analyses undercount affected populations and underestimate severity — a dedicated phase forces systematic population-by-population assessment with explicit severity ratings | After timeline (need to know what happened before assessing who it hurt), before gap analysis (impact findings reveal disclosure gaps) | **New phase.** Previously folded into gap analysis, but impact assessment is factual/analytical while gap analysis is speculative — mixing them blurred confidence levels and buried impact findings |
 | **7. Gap Analysis** | Reading between the lines — identifying what's not being said — is the highest-value analytical activity but also the most speculative, requiring explicit labeling and analyst judgment | After all factual phases are complete — speculation should be informed by the fullest possible picture | Considered combining with impact; rejected because gap analysis is deliberately speculative while impact assessment aims for evidentiary grounding |
 | **8. Defensive Recommendations** | Analysis without actionable output is academic exercise — recommendations translate findings into things people can actually do | After gap analysis (needs all findings from Phases 4, 6, and 7), before report (recommendations are a core deliverable) | **New phase.** Previously implicit in gap analysis as "what should we do differently?" but was never systematically developed with prioritization tiers, finding traceability, and reality-checking |
-| **9. Report** | The deliverable must stand alone — a reader who wasn't part of the analysis needs to understand everything from a single document | Last — synthesizes all prior work into a coherent whole | Considered incremental report generation during analysis; rejected because synthesis benefits from seeing the complete picture and avoids the report contradicting itself as understanding evolves |
+| **9. Report** | The deliverable must stand alone — a reader who wasn't part of the analysis needs to understand everything from a single document | Second to last — synthesizes all prior work into a coherent whole | Considered incremental report generation during analysis; rejected because synthesis benefits from seeing the complete picture and avoids the report contradicting itself as understanding evolves |
+| **10. Cross-Model Validation** | A single AI model reviewing its own work reproduces its own blind spots — independent models from different providers catch errors the authoring model misses | After the report exists (needs a complete document to review), before finalization (corrections must be applied) | **New phase.** Emerged from real analysis failures where factual errors (wrong feature dates), confidence inflation (inference tagged as confirmed), and vendor contradiction misses all survived internal review. Cross-model validation caught all five error categories in testing. Considered making this a step within Phase 9; kept separate because it has a distinct analytical mode (adversarial review vs. synthesis), requires external tooling, and produces its own deliverables |
 
 ## Cross-Cutting Design Decisions
 
@@ -105,7 +106,7 @@ These decisions span multiple phases or reflect fundamental design choices. Each
 
 ### 1. Pause Points as Human Judgment Gates
 
-**Decision:** Four pause points where the analyst reviews output before the next phase proceeds — after collection (Phase 2), source analysis (Phase 3), impact assessment (Phase 6), and gap analysis (Phase 7).
+**Decision:** Five pause points where the analyst reviews output before the next phase proceeds — after collection (Phase 2), source analysis (Phase 3), impact assessment (Phase 6), gap analysis (Phase 7), and cross-model validation (Phase 10).
 
 **Context:** The AI is systematically thorough but lacks domain expertise and the ability to recognize when something "doesn't smell right." The analyst has domain knowledge, institutional context, and intuition developed from experience, but may not have time to be systematically exhaustive.
 
@@ -118,6 +119,7 @@ These decisions span multiple phases or reflect fundamental design choices. Each
 - **After source analysis:** Confidence levels require judgment about source credibility that benefits from domain expertise
 - **After impact:** Population identification and severity ratings directly affect the analysis's conclusions and recommendations — getting these wrong cascades
 - **After gap analysis:** Speculative inferences are the highest-risk output; analyst review is essential before these feed into recommendations
+- **After cross-model validation:** External models may flag errors but can also produce false positives — the analyst decides which corrections to accept before the report is finalized
 
 ### 2. Teaching Mode On by Default
 
@@ -247,4 +249,4 @@ To start a discussion:
 
 We may agree immediately, we may push back with reasoning, or we may discover a better approach through discussion. All three outcomes are valuable.
 
-See `../../FEEDBACK.md` for the full feedback guide, including bug reports, feature requests, and other ways to contribute.
+See `../../../FEEDBACK.md` for the full feedback guide, including bug reports, feature requests, and other ways to contribute.

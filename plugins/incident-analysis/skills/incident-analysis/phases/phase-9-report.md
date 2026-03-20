@@ -26,7 +26,8 @@ Using all the work from prior phases — source inventory, unified fact sheet, c
 - Include the analysis date prominently: "This analysis reflects information available as of YYYY-MM-DD"
 - Tag every factual claim with its confidence level
 - All AI/analyst inferences are prefixed with "Analyst/AI assessment:"
-- The CSA controls section stays high-level — list relevant AICM/CCM domain families, don't do detailed mapping
+- The CSA controls section stays high-level — list relevant AICM/CCM domain families and briefly explain why each is relevant to this incident. Do NOT do detailed control-by-control mapping (that is the job of the controls mapping plugin). This section is generated during report synthesis, not by any prior phase — synthesize it from the attack chain, impact assessment, and defensive recommendations
+- Include the Vendor & Integration Analysis findings (from Phase 4) as a report section — the access comparison table, available-but-unused controls, and shared responsibility assessment are core deliverables, not just inputs to later phases
 - Include all source URLs with access dates in the Resources section
 - Write in clear, professional prose. Not academic — more like a well-written briefing
 

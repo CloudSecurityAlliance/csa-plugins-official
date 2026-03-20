@@ -55,6 +55,8 @@ Walk through all phases start to finish. Read each phase file as you reach it.
    - **Pause**: "Here's my deep analysis. Do you agree with these inferences?"
 8. **Phase 8 — Defensive Recommendations**: Read `phases/phase-8-defensive-recommendations.md` → generate prioritized, actionable recommendations traced to specific findings from Phases 4, 6, and 7
 9. **Phase 9 — Report**: Read `phases/phase-9-report.md` and `references/report-template.md` → generate and save report
+10. **Phase 10 — Cross-Model Validation**: Read `phases/phase-10-validation.md` → submit report to independent AI models (Codex, Gemini) for adversarial review, synthesize findings, apply corrections
+    - **Pause**: "Here are the validation findings. Do you want to review any corrections before finalizing?"
 
 ### Option 2: Specific Phase
 

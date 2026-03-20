@@ -45,7 +45,19 @@ Where sources disagree, create a conflicts table:
 - Each source's possible motivation for their version (use bias framework)
 - Your assessment of which is more likely accurate, and why
 
-### Step 4: Assess Coverage
+### Step 4: Vendor Disclosure Cross-Check
+
+After cross-referencing external sources against each other, do a dedicated pass checking external claims against the vendor's own disclosure. This catches a common failure mode: external sources (journalists, researchers, community) make a specific claim, multiple external sources agree, so the claim gets tagged Corroborated — but the vendor's own statement directly contradicts or qualifies it, which would make it Disputed.
+
+For each claim rated Corroborated or higher from external sources:
+1. **Does the vendor's disclosure address this specific topic?** If yes, does it agree, qualify, or contradict?
+2. **If the vendor contradicts an external claim**, downgrade to **Disputed** and present both sides with bias analysis (the vendor has incentive to minimize; external sources may have incomplete information or be over-interpreting)
+3. **If the vendor qualifies an external claim** (e.g., "LIFENET is functioning normally; interruptions are from third-party ePCR vendors, not our system"), note the qualification and adjust the confidence level or add nuance
+4. **If the vendor is silent on a topic**, note the silence — it may be addressed in Phase 7 (gap analysis) as a missing disclosure
+
+This step requires reading the vendor disclosure carefully for specific product/system statements, not just the general narrative. Vendor updates often contain per-product or per-system clarifications buried in later updates that contradict external reporting's broader claims.
+
+### Step 5: Assess Coverage
 
 Create a coverage matrix showing which aspects of the incident each source addresses. This reveals:
 - What everyone agrees on (high confidence)

@@ -39,6 +39,14 @@ Reports write to the `dataset-private-incident-analysis` repo:
 
 Filename: `YYYY-MM-DD-<incident-slug>.md` (e.g., `2026-02-15-acme-corp-api-breach.md`)
 
+## Validation
+
+If cross-model validation (Phase 10) was performed, the report should note this:
+- "This report was validated using cross-model review ([models used]). [N] corrections were applied based on validation findings."
+- If validation was not performed (tools unavailable), note: "Cross-model validation was not performed."
+
+The validation review files (`<report-name>.codex-review.md`, `<report-name>.gemini-review.md`) are kept alongside the report as supporting artifacts.
+
 ## Versioning
 
 Reports are immutable. Re-analysis produces a new file with today's date. The new report notes in its Executive Summary that it supersedes a prior analysis and highlights what changed.

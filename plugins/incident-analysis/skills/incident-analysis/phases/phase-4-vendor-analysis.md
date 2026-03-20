@@ -42,7 +42,20 @@ Present this as a comparison table:
 | (e.g., Read Cases/Support Tickets) | No — chatbot doesn't interact with support | Yes | **High** — contains credentials, configs, internal details |
 | (e.g., Bulk API access) | No — chatbot processes one visitor at a time | Yes | **Critical** — enables mass data export |
 
-### Step 3: Analyze How Customers Were Using It
+### Step 3: Verify "Available But Unused" Control Claims
+
+Before concluding that a security control was available but not used, verify each claim against primary vendor documentation. This prevents a common error: claiming a control was available for years when the specific sub-capability relevant to this incident was only recently added.
+
+For each control you identify as "available but unused":
+
+1. **Verify the specific capability's availability date** — Check the vendor's own release notes, changelog, or "what's new" documentation. Not secondary blog posts or general feature announcements — the primary vendor documentation for the specific sub-capability relevant to this incident.
+2. **Verify the capability covers the specific action that was exploited** — A feature may be generally available for some actions but not others (e.g., Multi-Admin Approval may cover app deployments but not device wipe actions, or vice versa, depending on the version).
+3. **State the verified date and source in the analysis** — "MAA for device wipe actions was available since [date] per [vendor documentation URL]" rather than "MAA was available since [date]."
+4. **Adjust blame framing accordingly** — "Available for 7 months and not enabled" tells a materially different story than "available for 2.5 years and not enabled." Both are failures, but the severity of the governance failure is different.
+
+If you cannot verify a specific capability's availability date against primary documentation, say so explicitly and tag the "available but unused" claim as **Inferred** rather than Confirmed.
+
+### Step 4: Analyze How Customers Were Using It
 
 Research and document:
 
@@ -51,7 +64,7 @@ Research and document:
 3. **Did the vendor's setup documentation encourage broad permissions?** — Some vendors request "all access" during setup and never tell customers they can scope it down
 4. **Were there alternative products or approaches with a smaller blast radius?** — Could the business need have been met with less risk?
 
-### Step 4: Assess Shared Responsibility
+### Step 5: Assess Shared Responsibility
 
 For each party involved, assess their contribution to the exposure:
 
@@ -78,4 +91,4 @@ Present to the analyst:
 
 This phase feeds directly into Phase 7 (gap analysis), where the over-permissioning findings become specific, actionable gap items.
 
-Proceed to Phase 5 after presenting — no separate pause needed here since the analyst will review all of Phases 4 through 7 together at the Phase 7 pause.
+Proceed to Phase 5 after presenting — no separate pause needed here. The analyst will review findings at the Phase 6 pause (impact assessment) and Phase 7 pause (gap analysis).
