@@ -65,12 +65,19 @@ def test_candidates_sorted_by_specificity():
 # --- children tests ---
 
 def test_children_of_injection():
+    """CWE-74 children in view 1000 include CWE-77, CWE-79 but NOT CWE-89 (which is under CWE-943)."""
     out = run(["children", "74"])
-    assert any(cwe in out for cwe in ["CWE-79", "CWE-89", "CWE-77"])
+    assert "CWE-77" in out or "CWE-79" in out
+    # CWE-89 is a child of CWE-943 in view 1000, not CWE-74
+    assert "CWE-89" not in out
 
 def test_children_of_leaf():
     out = run(["children", "5"])
-    assert "CWE-5" in out or "No children" in out or "0 children" in out
+    assert "0 children" in out
+
+def test_children_nonexistent():
+    """Children of a nonexistent CWE should error, not silently return empty."""
+    run(["children", "999999"], expect_rc=1)
 
 # --- chain tests ---
 
@@ -87,6 +94,10 @@ def test_chain_three_cwes():
 
 def test_chain_single_cwe_error():
     run(["chain", "79"], expect_rc=1)
+
+def test_chain_nonexistent_cwe():
+    """Chain with a nonexistent CWE should error, not show blank entry."""
+    run(["chain", "79", "999999"], expect_rc=1)
 
 # --- ai-relevant tests ---
 
@@ -119,9 +130,11 @@ if __name__ == "__main__":
         test_candidates_sorted_by_specificity,
         test_children_of_injection,
         test_children_of_leaf,
+        test_children_nonexistent,
         test_chain_two_cwes,
         test_chain_three_cwes,
         test_chain_single_cwe_error,
+        test_chain_nonexistent_cwe,
         test_ai_relevant_default,
         test_ai_relevant_high_score,
         test_ai_relevant_json,

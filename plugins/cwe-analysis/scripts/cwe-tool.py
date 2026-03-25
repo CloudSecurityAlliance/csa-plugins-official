@@ -266,9 +266,14 @@ def _parse_related_weaknesses(related_str):
 
 
 def cmd_children(cwe_id_input, as_json):
-    """Find all CWEs that are children of the given CWE-ID (via ChildOf relationships)."""
+    """Find all CWEs that are children of the given CWE-ID (via ChildOf relationships in view 1000)."""
     target_id = _strip_prefix(cwe_id_input)
     mitre_data = load_mitre_csv()
+
+    # Validate the target CWE exists
+    if target_id not in mitre_data:
+        print(f"Error: CWE-{target_id} not found.", file=sys.stderr)
+        sys.exit(1)
 
     children = []
     for cwe_id, row in mitre_data.items():
@@ -276,17 +281,14 @@ def cmd_children(cwe_id_input, as_json):
         if not related:
             continue
         rels = _parse_related_weaknesses(related)
-        for nature, rel_cwe_id, _view_id in rels:
-            if nature == "ChildOf" and rel_cwe_id == target_id:
+        for nature, rel_cwe_id, view_id in rels:
+            if nature == "ChildOf" and rel_cwe_id == target_id and view_id == "1000":
                 children.append(row)
                 break
 
     if not children:
         parent_row = mitre_data.get(target_id)
-        if parent_row:
-            print(f"CWE-{target_id}: {parent_row.get('Name', '')} — 0 children found.")
-        else:
-            print(f"No children found for CWE-{target_id}.")
+        print(f"CWE-{target_id}: {parent_row.get('Name', '')} — 0 children found (view 1000).")
         return
 
     if as_json:
@@ -302,7 +304,7 @@ def cmd_children(cwe_id_input, as_json):
 
     parent_row = mitre_data.get(target_id)
     parent_name = parent_row.get("Name", "") if parent_row else ""
-    print(f"CWE-{target_id}: {parent_name} — {len(children)} children\n")
+    print(f"CWE-{target_id}: {parent_name} — {len(children)} children (view 1000)\n")
     for row in children:
         cwe_id = row.get("CWE-ID", "")
         name = row.get("Name", "")
@@ -312,7 +314,7 @@ def cmd_children(cwe_id_input, as_json):
 
 
 def cmd_chain(cwe_ids, as_json):
-    """Analyze a chain of CWEs and show relationships between them."""
+    """Analyze a chain of CWEs and show relationships between them (view 1000 only)."""
     if len(cwe_ids) < 2:
         print("Error: chain requires at least 2 CWE IDs.", file=sys.stderr)
         sys.exit(1)
@@ -321,13 +323,19 @@ def cmd_chain(cwe_ids, as_json):
     mitre_data = load_mitre_csv()
     ai_data = load_ai_csv()
 
+    # Validate all IDs exist
+    for cid in ids:
+        if cid not in mitre_data and cid not in ai_data:
+            print(f"Error: CWE-{cid} not found.", file=sys.stderr)
+            sys.exit(1)
+
     # Load entries
     entries = []
     for cid in ids:
         entry = {"id": cid, "mitre": mitre_data.get(cid), "ai": ai_data.get(cid)}
         entries.append(entry)
 
-    # Find relationships between pairs
+    # Find relationships between pairs (view 1000 only)
     relationships = []
     id_set = set(ids)
     for entry in entries:
@@ -338,8 +346,8 @@ def cmd_chain(cwe_ids, as_json):
         if not related:
             continue
         rels = _parse_related_weaknesses(related)
-        for nature, rel_cwe_id, _view_id in rels:
-            if rel_cwe_id in id_set and rel_cwe_id != entry["id"]:
+        for nature, rel_cwe_id, view_id in rels:
+            if rel_cwe_id in id_set and rel_cwe_id != entry["id"] and view_id == "1000":
                 relationships.append({
                     "from": entry["id"],
                     "to": rel_cwe_id,

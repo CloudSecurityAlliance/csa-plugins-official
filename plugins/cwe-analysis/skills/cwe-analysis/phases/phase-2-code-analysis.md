@@ -53,9 +53,9 @@ Create an annotated summary:
 
 ## Teaching Moment
 
-> **Root cause vs. symptom:** If user input reaches a SQL query without sanitization, the symptom is SQL injection (CWE-89). But the root cause may be missing input validation at the trust boundary (CWE-20), or the use of string concatenation for query construction instead of parameterized queries. Both matter for CWE assignment — the primary CWE should describe the most specific weakness, but the chain should capture the full picture.
+> **Root cause vs. symptom:** If user input reaches a SQL query without sanitization, the symptom is SQL injection (CWE-89). But the root cause may be a specific input validation failure (e.g., CWE-1287 Improper Validation of Specified Type of Input), or the use of string concatenation for query construction instead of parameterized queries. Both matter for CWE assignment — the primary CWE should describe the most specific weakness, but the chain should capture the full picture. Avoid using CWE-20 (Improper Input Validation) as the root cause — it's discouraged because it's too broad. Use `cwe-tool.py children 20` to find a more specific input validation CWE.
 >
-> **Why patches reveal CWEs:** A diff between vulnerable and fixed code often reveals the weakness more clearly than the vulnerability description. If the fix adds parameterized queries, the weakness was CWE-89. If it adds an allowlist filter, the weakness may be CWE-20 or CWE-1287. The fix tells you what was missing.
+> **Why patches reveal CWEs:** A diff between vulnerable and fixed code often reveals the weakness more clearly than the vulnerability description. If the fix adds parameterized queries, the weakness was CWE-89. If it adds an allowlist filter, the weakness may be CWE-1287 (Improper Validation of Specified Type of Input) or another specific validation CWE. The fix tells you what was missing.
 
 ## Output
 

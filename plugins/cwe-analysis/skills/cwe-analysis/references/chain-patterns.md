@@ -6,19 +6,23 @@ A chain represents the causal flow from root weakness to final impact, with each
 
 ## Pattern 1: Web SQL Injection Chain
 
-**Chain:** CWE-20 (Improper Input Validation) --> CWE-89 (SQL Injection) --> CWE-200 (Exposure of Sensitive Information)
+**Chain:** CWE-1287 (Improper Validation of Specified Type of Input) --> CWE-89 (SQL Injection) --> CWE-200 (Exposure of Sensitive Information)
 
-**Causal flow:** User input is not validated at the trust boundary. Unsanitized input reaches SQL query construction, allowing attacker-controlled queries. Exfiltrated data exposes sensitive information such as credentials, personal data, or internal system details.
+**Causal flow:** The application fails to validate that input conforms to the expected type or format at the trust boundary. Unsanitized input reaches SQL query construction, allowing attacker-controlled queries. Exfiltrated data exposes sensitive information such as credentials, personal data, or internal system details.
 
-**MITRE relationships:** CWE-20 CanPrecede CWE-89 in some data views. CWE-89 is ChildOf CWE-74 (Injection).
+**MITRE relationships:** CWE-89 is ChildOf CWE-943 (Improper Neutralization of Special Elements in Data Query Logic) in view 1000.
+
+**Note:** Older references use CWE-20 (Improper Input Validation) as the root cause, but CWE-20 is discouraged for CVE assignment because it is too broad. Use the most specific input validation failure CWE that applies (e.g., CWE-1287, CWE-1284, CWE-1285).
 
 ## Pattern 2: Command Execution Chain
 
-**Chain:** CWE-20 (Improper Input Validation) --> CWE-78 (OS Command Injection) --> CWE-269 (Improper Privilege Management)
+**Chain:** CWE-1287 (Improper Validation of Specified Type of Input) --> CWE-78 (OS Command Injection) --> CWE-269 (Improper Privilege Management)
 
-**Causal flow:** Input validation failure allows OS command metacharacters through the application boundary. Unsanitized input reaches shell execution, allowing arbitrary command execution on the host system. The attacker inherits the application's operating system privileges, which are often excessive.
+**Causal flow:** The application fails to validate input type/format, allowing OS command metacharacters through the application boundary. Unsanitized input reaches shell execution, allowing arbitrary command execution on the host system. The attacker inherits the application's operating system privileges, which are often excessive.
 
-**MITRE relationships:** CWE-78 is ChildOf CWE-77 (Command Injection). The CWE-20 to CWE-78 link reflects a CanPrecede pattern.
+**MITRE relationships:** CWE-78 is ChildOf CWE-77 (Command Injection) in view 1000.
+
+**Note:** Same caveat as Pattern 1 — use the specific validation failure CWE, not the discouraged CWE-20.
 
 ## Pattern 3: XSS to CSRF Chain
 
@@ -26,7 +30,7 @@ A chain represents the causal flow from root weakness to final impact, with each
 
 **Causal flow:** Reflected or stored XSS allows an attacker to inject JavaScript into a page viewed by an authenticated user. The injected script performs authenticated actions on behalf of the victim, bypassing CSRF protections since the request originates from the victim's browser session with valid cookies and tokens.
 
-**MITRE relationships:** CWE-79 CanPrecede CWE-352 is documented in MITRE data. Both are ChildOf CWE-20 at a high level.
+**MITRE relationships:** CWE-79 CanPrecede CWE-352 is documented in MITRE data. CWE-79 is ChildOf CWE-74 (Injection) in view 1000.
 
 ## Pattern 4: AI Prompt Injection Chain
 
