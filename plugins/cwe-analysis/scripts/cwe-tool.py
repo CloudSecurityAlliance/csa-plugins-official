@@ -238,6 +238,79 @@ def cmd_candidates(impact, abstraction, as_json):
         print(f"  Consequences: {consequences}\n")
 
 
+def _parse_related_weaknesses(related_str):
+    """Parse the Related Weaknesses field into a list of (nature, cwe_id, view_id) tuples."""
+    results = []
+    # Format: ::NATURE:ChildOf:CWE ID:74:VIEW ID:1000:ORDINAL:Primary::
+    segments = related_str.split("::")
+    for seg in segments:
+        seg = seg.strip()
+        if not seg:
+            continue
+        parts = seg.split(":")
+        # Build a key-value map from consecutive pairs
+        kv = {}
+        i = 0
+        while i < len(parts) - 1:
+            key = parts[i].strip()
+            val = parts[i + 1].strip()
+            if key:
+                kv[key] = val
+            i += 2
+        nature = kv.get("NATURE", "")
+        cwe_id = kv.get("CWE ID", "")
+        view_id = kv.get("VIEW ID", "")
+        if nature and cwe_id:
+            results.append((nature, cwe_id, view_id))
+    return results
+
+
+def cmd_children(cwe_id_input, as_json):
+    """Find all CWEs that are children of the given CWE-ID (via ChildOf relationships)."""
+    target_id = _strip_prefix(cwe_id_input)
+    mitre_data = load_mitre_csv()
+
+    children = []
+    for cwe_id, row in mitre_data.items():
+        related = row.get("Related Weaknesses", "")
+        if not related:
+            continue
+        rels = _parse_related_weaknesses(related)
+        for nature, rel_cwe_id, _view_id in rels:
+            if nature == "ChildOf" and rel_cwe_id == target_id:
+                children.append(row)
+                break
+
+    if not children:
+        parent_row = mitre_data.get(target_id)
+        if parent_row:
+            print(f"CWE-{target_id}: {parent_row.get('Name', '')} — 0 children found.")
+        else:
+            print(f"No children found for CWE-{target_id}.")
+        return
+
+    if as_json:
+        out = []
+        for row in children:
+            out.append({
+                "CWE-ID": row.get("CWE-ID", ""),
+                "Name": row.get("Name", ""),
+                "Weakness Abstraction": row.get("Weakness Abstraction", ""),
+            })
+        print(json.dumps(out, indent=2))
+        return
+
+    parent_row = mitre_data.get(target_id)
+    parent_name = parent_row.get("Name", "") if parent_row else ""
+    print(f"CWE-{target_id}: {parent_name} — {len(children)} children\n")
+    for row in children:
+        cwe_id = row.get("CWE-ID", "")
+        name = row.get("Name", "")
+        abstraction = row.get("Weakness Abstraction", "")
+        print(f"  CWE-{cwe_id}: {name} [{abstraction}]")
+    print()
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="cwe-tool",
@@ -300,6 +373,22 @@ def main():
         help="Output as JSON.",
     )
 
+    # children subcommand
+    children_parser = subparsers.add_parser(
+        "children",
+        help="Find all children of a CWE (entries with ChildOf relationship).",
+    )
+    children_parser.add_argument(
+        "cwe_id",
+        help="Parent CWE ID (e.g. '74' or 'CWE-74').",
+    )
+    children_parser.add_argument(
+        "--json",
+        dest="as_json",
+        action="store_true",
+        help="Output as JSON.",
+    )
+
     args = parser.parse_args()
 
     if args.command == "lookup":
@@ -308,6 +397,8 @@ def main():
         cmd_search(args.keywords, args.as_json)
     elif args.command == "candidates":
         cmd_candidates(args.impact, args.abstraction, args.as_json)
+    elif args.command == "children":
+        cmd_children(args.cwe_id, args.as_json)
 
 
 if __name__ == "__main__":

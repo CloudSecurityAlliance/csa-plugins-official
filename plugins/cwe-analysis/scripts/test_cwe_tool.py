@@ -62,6 +62,16 @@ def test_candidates_sorted_by_specificity():
         scores = [specificity.get(a, 4) for a in abstractions]
         assert scores == sorted(scores)
 
+# --- children tests ---
+
+def test_children_of_injection():
+    out = run(["children", "74"])
+    assert any(cwe in out for cwe in ["CWE-79", "CWE-89", "CWE-77"])
+
+def test_children_of_leaf():
+    out = run(["children", "5"])
+    assert "CWE-5" in out or "No children" in out or "0 children" in out
+
 if __name__ == "__main__":
     tests = [
         test_lookup_known_cwe,
@@ -73,6 +83,8 @@ if __name__ == "__main__":
         test_candidates_by_impact,
         test_candidates_by_abstraction,
         test_candidates_sorted_by_specificity,
+        test_children_of_injection,
+        test_children_of_leaf,
     ]
     failed = 0
     for t in tests:
