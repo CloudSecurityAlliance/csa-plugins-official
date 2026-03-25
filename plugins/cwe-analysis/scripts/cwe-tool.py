@@ -186,6 +186,58 @@ def cmd_search(keywords, as_json):
         print(f"  {desc}\n")
 
 
+_SPECIFICITY_ORDER = {"Variant": 0, "Base": 1, "Class": 2, "Pillar": 3}
+
+
+def cmd_candidates(impact, abstraction, as_json):
+    """Find candidate CWEs filtered by impact and/or abstraction (MITRE only)."""
+    mitre_data = load_mitre_csv()
+
+    matches = []
+    for cwe_id, row in mitre_data.items():
+        if impact:
+            consequences = row.get("Common Consequences", "").lower()
+            if impact.lower() not in consequences:
+                continue
+        if abstraction:
+            row_abs = row.get("Weakness Abstraction", "").strip()
+            if row_abs != abstraction:
+                continue
+        matches.append(row)
+
+    # Sort by specificity: Variant (0) > Base (1) > Class (2) > Pillar (3)
+    matches.sort(key=lambda r: (
+        _SPECIFICITY_ORDER.get(r.get("Weakness Abstraction", "").strip(), 4),
+        r.get("CWE-ID", ""),
+    ))
+
+    if not matches:
+        print("No candidates found.")
+        return
+
+    if as_json:
+        out = []
+        for row in matches:
+            out.append({
+                "CWE-ID": row.get("CWE-ID", ""),
+                "Name": row.get("Name", ""),
+                "Weakness Abstraction": row.get("Weakness Abstraction", ""),
+                "Common Consequences": row.get("Common Consequences", ""),
+            })
+        print(json.dumps(out, indent=2))
+        return
+
+    print(f"{len(matches)} candidates found\n")
+    for row in matches:
+        cwe_id = row.get("CWE-ID", "")
+        name = row.get("Name", "")
+        abs_val = row.get("Weakness Abstraction", "")
+        consequences = _truncate(row.get("Common Consequences", ""), 120)
+        print(f"CWE-{cwe_id}: {name}")
+        print(f"  Abstraction: {abs_val}")
+        print(f"  Consequences: {consequences}\n")
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="cwe-tool",
@@ -226,12 +278,36 @@ def main():
         help="Output as JSON.",
     )
 
+    # candidates subcommand
+    candidates_parser = subparsers.add_parser(
+        "candidates",
+        help="Find candidate CWEs by impact and/or abstraction level.",
+    )
+    candidates_parser.add_argument(
+        "--impact",
+        default=None,
+        help="Filter by Common Consequences (case-insensitive substring).",
+    )
+    candidates_parser.add_argument(
+        "--abstraction",
+        default=None,
+        help="Filter by Weakness Abstraction (exact match: Variant, Base, Class, Pillar).",
+    )
+    candidates_parser.add_argument(
+        "--json",
+        dest="as_json",
+        action="store_true",
+        help="Output as JSON.",
+    )
+
     args = parser.parse_args()
 
     if args.command == "lookup":
         cmd_lookup(args.cwe_id, args.as_json)
     elif args.command == "search":
         cmd_search(args.keywords, args.as_json)
+    elif args.command == "candidates":
+        cmd_candidates(args.impact, args.abstraction, args.as_json)
 
 
 if __name__ == "__main__":

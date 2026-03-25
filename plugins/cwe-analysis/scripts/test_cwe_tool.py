@@ -42,6 +42,26 @@ def test_search_no_results():
     out = run(["search", "xyznonexistentkeywordxyz"])
     assert "No matches" in out or "0 matches" in out
 
+# --- candidates tests ---
+
+def test_candidates_by_impact():
+    out = run(["candidates", "--impact", "code execution"])
+    assert "CWE-" in out
+
+def test_candidates_by_abstraction():
+    out = run(["candidates", "--abstraction", "Variant"])
+    assert "CWE-" in out
+    assert "Variant" in out
+
+def test_candidates_sorted_by_specificity():
+    out = run(["candidates", "--impact", "injection", "--json"])
+    data = json.loads(out)
+    if len(data) > 1:
+        abstractions = [e.get("Weakness Abstraction", "") for e in data]
+        specificity = {"Variant": 0, "Base": 1, "Class": 2, "Pillar": 3}
+        scores = [specificity.get(a, 4) for a in abstractions]
+        assert scores == sorted(scores)
+
 if __name__ == "__main__":
     tests = [
         test_lookup_known_cwe,
@@ -50,6 +70,9 @@ if __name__ == "__main__":
         test_search_injection,
         test_search_multiple_keywords,
         test_search_no_results,
+        test_candidates_by_impact,
+        test_candidates_by_abstraction,
+        test_candidates_sorted_by_specificity,
     ]
     failed = 0
     for t in tests:
