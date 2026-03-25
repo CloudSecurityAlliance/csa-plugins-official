@@ -50,8 +50,10 @@ cwe-analysis/
 │   ├── CWE-Research-Concepts-1000.csv
 │   ├── MITRE-CWE-LICENSE.txt
 │   └── VERSION.txt
+├── docs/                    # Design spec and implementation plan
 ├── scripts/
-│   └── cwe-tool.py          # CWE data query tool (6 subcommands)
+│   ├── cwe-tool.py          # CWE data query tool (6 subcommands)
+│   └── test_cwe_tool.py     # Tests for cwe-tool.py
 └── skills/
     └── cwe-analysis/
         ├── SKILL.md          # Main skill router
