@@ -9,17 +9,22 @@ A curated directory of Cloud Security Alliance plugins for Claude Code.
 - **`/plugins`** - Internal plugins developed and maintained by CSA
 - **`/external_plugins`** - Third-party plugins from partners and the community
 
+## Available Plugins
+
+| Plugin | Description | Install |
+|--------|-------------|---------|
+| [incident-analysis](plugins/incident-analysis/) | Comprehensive security incident analysis with OSINT collection, source cross-referencing, confidence classification, and deep analysis. | `/plugin install incident-analysis@csa-plugins-official` |
+| [cwe-analysis](plugins/cwe-analysis/) | CWE assignment and vulnerability chain analysis for CNAs, security researchers, and vendors. | `/plugin install cwe-analysis@csa-plugins-official` |
+
 ## Installation
 
-Plugins can be installed directly from this marketplace via Claude Code's plugin system.
-
-To add this marketplace:
+First, add the CSA marketplace:
 
 ```
 /plugin marketplace add CloudSecurityAlliance/csa-plugins-official
 ```
 
-To install a plugin:
+Then install any plugin:
 
 ```
 /plugin install {plugin-name}@csa-plugins-official
