@@ -311,6 +311,96 @@ def cmd_children(cwe_id_input, as_json):
     print()
 
 
+def cmd_chain(cwe_ids, as_json):
+    """Analyze a chain of CWEs and show relationships between them."""
+    if len(cwe_ids) < 2:
+        print("Error: chain requires at least 2 CWE IDs.", file=sys.stderr)
+        sys.exit(1)
+
+    ids = [_strip_prefix(c) for c in cwe_ids]
+    mitre_data = load_mitre_csv()
+    ai_data = load_ai_csv()
+
+    # Load entries
+    entries = []
+    for cid in ids:
+        entry = {"id": cid, "mitre": mitre_data.get(cid), "ai": ai_data.get(cid)}
+        entries.append(entry)
+
+    # Find relationships between pairs
+    relationships = []
+    id_set = set(ids)
+    for entry in entries:
+        mitre_row = entry["mitre"]
+        if not mitre_row:
+            continue
+        related = mitre_row.get("Related Weaknesses", "")
+        if not related:
+            continue
+        rels = _parse_related_weaknesses(related)
+        for nature, rel_cwe_id, _view_id in rels:
+            if rel_cwe_id in id_set and rel_cwe_id != entry["id"]:
+                relationships.append({
+                    "from": entry["id"],
+                    "to": rel_cwe_id,
+                    "nature": nature,
+                })
+
+    if as_json:
+        out = []
+        for entry in entries:
+            item = {"CWE-ID": entry["id"]}
+            mitre_row = entry["mitre"]
+            if mitre_row:
+                item["Name"] = mitre_row.get("Name", "")
+                item["Weakness Abstraction"] = mitre_row.get("Weakness Abstraction", "")
+                item["Description"] = mitre_row.get("Description", "")
+            ai_row = entry["ai"]
+            if ai_row:
+                item["View1_Score"] = ai_row.get("View1_Score", "")
+                item["View2_Score"] = ai_row.get("View2_Score", "")
+                item["AI_Category"] = ai_row.get("AI_Category", "")
+            out.append(item)
+        result = {"chain": out, "relationships": relationships}
+        print(json.dumps(result, indent=2))
+        return
+
+    # Human-readable output
+    print(f"{'=' * 60}")
+    print(f"CWE Chain Analysis: {' -> '.join('CWE-' + c for c in ids)}")
+    print(f"{'=' * 60}")
+
+    for entry in entries:
+        cid = entry["id"]
+        mitre_row = entry["mitre"]
+        ai_row = entry["ai"]
+        name = ""
+        if mitre_row:
+            name = mitre_row.get("Name", "")
+        elif ai_row:
+            name = ai_row.get("Name", "")
+        print(f"\nCWE-{cid}: {name}")
+        if mitre_row:
+            print(f"  Abstraction: {mitre_row.get('Weakness Abstraction', '')}")
+            print(f"  {_truncate(mitre_row.get('Description', ''), 200)}")
+        if ai_row:
+            v1 = ai_row.get("View1_Score", "").strip()
+            v2 = ai_row.get("View2_Score", "").strip()
+            cat = ai_row.get("AI_Category", "").strip()
+            if v1 or v2:
+                print(f"  AI Relevance: View1={v1}, View2={v2}, Category={cat}")
+
+    print(f"\n-- Relationships Found --")
+    if relationships:
+        for rel in relationships:
+            print(f"  CWE-{rel['from']} --[{rel['nature']}]--> CWE-{rel['to']}")
+    else:
+        print("  No direct taxonomic relationships found between these CWEs.")
+
+    print(f"\nNote: CWE relationships are taxonomic. Absence of a relationship "
+          f"does not mean these CWEs are unrelated in an exploit chain.\n")
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="cwe-tool",
@@ -389,6 +479,23 @@ def main():
         help="Output as JSON.",
     )
 
+    # chain subcommand
+    chain_parser = subparsers.add_parser(
+        "chain",
+        help="Analyze a chain of CWEs and show relationships.",
+    )
+    chain_parser.add_argument(
+        "cwe_ids",
+        nargs="+",
+        help="Two or more CWE IDs (e.g. '20 89' or 'CWE-20 CWE-89').",
+    )
+    chain_parser.add_argument(
+        "--json",
+        dest="as_json",
+        action="store_true",
+        help="Output as JSON.",
+    )
+
     args = parser.parse_args()
 
     if args.command == "lookup":
@@ -399,6 +506,8 @@ def main():
         cmd_candidates(args.impact, args.abstraction, args.as_json)
     elif args.command == "children":
         cmd_children(args.cwe_id, args.as_json)
+    elif args.command == "chain":
+        cmd_chain(args.cwe_ids, args.as_json)
 
 
 if __name__ == "__main__":

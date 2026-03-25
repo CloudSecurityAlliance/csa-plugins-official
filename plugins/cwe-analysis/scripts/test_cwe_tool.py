@@ -72,6 +72,22 @@ def test_children_of_leaf():
     out = run(["children", "5"])
     assert "CWE-5" in out or "No children" in out or "0 children" in out
 
+# --- chain tests ---
+
+def test_chain_two_cwes():
+    out = run(["chain", "20", "89"])
+    assert "CWE-20" in out
+    assert "CWE-89" in out
+
+def test_chain_three_cwes():
+    out = run(["chain", "502", "94", "78"])
+    assert "CWE-502" in out
+    assert "CWE-94" in out
+    assert "CWE-78" in out
+
+def test_chain_single_cwe_error():
+    run(["chain", "79"], expect_rc=1)
+
 if __name__ == "__main__":
     tests = [
         test_lookup_known_cwe,
@@ -85,6 +101,9 @@ if __name__ == "__main__":
         test_candidates_sorted_by_specificity,
         test_children_of_injection,
         test_children_of_leaf,
+        test_chain_two_cwes,
+        test_chain_three_cwes,
+        test_chain_single_cwe_error,
     ]
     failed = 0
     for t in tests:
