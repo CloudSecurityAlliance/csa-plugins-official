@@ -27,11 +27,38 @@ def test_lookup_known_cwe_json():
 def test_lookup_nonexistent():
     run(["lookup", "999999"], expect_rc=1)
 
+# --- search tests ---
+
+def test_search_injection():
+    out = run(["search", "injection"])
+    assert "CWE-" in out
+    assert out.count("CWE-") > 5
+
+def test_search_multiple_keywords():
+    out = run(["search", "sql", "injection"])
+    assert "CWE-89" in out
+
+def test_search_no_results():
+    out = run(["search", "xyznonexistentkeywordxyz"])
+    assert "No matches" in out or "0 matches" in out
+
 if __name__ == "__main__":
-    test_lookup_known_cwe()
-    print("  PASS: test_lookup_known_cwe")
-    test_lookup_known_cwe_json()
-    print("  PASS: test_lookup_known_cwe_json")
-    test_lookup_nonexistent()
-    print("  PASS: test_lookup_nonexistent")
-    print("All lookup tests passed")
+    tests = [
+        test_lookup_known_cwe,
+        test_lookup_known_cwe_json,
+        test_lookup_nonexistent,
+        test_search_injection,
+        test_search_multiple_keywords,
+        test_search_no_results,
+    ]
+    failed = 0
+    for t in tests:
+        try:
+            t()
+            print(f"  PASS: {t.__name__}")
+        except Exception as e:
+            print(f"  FAIL: {t.__name__}: {e}")
+            failed += 1
+    print(f"\n{len(tests) - failed}/{len(tests)} tests passed")
+    if failed:
+        sys.exit(1)

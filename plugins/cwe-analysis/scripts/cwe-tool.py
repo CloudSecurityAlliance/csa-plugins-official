@@ -146,6 +146,46 @@ def cmd_lookup(cwe_id_input, as_json):
     print()
 
 
+def cmd_search(keywords, as_json):
+    """Search CWE entries by keywords (AND logic, case-insensitive)."""
+    mitre_data = load_mitre_csv()
+    keywords_lower = [kw.lower() for kw in keywords]
+
+    matches = []
+    for cwe_id, row in mitre_data.items():
+        name = row.get("Name", "")
+        desc = row.get("Description", "")
+        combined = (name + " " + desc).lower()
+        if all(kw in combined for kw in keywords_lower):
+            matches.append(row)
+
+    if not matches:
+        print(f"No matches found for: {' '.join(keywords)}")
+        return
+
+    if as_json:
+        out = []
+        for row in matches:
+            out.append({
+                "CWE-ID": row.get("CWE-ID", ""),
+                "Name": row.get("Name", ""),
+                "Weakness Abstraction": row.get("Weakness Abstraction", ""),
+                "Description": row.get("Description", ""),
+            })
+        print(json.dumps(out, indent=2))
+        return
+
+    print(f"{len(matches)} matches for: {' '.join(keywords)}\n")
+    for row in matches:
+        cwe_id = row.get("CWE-ID", "")
+        name = row.get("Name", "")
+        abstraction = row.get("Weakness Abstraction", "")
+        desc = _truncate(row.get("Description", ""), 120)
+        print(f"CWE-{cwe_id}: {name}")
+        print(f"  Abstraction: {abstraction}")
+        print(f"  {desc}\n")
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="cwe-tool",
@@ -169,10 +209,29 @@ def main():
         help="Output as JSON.",
     )
 
+    # search subcommand
+    search_parser = subparsers.add_parser(
+        "search",
+        help="Search CWE entries by keywords (AND logic).",
+    )
+    search_parser.add_argument(
+        "keywords",
+        nargs="+",
+        help="Keywords to search for in Name and Description.",
+    )
+    search_parser.add_argument(
+        "--json",
+        dest="as_json",
+        action="store_true",
+        help="Output as JSON.",
+    )
+
     args = parser.parse_args()
 
     if args.command == "lookup":
         cmd_lookup(args.cwe_id, args.as_json)
+    elif args.command == "search":
+        cmd_search(args.keywords, args.as_json)
 
 
 if __name__ == "__main__":
