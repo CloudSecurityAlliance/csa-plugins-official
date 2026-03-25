@@ -1,0 +1,12 @@
+{
+  "name": "cwe-analysis",
+  "description": "CWE assignment and vulnerability chain analysis for CNAs, security researchers, and vendors. Guides analysts through vulnerability understanding, code examination, CWE identification, chain mapping, and quality validation.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Kurt Seifried",
+    "email": "kseifried@cloudsecurityalliance.org"
+  },
+  "skills": [
+    "skills/cwe-analysis/SKILL.md"
+  ]
+}
