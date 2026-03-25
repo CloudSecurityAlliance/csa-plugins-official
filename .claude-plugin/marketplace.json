@@ -17,6 +17,17 @@
       "source": "./plugins/incident-analysis",
       "category": "security",
       "homepage": "https://github.com/CloudSecurityAlliance/csa-plugins-official/tree/main/plugins/incident-analysis"
+    },
+    {
+      "name": "cwe-analysis",
+      "description": "CWE assignment and vulnerability chain analysis for CNAs, security researchers, and vendors. Guides analysts through vulnerability understanding, code examination, CWE identification, chain mapping, and quality validation.",
+      "author": {
+        "name": "Cloud Security Alliance",
+        "email": "research@cloudsecurityalliance.org"
+      },
+      "source": "./plugins/cwe-analysis",
+      "category": "security",
+      "homepage": "https://github.com/CloudSecurityAlliance/csa-plugins-official/tree/main/plugins/cwe-analysis"
     }
   ]
 }
