@@ -88,6 +88,24 @@ def test_chain_three_cwes():
 def test_chain_single_cwe_error():
     run(["chain", "79"], expect_rc=1)
 
+# --- ai-relevant tests ---
+
+def test_ai_relevant_default():
+    out = run(["ai-relevant"])
+    assert "CWE-" in out
+
+def test_ai_relevant_high_score():
+    out = run(["ai-relevant", "--min-score", "4"])
+    assert "CWE-1427" in out or "CWE-77" in out
+
+def test_ai_relevant_json():
+    out = run(["ai-relevant", "--min-score", "4", "--json"])
+    data = json.loads(out)
+    ids = [str(e.get("CWE_ID", "")) for e in data]
+    assert "1427" in ids
+    assert "77" in ids or "78" in ids
+    assert len(data) >= 4
+
 if __name__ == "__main__":
     tests = [
         test_lookup_known_cwe,
@@ -104,6 +122,9 @@ if __name__ == "__main__":
         test_chain_two_cwes,
         test_chain_three_cwes,
         test_chain_single_cwe_error,
+        test_ai_relevant_default,
+        test_ai_relevant_high_score,
+        test_ai_relevant_json,
     ]
     failed = 0
     for t in tests:

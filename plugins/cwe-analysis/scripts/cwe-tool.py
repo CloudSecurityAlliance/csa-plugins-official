@@ -401,6 +401,64 @@ def cmd_chain(cwe_ids, as_json):
           f"does not mean these CWEs are unrelated in an exploit chain.\n")
 
 
+def cmd_ai_relevant(min_score, as_json):
+    """List AI-relevant CWEs filtered by minimum Max_Score."""
+    ai_data = load_ai_csv()
+
+    matches = []
+    for cwe_id, row in ai_data.items():
+        try:
+            max_score = int(row.get("Max_Score", "0").strip())
+        except ValueError:
+            continue
+        if max_score >= min_score:
+            matches.append(row)
+
+    # Sort by Max_Score descending, then CWE_ID ascending
+    def sort_key(row):
+        try:
+            ms = int(row.get("Max_Score", "0").strip())
+        except ValueError:
+            ms = 0
+        try:
+            cid = int(row.get("CWE_ID", "0").strip())
+        except ValueError:
+            cid = 0
+        return (-ms, cid)
+
+    matches.sort(key=sort_key)
+
+    if not matches:
+        print(f"No AI-relevant CWEs found with Max_Score >= {min_score}.")
+        return
+
+    if as_json:
+        out = []
+        for row in matches:
+            out.append({
+                "CWE_ID": row.get("CWE_ID", ""),
+                "Name": row.get("Name", ""),
+                "View1_Score": row.get("View1_Score", ""),
+                "View2_Score": row.get("View2_Score", ""),
+                "Max_Score": row.get("Max_Score", ""),
+                "AI_Category": row.get("AI_Category", ""),
+                "Attack_Surface": row.get("Attack_Surface", ""),
+            })
+        print(json.dumps(out, indent=2))
+        return
+
+    print(f"{len(matches)} AI-relevant CWEs with Max_Score >= {min_score}\n")
+    for row in matches:
+        cwe_id = row.get("CWE_ID", "")
+        name = row.get("Name", "")
+        v1 = row.get("View1_Score", "").strip()
+        v2 = row.get("View2_Score", "").strip()
+        cat = row.get("AI_Category", "").strip()
+        surface = row.get("Attack_Surface", "").strip()
+        print(f"CWE-{cwe_id}: {name}")
+        print(f"  View1={v1}, View2={v2}, Category={cat}, Surface={surface}\n")
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="cwe-tool",
@@ -496,6 +554,24 @@ def main():
         help="Output as JSON.",
     )
 
+    # ai-relevant subcommand
+    ai_parser = subparsers.add_parser(
+        "ai-relevant",
+        help="List AI-relevant CWEs by minimum score.",
+    )
+    ai_parser.add_argument(
+        "--min-score",
+        type=int,
+        default=2,
+        help="Minimum Max_Score threshold (default: 2).",
+    )
+    ai_parser.add_argument(
+        "--json",
+        dest="as_json",
+        action="store_true",
+        help="Output as JSON.",
+    )
+
     args = parser.parse_args()
 
     if args.command == "lookup":
@@ -508,6 +584,8 @@ def main():
         cmd_children(args.cwe_id, args.as_json)
     elif args.command == "chain":
         cmd_chain(args.cwe_ids, args.as_json)
+    elif args.command == "ai-relevant":
+        cmd_ai_relevant(args.min_score, args.as_json)
 
 
 if __name__ == "__main__":
