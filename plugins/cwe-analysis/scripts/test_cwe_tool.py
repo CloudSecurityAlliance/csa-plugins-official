@@ -117,6 +117,27 @@ def test_ai_relevant_json():
     assert "77" in ids or "78" in ids
     assert len(data) >= 4
 
+# --- lookup parsed output tests ---
+
+def test_lookup_parsed_related():
+    """Lookup should show parsed relationships, not raw :: blobs."""
+    out = run(["lookup", "89"])
+    # Should show parsed ChildOf with CWE name, not raw ::NATURE:ChildOf:...
+    assert "ChildOf" in out
+    assert "CWE-943" in out
+    assert "::NATURE:" not in out  # raw format should not appear
+
+def test_lookup_parsed_consequences():
+    """Lookup should show parsed consequences, not raw :: blobs."""
+    out = run(["lookup", "79"])
+    # Should show parsed scope/impact, not raw ::SCOPE:...
+    assert "Confidentiality" in out or "Integrity" in out or "Availability" in out
+
+def test_version():
+    out = run(["version"])
+    assert "CWE Version" in out
+    assert "Export Date" in out
+
 if __name__ == "__main__":
     tests = [
         test_lookup_known_cwe,
@@ -138,6 +159,9 @@ if __name__ == "__main__":
         test_ai_relevant_default,
         test_ai_relevant_high_score,
         test_ai_relevant_json,
+        test_lookup_parsed_related,
+        test_lookup_parsed_consequences,
+        test_version,
     ]
     failed = 0
     for t in tests:

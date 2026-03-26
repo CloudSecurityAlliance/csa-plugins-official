@@ -79,4 +79,19 @@ Present a ranked candidate list:
 
 Then pause: "Here are my top candidates with confidence levels. Do any miss the mark, or should any confidence levels be adjusted?"
 
+## When to Chain vs. Single CWE
+
+**Use a single CWE when:**
+- The root cause and the exploitable weakness are the same thing (e.g., SQL injection where the missing sanitization IS the injection flaw)
+- The vulnerability is a single, clear weakness type with no intermediate enabling steps
+- The analyst needs a quick, accurate assignment for a CVE record
+
+**Build a chain when:**
+- The root cause is different from the exploitable weakness (e.g., missing input validation enables deserialization which enables code execution)
+- The vulnerability crosses trust boundaries in a way a single CWE can't capture
+- Multiple distinct weaknesses must all be present for exploitation to succeed
+- The analyst wants to document the full causal path for a detailed report
+
+**When in doubt:** Start with a single CWE. A precise single assignment is better than a speculative chain. You can always add chain analysis later if the analyst wants more depth.
+
 If the analyst wants to stop here (single CWE assignment), proceed to Phase 5 (Validation). If they want chain analysis, proceed to Phase 4.

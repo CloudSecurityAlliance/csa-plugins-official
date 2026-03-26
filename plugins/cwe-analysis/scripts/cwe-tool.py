@@ -66,6 +66,121 @@ def _truncate(text, max_len=500):
     return text
 
 
+def _parse_kv_segments(raw):
+    """Parse a ``::KEY:val:KEY:val::`` encoded string into a list of dicts.
+
+    Each ``::``-delimited segment is split on ``:`` into consecutive key/value
+    pairs.  Returns a list of dicts, one per non-empty segment.
+    """
+    results = []
+    segments = raw.split("::")
+    for seg in segments:
+        seg = seg.strip()
+        if not seg:
+            continue
+        parts = seg.split(":")
+        kv = {}
+        i = 0
+        while i < len(parts) - 1:
+            key = parts[i].strip()
+            val = parts[i + 1].strip()
+            if key:
+                # Some keys repeat (e.g. SCOPE, IMPACT) – collect as list
+                if key in kv:
+                    existing = kv[key]
+                    if isinstance(existing, list):
+                        existing.append(val)
+                    else:
+                        kv[key] = [existing, val]
+                else:
+                    kv[key] = val
+            i += 2
+        if kv:
+            results.append(kv)
+    return results
+
+
+def _format_related_weaknesses(raw, mitre_data):
+    """Format Related Weaknesses, showing only view-1000 entries with resolved names."""
+    if not raw or not raw.strip():
+        return "(none)"
+    segments = _parse_kv_segments(raw)
+    taxonomic = {"ChildOf", "ParentOf", "MemberOf", "HasMember", "PeerOf"}
+    lines = []
+    for kv in segments:
+        view_id = kv.get("VIEW ID", "")
+        if view_id != "1000":
+            continue
+        nature = kv.get("NATURE", "")
+        cwe_id = kv.get("CWE ID", "")
+        if not nature or not cwe_id:
+            continue
+        # Resolve name from mitre_data
+        target_row = mitre_data.get(cwe_id, {})
+        name = target_row.get("Name", "(unknown)")
+        kind = "taxonomic" if nature in taxonomic else "directional"
+        lines.append(f"  {nature} CWE-{cwe_id}: {name} (view 1000, {kind})")
+    return "\n".join(lines) if lines else "(none in view 1000)"
+
+
+def _format_consequences(raw):
+    """Format Common Consequences into readable scope/impact lines."""
+    if not raw or not raw.strip():
+        return "(none)"
+    segments = _parse_kv_segments(raw)
+    lines = []
+    for kv in segments:
+        scope = kv.get("SCOPE", "")
+        impact = kv.get("IMPACT", "")
+        # Normalise to list
+        if isinstance(scope, list):
+            scope = ", ".join(scope)
+        if isinstance(impact, list):
+            impact = ", ".join(impact)
+        parts = []
+        if scope:
+            parts.append(f"Scope: {scope}")
+        if impact:
+            parts.append(f"Impact: {impact}")
+        if parts:
+            lines.append("  " + " | ".join(parts))
+    return "\n".join(lines) if lines else "(none)"
+
+
+def _format_observed_examples(raw):
+    """Format Observed Examples into CVE: description lines."""
+    if not raw or not raw.strip():
+        return "(none)"
+    segments = _parse_kv_segments(raw)
+    lines = []
+    for kv in segments:
+        ref = kv.get("REFERENCE", "")
+        desc = kv.get("DESCRIPTION", "")
+        if ref:
+            lines.append(f"  {ref}: {desc}" if desc else f"  {ref}")
+    return "\n".join(lines) if lines else "(none)"
+
+
+def _format_mitigations(raw):
+    """Format Potential Mitigations into [Phase] description lines."""
+    if not raw or not raw.strip():
+        return "(none)"
+    segments = _parse_kv_segments(raw)
+    lines = []
+    for kv in segments:
+        phase = kv.get("PHASE", "")
+        if isinstance(phase, list):
+            phase = ", ".join(phase)
+        desc = kv.get("DESCRIPTION", "")
+        effectiveness = kv.get("EFFECTIVENESS", "")
+        line = f"  [{phase}] " if phase else "  "
+        line += _truncate(desc, 300)
+        if effectiveness:
+            line += f" (Effectiveness: {effectiveness})"
+        lines.append(line)
+    return "\n".join(lines) if lines else "(none)"
+
+
 def cmd_lookup(cwe_id_input, as_json):
     """Look up a CWE by ID and display its details."""
     cwe_id = _strip_prefix(cwe_id_input)
@@ -120,13 +235,13 @@ def cmd_lookup(cwe_id_input, as_json):
             print(f"\n-- Extended Description --")
             print(_truncate(ext_description))
         print(f"\n-- Related Weaknesses --")
-        print(_truncate(related))
+        print(_format_related_weaknesses(related, mitre_data))
         print(f"\n-- Common Consequences --")
-        print(_truncate(consequences))
+        print(_format_consequences(consequences))
         print(f"\n-- Potential Mitigations --")
-        print(_truncate(mitigations))
+        print(_format_mitigations(mitigations))
         print(f"\n-- Observed Examples --")
-        print(_truncate(observed))
+        print(_format_observed_examples(observed))
 
     if ai_row:
         print(f"\n-- AI Relevance --")
@@ -418,6 +533,16 @@ def cmd_chain(cwe_ids, as_json):
           f"Requires) describe potential causal flow.\n")
 
 
+def cmd_version():
+    """Print the CWE data version from VERSION.txt."""
+    version_file = os.path.join(DATA_DIR, "VERSION.txt")
+    if not os.path.isfile(version_file):
+        print("Error: VERSION.txt not found.", file=sys.stderr)
+        sys.exit(1)
+    with open(version_file, encoding="utf-8") as f:
+        print(f.read().strip())
+
+
 def cmd_ai_relevant(min_score, as_json):
     """List AI-relevant CWEs filtered by minimum Max_Score."""
     ai_data = load_ai_csv()
@@ -589,6 +714,12 @@ def main():
         help="Output as JSON.",
     )
 
+    # version subcommand
+    subparsers.add_parser(
+        "version",
+        help="Print CWE data version information.",
+    )
+
     args = parser.parse_args()
 
     if args.command == "lookup":
@@ -603,6 +734,8 @@ def main():
         cmd_chain(args.cwe_ids, args.as_json)
     elif args.command == "ai-relevant":
         cmd_ai_relevant(args.min_score, args.as_json)
+    elif args.command == "version":
+        cmd_version()
 
 
 if __name__ == "__main__":
