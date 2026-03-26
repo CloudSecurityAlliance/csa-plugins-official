@@ -1,0 +1,4 @@
+CWE Version: 4.16
+Export Date: 2026-01-21
+Row Count: 944
+Source: https://cwe.mitre.org/data/csv/1000.csv.zip
