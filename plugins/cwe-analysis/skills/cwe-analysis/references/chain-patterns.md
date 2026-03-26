@@ -30,7 +30,7 @@ A chain represents the causal flow from root weakness to final impact, with each
 
 **Causal flow:** Reflected or stored XSS allows an attacker to inject JavaScript into a page viewed by an authenticated user. The injected script performs authenticated actions on behalf of the victim, bypassing CSRF protections since the request originates from the victim's browser session with valid cookies and tokens.
 
-**MITRE relationships:** CWE-79 CanPrecede CWE-352 is documented in MITRE data. CWE-79 is ChildOf CWE-74 (Injection) in view 1000.
+**MITRE relationships:** CWE-79 is PeerOf CWE-352 in view 1000 (related but distinct weaknesses). CWE-79 is ChildOf CWE-74 (Injection) in view 1000. CWE-79 CanPrecede CWE-494 (Download of Code Without Integrity Check).
 
 ## Pattern 4: AI Prompt Injection Chain
 
@@ -70,7 +70,7 @@ Understanding MITRE's relationship types helps interpret chain data:
 
 - **CanPrecede** — CWE A can lead to CWE B. Present but sparse in MITRE data. Indicates a known causal or enabling relationship between two weaknesses.
 - **CanFollow** — Inverse of CanPrecede. CWE B can follow from CWE A.
-- **ChildOf** — Taxonomic hierarchy. CWE-89 is a child of CWE-74. This is a classification relationship, not a causal one.
+- **ChildOf** — Taxonomic hierarchy. CWE-89 is a child of CWE-943 in view 1000. This is a classification relationship, not a causal one.
 - **PeerOf** — Similar weaknesses at the same abstraction level. CWE-862 and CWE-863 are peers (both deal with authorization).
 - **Requires** — CWE A requires CWE B to be exploitable. The presence of one weakness is a precondition for exploiting another.
 

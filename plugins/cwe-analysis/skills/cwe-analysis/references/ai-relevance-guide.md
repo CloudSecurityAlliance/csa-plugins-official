@@ -50,7 +50,7 @@ These CWEs represent the most direct intersection of traditional weakness classi
 - **CWE-1427: Improper Neutralization of Input Used for LLM Prompting** — The canonical attack on LLMs. Prompt injection is the defining weakness of current-generation language model applications.
 - **CWE-1039: Automated Recognition Mechanism with Inadequate Detection or Handling of Adversarial Input Perturbations** — Attacks on ML recognition systems. Adversarial examples that cause misclassification in vision, audio, or other ML models.
 - **CWE-502: Deserialization of Untrusted Data** — Malicious model files. Serialized model formats (particularly Python-based formats) can execute arbitrary code when loaded.
-- **CWE-1434: Insecure Default Initialization of Inference Engine Resource** — Misconfigured inference parameters such as temperature, top_k, or other generation settings that affect model behavior and safety.
+- **CWE-1434: Insecure Setting of Generative AI/ML Model Inference Parameters** — Misconfigured inference parameters such as temperature, top_k, or other generation settings that affect model behavior and safety.
 
 ### Attacks VIA AI (View 2 = 4)
 

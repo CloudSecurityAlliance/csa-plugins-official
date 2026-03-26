@@ -53,7 +53,7 @@ This is **annotation**, not chain construction. The chain should be correct rega
 
 > **Why chains matter for CVE records:** A single CWE on a CVE record tells you what the weakness IS, but a chain tells you HOW it's exploitable. For a CNA, the primary CWE (the most specific exploitable weakness) goes on the CVE record. The chain goes in the analysis justification — it shows you understand the vulnerability deeply enough to trace causality.
 >
-> **Taxonomic vs. exploit-flow relationships:** CWE-89 (SQL Injection) has a ChildOf relationship to CWE-74 (Injection) — that's taxonomy. But in an exploit chain, CWE-20 (Input Validation) CanPrecede CWE-89 — that's temporal flow. The tool shows both kinds. Don't confuse a parent-child hierarchy relationship with a causal exploit relationship.
+> **Taxonomic vs. directional relationships:** CWE-89 (SQL Injection) has a ChildOf relationship to CWE-943 (Data Query Logic) in view 1000 — that's taxonomy, describing where SQL injection sits in the classification hierarchy. But CWE-20 (Input Validation) CanPrecede CWE-74 (Injection) — that's a directional relationship describing potential causal flow. The tool shows both kinds and labels them differently. Don't confuse parent-child hierarchy with causal exploit flow.
 
 ## Output
 

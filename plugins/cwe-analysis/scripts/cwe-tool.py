@@ -106,6 +106,7 @@ def cmd_lookup(cwe_id_input, as_json):
         abstraction = mitre_row.get("Weakness Abstraction", "").strip()
         status = mitre_row.get("Status", "").strip()
         description = mitre_row.get("Description", "").strip()
+        ext_description = mitre_row.get("Extended Description", "").strip()
         related = mitre_row.get("Related Weaknesses", "").strip()
         consequences = mitre_row.get("Common Consequences", "").strip()
         mitigations = mitre_row.get("Potential Mitigations", "").strip()
@@ -115,6 +116,9 @@ def cmd_lookup(cwe_id_input, as_json):
         print(f"Status      : {status or '(none)'}")
         print(f"\n-- Description --")
         print(_truncate(description))
+        if ext_description:
+            print(f"\n-- Extended Description --")
+            print(_truncate(ext_description))
         print(f"\n-- Related Weaknesses --")
         print(_truncate(related))
         print(f"\n-- Common Consequences --")
@@ -398,15 +402,20 @@ def cmd_chain(cwe_ids, as_json):
             if v1 or v2:
                 print(f"  AI Relevance: View1={v1}, View2={v2}, Category={cat}")
 
-    print(f"\n-- Relationships Found --")
+    print(f"\n-- Relationships Found (view 1000) --")
     if relationships:
+        taxonomic = {"ChildOf", "ParentOf", "MemberOf", "HasMember", "PeerOf"}
         for rel in relationships:
-            print(f"  CWE-{rel['from']} --[{rel['nature']}]--> CWE-{rel['to']}")
+            nature = rel['nature']
+            kind = "taxonomic" if nature in taxonomic else "directional"
+            print(f"  CWE-{rel['from']} --[{nature}]--> CWE-{rel['to']}  ({kind})")
     else:
-        print("  No direct taxonomic relationships found between these CWEs.")
+        print("  No direct relationships found between these CWEs in view 1000.")
 
-    print(f"\nNote: CWE relationships are taxonomic. Absence of a relationship "
-          f"does not mean these CWEs are unrelated in an exploit chain.\n")
+    print(f"\nNote: Absence of a relationship does not mean these CWEs are "
+          f"unrelated in an exploit chain. Taxonomic relationships (ChildOf, PeerOf) "
+          f"describe classification. Directional relationships (CanPrecede, CanFollow, "
+          f"Requires) describe potential causal flow.\n")
 
 
 def cmd_ai_relevant(min_score, as_json):
