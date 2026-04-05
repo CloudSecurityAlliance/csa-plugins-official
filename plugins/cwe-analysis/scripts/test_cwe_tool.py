@@ -138,6 +138,12 @@ def test_version():
     assert "CWE Version" in out
     assert "Export Date" in out
 
+def test_candidates_parsed_consequences():
+    """Candidates output should show parsed consequences, not raw :: blobs."""
+    out = run(["candidates", "--impact", "code execution"])
+    assert "::SCOPE:" not in out, "Raw blob found in candidates output"
+    assert "Confidentiality" in out or "Integrity" in out or "Availability" in out
+
 if __name__ == "__main__":
     tests = [
         test_lookup_known_cwe,
@@ -162,6 +168,7 @@ if __name__ == "__main__":
         test_lookup_parsed_related,
         test_lookup_parsed_consequences,
         test_version,
+        test_candidates_parsed_consequences,
     ]
     failed = 0
     for t in tests:

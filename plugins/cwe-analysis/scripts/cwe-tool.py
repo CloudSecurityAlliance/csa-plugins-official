@@ -181,6 +181,49 @@ def _format_mitigations(raw):
     return "\n".join(lines) if lines else "(none)"
 
 
+def _compact_consequences(raw):
+    """Format Common Consequences as a single compact line.
+
+    Groups impacts by scope, deduplicates, returns e.g.:
+    "Confidentiality (Read Data), Availability (DoS: Crash, DoS: Resource Consumption)"
+    """
+    if not raw or not raw.strip():
+        return "(none)"
+    segments = _parse_kv_segments(raw)
+    # Group impacts by scope, dedup
+    scope_impacts = {}
+    for kv in segments:
+        scope = kv.get("SCOPE", "")
+        impact = kv.get("IMPACT", "")
+        if isinstance(scope, list):
+            scopes = scope
+        else:
+            scopes = [scope] if scope else []
+        if isinstance(impact, list):
+            impacts = impact
+        else:
+            impacts = [impact] if impact else []
+        for s in scopes:
+            s = s.strip()
+            if not s:
+                continue
+            if s not in scope_impacts:
+                scope_impacts[s] = []
+            for imp in impacts:
+                imp = imp.strip()
+                if imp and imp not in scope_impacts[s]:
+                    scope_impacts[s].append(imp)
+    if not scope_impacts:
+        return "(none)"
+    parts = []
+    for scope, impacts in scope_impacts.items():
+        if impacts:
+            parts.append(f"{scope} ({', '.join(impacts)})")
+        else:
+            parts.append(scope)
+    return ", ".join(parts)
+
+
 def cmd_lookup(cwe_id_input, as_json):
     """Look up a CWE by ID and display its details."""
     cwe_id = _strip_prefix(cwe_id_input)
@@ -351,7 +394,7 @@ def cmd_candidates(impact, abstraction, as_json):
         cwe_id = row.get("CWE-ID", "")
         name = row.get("Name", "")
         abs_val = row.get("Weakness Abstraction", "")
-        consequences = _truncate(row.get("Common Consequences", ""), 120)
+        consequences = _compact_consequences(row.get("Common Consequences", ""))
         print(f"CWE-{cwe_id}: {name}")
         print(f"  Abstraction: {abs_val}")
         print(f"  Consequences: {consequences}\n")
