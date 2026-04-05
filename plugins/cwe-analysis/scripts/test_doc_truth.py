@@ -7,12 +7,24 @@ import csv
 import os
 import re
 import sys
+import subprocess
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data")
 REFS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "skills", "cwe-analysis", "references")
+TOOL = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cwe-tool.py")
 
 MITRE_CSV = os.path.join(DATA_DIR, "CWE-Research-Concepts-1000.csv")
 AI_CSV = os.path.join(DATA_DIR, "CWE-AI-Classifications.csv")
+
+
+def run(args, expect_rc=0):
+    """Run cwe-tool.py with given arguments and return stdout."""
+    result = subprocess.run(
+        [sys.executable, TOOL] + args,
+        capture_output=True, text=True
+    )
+    assert result.returncode == expect_rc, f"Exit {result.returncode}: {result.stderr}\nStdout: {result.stdout}"
+    return result.stdout
 
 
 def load_mitre():
@@ -113,6 +125,14 @@ def test_cwe79_childof_74_view1000():
     assert "74" in view1000_parents, f"CWE-79 view-1000 parents: {view1000_parents}"
 
 
+# --- similar command regression test ---
+
+def test_cwe79_similar_includes_352():
+    """CWE-79 PeerOf CWE-352 should be discoverable via the similar command."""
+    out = run(["similar", "79"])
+    assert "CWE-352" in out, "CWE-352 should appear as peer of CWE-79"
+
+
 if __name__ == "__main__":
     tests = [
         test_score4_cwe_list,
@@ -120,6 +140,7 @@ if __name__ == "__main__":
         test_cwe89_parent_is_943,
         test_cwe79_peerof_352,
         test_cwe79_childof_74_view1000,
+        test_cwe79_similar_includes_352,
     ]
     failed = 0
     for t in tests:
