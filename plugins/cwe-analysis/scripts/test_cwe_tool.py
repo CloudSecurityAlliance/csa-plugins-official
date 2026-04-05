@@ -144,6 +144,15 @@ def test_candidates_parsed_consequences():
     assert "::SCOPE:" not in out, "Raw blob found in candidates output"
     assert "Confidentiality" in out or "Integrity" in out or "Availability" in out
 
+def test_search_parsed_output():
+    """Search output should include parsed Consequences and Related, no raw blobs."""
+    out = run(["search", "injection"])
+    # After adding Consequences/Related to search, verify they're parsed
+    assert "::SCOPE:" not in out, "Raw consequence blob found in search output"
+    assert "::NATURE:" not in out, "Raw related blob found in search output"
+    assert "Consequences:" in out
+    assert "Related:" in out
+
 if __name__ == "__main__":
     tests = [
         test_lookup_known_cwe,
@@ -169,6 +178,7 @@ if __name__ == "__main__":
         test_lookup_parsed_consequences,
         test_version,
         test_candidates_parsed_consequences,
+        test_search_parsed_output,
     ]
     failed = 0
     for t in tests:

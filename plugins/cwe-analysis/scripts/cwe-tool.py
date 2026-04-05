@@ -224,6 +224,26 @@ def _compact_consequences(raw):
     return ", ".join(parts)
 
 
+def _compact_related(raw, mitre_data):
+    """Format Related Weaknesses as a single compact line (view 1000 only).
+
+    Returns e.g.: "ChildOf CWE-943, PeerOf CWE-564"
+    """
+    if not raw or not raw.strip():
+        return "(none)"
+    segments = _parse_kv_segments(raw)
+    parts = []
+    for kv in segments:
+        view_id = kv.get("VIEW ID", "")
+        if view_id != "1000":
+            continue
+        nature = kv.get("NATURE", "")
+        cwe_id = kv.get("CWE ID", "")
+        if nature and cwe_id:
+            parts.append(f"{nature} CWE-{cwe_id}")
+    return ", ".join(parts) if parts else "(none in view 1000)"
+
+
 def cmd_lookup(cwe_id_input, as_json):
     """Look up a CWE by ID and display its details."""
     cwe_id = _strip_prefix(cwe_id_input)
@@ -343,9 +363,13 @@ def cmd_search(keywords, as_json):
         name = row.get("Name", "")
         abstraction = row.get("Weakness Abstraction", "")
         desc = _truncate(row.get("Description", ""), 120)
+        consequences = _compact_consequences(row.get("Common Consequences", ""))
+        related = _compact_related(row.get("Related Weaknesses", ""), mitre_data)
         print(f"CWE-{cwe_id}: {name}")
         print(f"  Abstraction: {abstraction}")
-        print(f"  {desc}\n")
+        print(f"  {desc}")
+        print(f"  Consequences: {consequences}")
+        print(f"  Related: {related}\n")
 
 
 _SPECIFICITY_ORDER = {"Variant": 0, "Base": 1, "Class": 2, "Pillar": 3}
@@ -395,9 +419,11 @@ def cmd_candidates(impact, abstraction, as_json):
         name = row.get("Name", "")
         abs_val = row.get("Weakness Abstraction", "")
         consequences = _compact_consequences(row.get("Common Consequences", ""))
+        related = _compact_related(row.get("Related Weaknesses", ""), mitre_data)
         print(f"CWE-{cwe_id}: {name}")
         print(f"  Abstraction: {abs_val}")
-        print(f"  Consequences: {consequences}\n")
+        print(f"  Consequences: {consequences}")
+        print(f"  Related: {related}\n")
 
 
 def _parse_related_weaknesses(related_str):
