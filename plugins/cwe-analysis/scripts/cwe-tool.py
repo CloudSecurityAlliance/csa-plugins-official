@@ -670,6 +670,159 @@ def cmd_ai_relevant(min_score, as_json):
         print(f"  View1={v1}, View2={v2}, Category={cat}, Surface={surface}\n")
 
 
+def cmd_similar(cwe_id_input, as_json):
+    """Find similar CWEs for disambiguation: PeerOf relationships + siblings (same parent)."""
+    target_id = _strip_prefix(cwe_id_input)
+    mitre_data = load_mitre_csv()
+
+    if target_id not in mitre_data:
+        print(f"Error: CWE-{target_id} not found.", file=sys.stderr)
+        sys.exit(1)
+
+    target_row = mitre_data[target_id]
+    target_related = target_row.get("Related Weaknesses", "")
+    target_rels = _parse_related_weaknesses(target_related)
+
+    # 1. Find parents (ChildOf in view 1000)
+    parents = []
+    for nature, rel_id, view_id in target_rels:
+        if nature == "ChildOf" and view_id == "1000":
+            parent_row = mitre_data.get(rel_id)
+            if parent_row:
+                parents.append(parent_row)
+
+    # 2. Find peers (PeerOf in view 1000, bidirectional)
+    peer_ids = set()
+    # Forward: target lists PeerOf X
+    for nature, rel_id, view_id in target_rels:
+        if nature == "PeerOf" and view_id == "1000":
+            peer_ids.add(rel_id)
+    # Reverse: X lists PeerOf target
+    for cwe_id, row in mitre_data.items():
+        if cwe_id == target_id:
+            continue
+        related = row.get("Related Weaknesses", "")
+        if not related:
+            continue
+        rels = _parse_related_weaknesses(related)
+        for nature, rel_id, view_id in rels:
+            if nature == "PeerOf" and rel_id == target_id and view_id == "1000":
+                peer_ids.add(cwe_id)
+    peers = [mitre_data[pid] for pid in sorted(peer_ids) if pid in mitre_data]
+
+    # 3. Find siblings (other children of same parents in view 1000)
+    parent_ids = set()
+    for nature, rel_id, view_id in target_rels:
+        if nature == "ChildOf" and view_id == "1000":
+            parent_ids.add(rel_id)
+    siblings = []
+    if parent_ids:
+        for cwe_id, row in mitre_data.items():
+            if cwe_id == target_id:
+                continue
+            related = row.get("Related Weaknesses", "")
+            if not related:
+                continue
+            rels = _parse_related_weaknesses(related)
+            for nature, rel_id, view_id in rels:
+                if nature == "ChildOf" and view_id == "1000" and rel_id in parent_ids:
+                    siblings.append({"row": row, "parent": rel_id})
+                    break
+
+    if as_json:
+        result = {
+            "target": {
+                "CWE-ID": target_id,
+                "Name": target_row.get("Name", ""),
+                "Weakness Abstraction": target_row.get("Weakness Abstraction", ""),
+            },
+            "parents": [
+                {
+                    "CWE-ID": r.get("CWE-ID", ""),
+                    "Name": r.get("Name", ""),
+                    "Weakness Abstraction": r.get("Weakness Abstraction", ""),
+                }
+                for r in parents
+            ],
+            "peers": [
+                {
+                    "CWE-ID": r.get("CWE-ID", ""),
+                    "Name": r.get("Name", ""),
+                    "Weakness Abstraction": r.get("Weakness Abstraction", ""),
+                }
+                for r in peers
+            ],
+            "siblings": [
+                {
+                    "CWE-ID": s["row"].get("CWE-ID", ""),
+                    "Name": s["row"].get("Name", ""),
+                    "Weakness Abstraction": s["row"].get("Weakness Abstraction", ""),
+                    "parent": s["parent"],
+                }
+                for s in siblings
+            ],
+        }
+        print(json.dumps(result, indent=2))
+        return
+
+    # Human-readable output
+    name = target_row.get("Name", "")
+    abstraction = target_row.get("Weakness Abstraction", "")
+    print(f"{'=' * 60}")
+    print(f"Similar to CWE-{target_id}: {name}")
+    print(f"Abstraction: {abstraction}")
+    print(f"{'=' * 60}")
+
+    if not parents and not peers and not siblings:
+        print("\nNo similar CWEs found. This CWE has no PeerOf relationships")
+        print("and no siblings in view 1000.")
+        print()
+        return
+
+    print(f"\nParents:")
+    if parents:
+        for r in parents:
+            pid = r.get("CWE-ID", "")
+            pname = r.get("Name", "")
+            pabs = r.get("Weakness Abstraction", "")
+            print(f"  CWE-{pid}: {pname} [{pabs}]")
+    else:
+        print("  (none — this is a top-level CWE)")
+
+    print(f"\nPeers:")
+    if peers:
+        for r in peers:
+            pid = r.get("CWE-ID", "")
+            pname = r.get("Name", "")
+            pabs = r.get("Weakness Abstraction", "")
+            print(f"  CWE-{pid}: {pname} [{pabs}]")
+    else:
+        print("  (none in view 1000)")
+
+    print(f"\nSiblings:")
+    if siblings:
+        # Group by parent for display
+        by_parent = {}
+        for s in siblings:
+            pid = s["parent"]
+            if pid not in by_parent:
+                by_parent[pid] = []
+            by_parent[pid].append(s["row"])
+        for pid, rows in by_parent.items():
+            parent_row = mitre_data.get(pid, {})
+            parent_name = parent_row.get("Name", "")
+            print(f"  (children of CWE-{pid}: {parent_name})")
+            for r in rows:
+                sid = r.get("CWE-ID", "")
+                sname = r.get("Name", "")
+                sabs = r.get("Weakness Abstraction", "")
+                print(f"    CWE-{sid}: {sname} [{sabs}]")
+    else:
+        print("  (none in view 1000)")
+
+    print()
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="cwe-tool",
@@ -789,6 +942,22 @@ def main():
         help="Print CWE data version information.",
     )
 
+    # similar subcommand
+    similar_parser = subparsers.add_parser(
+        "similar",
+        help="Find PeerOf and sibling CWEs for disambiguation.",
+    )
+    similar_parser.add_argument(
+        "cwe_id",
+        help="CWE ID (e.g. '79' or 'CWE-79').",
+    )
+    similar_parser.add_argument(
+        "--json",
+        dest="as_json",
+        action="store_true",
+        help="Output as JSON.",
+    )
+
     args = parser.parse_args()
 
     if args.command == "lookup":
@@ -805,6 +974,8 @@ def main():
         cmd_ai_relevant(args.min_score, args.as_json)
     elif args.command == "version":
         cmd_version()
+    elif args.command == "similar":
+        cmd_similar(args.cwe_id, args.as_json)
 
 
 if __name__ == "__main__":

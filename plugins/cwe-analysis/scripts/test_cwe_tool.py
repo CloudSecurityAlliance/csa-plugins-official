@@ -153,6 +153,45 @@ def test_search_parsed_output():
     assert "Consequences:" in out
     assert "Related:" in out
 
+def test_similar_known_cwe():
+    """similar 89 should show parent CWE-943 and siblings."""
+    out = run(["similar", "89"])
+    assert "CWE-943" in out
+    # At least one sibling (CWE-90, 643, or 652)
+    assert "CWE-90" in out or "CWE-643" in out or "CWE-652" in out
+
+def test_similar_with_peers():
+    """similar 79 should show CWE-352 as a peer."""
+    out = run(["similar", "79"])
+    assert "CWE-352" in out
+
+def test_similar_json():
+    """similar 79 --json should return valid JSON with expected keys."""
+    out = run(["similar", "79", "--json"])
+    data = json.loads(out)
+    assert "target" in data
+    assert "parents" in data
+    assert "peers" in data
+    assert "siblings" in data
+    # CWE-352 should be in peers
+    peer_ids = [str(p.get("CWE-ID", "")) for p in data["peers"]]
+    assert "352" in peer_ids
+
+def test_similar_nonexistent():
+    """similar with nonexistent CWE should error."""
+    run(["similar", "999999"], expect_rc=1)
+
+def test_similar_no_peers():
+    """similar 89 should have empty peers but populated siblings."""
+    out = run(["similar", "89"])
+    assert "(none" in out.split("Siblings")[0]  # "none" appears in Peers section before Siblings
+    assert "CWE-90" in out  # sibling exists
+
+def test_similar_pillar_no_results():
+    """similar on a Pillar CWE with no peers should report no similar CWEs."""
+    out = run(["similar", "284"])
+    assert "No similar" in out or "no similar" in out
+
 if __name__ == "__main__":
     tests = [
         test_lookup_known_cwe,
@@ -179,6 +218,12 @@ if __name__ == "__main__":
         test_version,
         test_candidates_parsed_consequences,
         test_search_parsed_output,
+        test_similar_known_cwe,
+        test_similar_with_peers,
+        test_similar_json,
+        test_similar_nonexistent,
+        test_similar_no_peers,
+        test_similar_pillar_no_results,
     ]
     failed = 0
     for t in tests:
