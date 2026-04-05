@@ -76,6 +76,6 @@ Would go in `skills/cwe-analysis/examples/` or a single `references/worked-examp
 
 ## Tool Improvements
 
-- **Parsed structured fields in candidates/search output** — same treatment as lookup (currently only lookup parses the raw blobs)
+- ~~**Parsed structured fields in candidates/search output**~~ — Done. Search and candidates now show compact parsed Consequences and Related Weaknesses instead of raw blobs.
+- ~~**`cwe-tool.py similar <CWE-ID>`**~~ — Done. Finds PeerOf and sibling CWEs for disambiguation.
 - **`cwe-tool.py cve-lookup <CVE-ID>`** — if OSV or NVD API is available, look up what CWE was assigned to a given CVE (requires network)
-- **`cwe-tool.py similar <CWE-ID>`** — find CWEs that are PeerOf or otherwise closely related, useful for disambiguation

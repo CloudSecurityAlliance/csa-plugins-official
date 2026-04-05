@@ -40,6 +40,7 @@ Available subcommands:
 - `children <CWE-ID>` — find more specific child CWEs
 - `chain <ID1> <ID2> [...]` — show relationships between 2+ CWEs
 - `ai-relevant [--min-score N]` — list AI-relevant CWEs (default min-score 2)
+- `similar <CWE-ID>` — find PeerOf and sibling CWEs for disambiguation
 
 All subcommands support `--json` for structured output.
 
