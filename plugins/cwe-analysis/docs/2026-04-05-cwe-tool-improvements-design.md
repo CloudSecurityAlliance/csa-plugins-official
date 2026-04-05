@@ -1,7 +1,7 @@
 # cwe-tool.py Improvements: Parsed List Output + Similar Subcommand
 
 **Date:** 2026-04-05
-**Scope:** Two improvements to `scripts/cwe-tool.py` — no changes to skill phases, SKILL.md, or plugin.json.
+**Scope:** Two improvements to `scripts/cwe-tool.py`, plus doc updates to SKILL.md and TODO.md. No changes to skill phases or plugin.json.
 
 ## 1. Compact Parsed Output for List Views
 
@@ -22,6 +22,7 @@ Add two compact formatter functions alongside the existing multi-line formatters
 - `_compact_consequences(raw)` — Parses `::KEY:val::` blobs into a single line.
   - Output: `"Confidentiality (Read Data), Integrity (Modify Data), Availability (DoS: Crash)"`
   - Format: `"Scope (Impact1, Impact2), Scope2 (Impact3)"`
+  - Deduplicates impacts within each scope (the raw data sometimes has duplicates like `DoS, DoS`).
   - Uses `_parse_kv_segments()` (existing, proven parser).
 
 - `_compact_related(raw, mitre_data)` — Parses Related Weaknesses into a single line, view 1000 only.
@@ -62,8 +63,10 @@ New output per result:
 CWE-121: Stack-based Buffer Overflow
   Abstraction: Variant
   Consequences: Availability (Modify Memory, DoS: Crash, DoS: Resource Consumption), Confidentiality (Read Memory)
-  Related: ChildOf CWE-787
+  Related: ChildOf CWE-788, ChildOf CWE-787
 ```
+
+Note: CWE-121 has two parents in view 1000. The compact format lists all relationships.
 
 Raw blob replaced with compact parsed version. Related Weaknesses added.
 
@@ -144,7 +147,7 @@ Siblings (children of CWE-943):
 ### New tests in `test_cwe_tool.py`
 
 **Parsed list output (2 tests):**
-- `test_search_no_raw_blobs` — Search "injection", verify no `::SCOPE:` or `::NATURE:` strings in output.
+- `test_search_parsed_output` — Search "injection", verify the new Consequences and Related lines are parsed (no `::SCOPE:` or `::NATURE:` raw blobs), and that readable fields like "Confidentiality" or "Availability" appear.
 - `test_candidates_parsed_consequences` — Candidates with `--impact "code execution"`, verify readable consequence text appears (e.g., "Confidentiality" or "Availability"), no `::SCOPE:` raw blobs.
 
 **Similar subcommand (5 tests):**
@@ -153,11 +156,12 @@ Siblings (children of CWE-943):
 - `test_similar_json` — `similar 79 --json`, verify valid JSON with `target`, `parents`, `peers`, `siblings` keys.
 - `test_similar_nonexistent` — `similar 999999`, expect exit code 1.
 - `test_similar_no_peers` — `similar 89`, verify peers section is empty (CWE-89 has no PeerOf relationships), siblings section is populated.
+- `test_similar_pillar_no_results` — `similar 284` (Pillar, no parents, no one peers to it), verify graceful "No similar CWEs found" message.
 
 **New doc truth test in `test_doc_truth.py`:**
 - `test_cwe79_similar_includes_352` — Run `similar 79`, verify CWE-352 appears. Guards against data regressions in PeerOf relationships.
 
-**Total: 7 new tests (27 → 34).**
+**Total: 8 new tests (27 → 35).**
 
 ## 4. Documentation Updates
 
