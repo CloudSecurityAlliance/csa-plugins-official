@@ -64,6 +64,18 @@ A chain represents the causal flow from root weakness to final impact, with each
 
 **MITRE relationships:** CWE-22 CanPrecede CWE-434 in some exploitation scenarios. CWE-434 CanPrecede CWE-94 when the uploaded file is executable.
 
+## Pattern 8: Compound Weakness (Convergent)
+
+**Real-world example:** CVE-2026-31979 — Himmelblau symlink privilege escalation
+
+**Topology:** CWE-59 (Improper Link Resolution Before File Access) + CWE-693 (Protection Mechanism Failure) → root privilege escalation
+
+**Causal flow:** The Himmelblau daemon (running as root) writes Kerberos credential cache files to `/tmp/krb5cc_<uid>` without checking for symlinks (CWE-59). Separately, a code change removed `PrivateTmp=true` from the systemd unit, exposing the daemon's `/tmp` to unprivileged users (CWE-693). Neither alone is exploitable: the symlink-following code is harmless when `/tmp` is namespaced (no attacker access), and shared `/tmp` is harmless when the daemon validates symlinks. Combined, an unprivileged user creates a symlink pointing to `/etc/shadow`, and the root daemon follows it — full privilege escalation.
+
+**Key difference from linear chains:** In a linear chain, each link is exploitable in sequence. In a compound weakness, the individual weaknesses may be unexploitable on their own. The chain notation uses "Contributing" rather than "Root Cause → Enabling" to signal convergence rather than sequence. Neither weakness "enables" the other — they are orthogonal (one is a code flaw, the other a configuration flaw).
+
+**When to suspect compound weaknesses:** The vulnerability description says "only exploitable when..." or "requires... combined with..." or the patch fixes two seemingly unrelated issues.
+
 ## CWE Relationship Vocabulary
 
 Understanding MITRE's relationship types helps interpret chain data:
