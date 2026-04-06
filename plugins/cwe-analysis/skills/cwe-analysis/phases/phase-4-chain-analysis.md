@@ -57,19 +57,25 @@ This is **annotation**, not chain construction. The chain should be correct rega
 
 ## Output
 
-Present the chain:
+Present the chain using the standardized flat format:
 
 ```
 Root Cause: CWE-XXX (Name) [Confidence]
-  ↓ enables
-Enabling: CWE-YYY (Name) [Confidence]
-  ↓ leads to
-Exploited: CWE-ZZZ (Name) [Confidence]
-  ↓ results in
-Impact: [description of what the attacker achieves]
+→ enables: CWE-YYY (Name) [Confidence]
+→ leads to: CWE-ZZZ (Name) [Confidence]
+→ Impact: [description of what the attacker achieves]
 ```
 
-For each link: CWE ID, Name, role in chain, confidence level, and relationship to adjacent links.
+For compound weaknesses (see Step 5b), use the convergent format:
+
+```
+Contributing: CWE-XXX (Name) [Confidence]
+Contributing: CWE-YYY (Name) [Confidence]
+→ combined effect: [description or CWE] [Confidence]
+→ Impact: [description]
+```
+
+For each link: CWE ID, Name, confidence level, and relationship to adjacent links.
 
 If AI relevance was applied, show annotations separately:
 - CWE-XXX: View1=N, View2=N, Category=...
