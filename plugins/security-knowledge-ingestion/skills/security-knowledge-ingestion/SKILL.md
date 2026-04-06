@@ -34,6 +34,16 @@ This plugin uses several tool categories:
 3. **Web access** — fetch content from URLs, look up licenses at source sites
 4. **Bash** — run conversion tools (marker, pandoc) when available
 
+### Degraded Mode
+
+Not all tools may be available. Handle gracefully:
+
+- **SecID MCP not configured**: Skip the SecID check in Phase 1. Inform the user: "SecID tools aren't available — skipping the check for existing structured data. You can add SecID as a remote MCP server: `https://secid.cloudsecurityalliance.org/mcp`." Proceed with the user's file.
+- **Conversion tools not installed** (marker, pandoc): In Phase 3, inform the user which tool is needed and how to install it. Offer alternatives: "If you can convert the document to markdown yourself, provide the markdown and we'll skip to Phase 4."
+- **Cross-model validation tools not installed** (codex, gemini CLIs): In Phase 6, skip validation with a note: "Cross-model validation requires codex and/or gemini CLI. Skipping — you can install them and validate later." Proceed to Phase 7.
+
+The plugin always works with just file reading — all external tools enhance but don't block.
+
 ## Automation Spectrum
 
 Ask the user how they want to work:
@@ -92,7 +102,7 @@ The user has a partial ingestion from a prior session. Ask them what they have s
 
 - **Never silently skip content** — if you can't process something (malformed table, image-only page), say so and ask the user
 - **Preserve source identifiers exactly** — use the IDs the source uses, don't normalize or rename
-- **Pause between phases** — let the user review, correct, and add domain knowledge
+- **Pause between phases** (interactive and semi-automated modes) — let the user review, correct, and add domain knowledge. In fully automated mode, pauses are suppressed and the user reviews the final output only.
 - **Structured input is better** — if the user provides raw PDF when structured data exists, note that structured data produces faster, more reliable results. But always respect their choice.
 
 ## Feedback and Bug Reports
