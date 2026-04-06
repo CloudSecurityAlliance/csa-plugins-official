@@ -17,12 +17,12 @@ Root Cause: CWE-1287 (Improper Validation of Specified Type of Input) [Confirmed
 → Impact: Data exfiltration
 ```
 
-**Compound weakness format:**
+**Compound weakness format (CVE-2026-31979):**
 ```
-Contributing: CWE-362 (Race Condition) [Confirmed]
-Contributing: CWE-22 (Path Traversal) [Strong]
-→ combined effect: CWE-434 (Unrestricted Upload) [Strong]
-→ Impact: Arbitrary code execution
+Contributing: CWE-59 (Improper Link Resolution Before File Access) [Confirmed]
+Contributing: CWE-693 (Protection Mechanism Failure) [Confirmed]
+→ combined effect: Symlink-following by root process in attacker-controlled directory [Best Fit — CWE-59]
+→ Impact: Root privilege escalation
 ```
 
 **Independent weaknesses format:**
@@ -117,10 +117,10 @@ exploited → impact.
 low-severity) but become exploitable in combination. Neither alone is sufficient —
 the vulnerability exists at their intersection.
 
-    Contributing: CWE-362 (Race Condition) [Confirmed]
-    Contributing: CWE-22 (Path Traversal) [Strong]
-    → combined effect: CWE-434 (Unrestricted Upload) [Strong]
-    → Impact: Arbitrary code execution
+    Contributing: CWE-59 (Improper Link Resolution Before File Access) [Confirmed]
+    Contributing: CWE-693 (Protection Mechanism Failure) [Confirmed]
+    → combined effect: Symlink-following by root in attacker-controlled dir [Best Fit — CWE-59]
+    → Impact: Root privilege escalation
 
 Tag each contributing weakness independently. The "combined effect" CWE describes
 what becomes possible when both are present. If no single CWE captures the combined
@@ -143,21 +143,25 @@ And add Pattern 8 to `references/chain-patterns.md`:
 ```markdown
 ## Pattern 8: Compound Weakness (Convergent)
 
-**Topology:** CWE-362 (Concurrent Execution Using Shared Resource with Improper
-Synchronization) + CWE-22 (Path Traversal) → CWE-434 (Unrestricted Upload of File
-with Dangerous Type)
+**Real-world example:** CVE-2026-31979 — Himmelblau symlink privilege escalation
 
-**Causal flow:** A race condition in the upload handler allows a brief window where
-path validation has completed but the file hasn't been written yet. A concurrent
-request exploiting a path traversal during this window writes the file to an
-unintended location. Neither the race condition alone (the upload directory is safe)
-nor the path traversal alone (it's caught by validation) would be exploitable — the
-vulnerability exists only at the intersection.
+**Topology:** CWE-59 (Improper Link Resolution Before File Access) + CWE-693
+(Protection Mechanism Failure) → root privilege escalation
+
+**Causal flow:** The Himmelblau daemon (running as root) writes Kerberos credential
+cache files to `/tmp/krb5cc_<uid>` without checking for symlinks (CWE-59). Separately,
+a code change removed `PrivateTmp=true` from the systemd unit, exposing the daemon's
+`/tmp` to unprivileged users (CWE-693). Neither alone is exploitable: the symlink-
+following code is harmless when `/tmp` is namespaced (no attacker access), and shared
+`/tmp` is harmless when the daemon validates symlinks. Combined, an unprivileged user
+creates a symlink pointing to `/etc/shadow`, and the root daemon follows it — full
+privilege escalation.
 
 **Key difference from linear chains:** In a linear chain, each link is exploitable
 in sequence. In a compound weakness, the individual weaknesses may be unexploitable
 on their own. The chain notation uses "Contributing" rather than "Root Cause →
-Enabling" to signal convergence rather than sequence.
+Enabling" to signal convergence rather than sequence. Neither weakness "enables" the
+other — they are orthogonal (one is a code flaw, the other a configuration flaw).
 
 **When to suspect compound weaknesses:** The vulnerability description says "only
 exploitable when..." or "requires... combined with..." or the patch fixes two
@@ -172,7 +176,7 @@ seemingly unrelated issues.
 
 **Problem:** No guidance on whether to sample or fully trace code in large codebases.
 
-**Fix:** Add one sentence to `phases/phase-2-code-analysis.md` process section, at the beginning of the code tracing instructions:
+**Fix:** Add one sentence to `phases/phase-2-code-analysis.md` at the top of the "Process" section, before "Step 1: Locate the Entry Point" (line 16):
 
 ```markdown
 With AI-assisted analysis, the default approach is to trace the full code path in
