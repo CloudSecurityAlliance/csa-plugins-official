@@ -1,0 +1,12 @@
+{
+  "name": "security-knowledge-ingestion",
+  "description": "Ingest security knowledge documents (standards, regulations, frameworks, controls, capabilities) into structured, machine-readable data. Checks SecID for existing structured data, handles license verification for contributions, produces reproducible conversion recipes, and guides users toward proper data management.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Kurt Seifried",
+    "email": "kseifried@cloudsecurityalliance.org"
+  },
+  "skills": [
+    "skills/security-knowledge-ingestion/SKILL.md"
+  ]
+}
