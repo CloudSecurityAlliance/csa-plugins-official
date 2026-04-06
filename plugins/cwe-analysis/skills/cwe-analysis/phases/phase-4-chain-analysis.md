@@ -40,6 +40,32 @@ Each chain link gets its own confidence level. The root cause may be **Confirmed
 
 Compare the chain against patterns in `references/chain-patterns.md`. Does it match a known pattern? If so, verify the match is genuine, not just superficial similarity.
 
+### Step 5b: Multi-Weakness Topologies
+
+Not all vulnerabilities follow a linear chain. Three patterns exist:
+
+**Linear chain** (covered above): A enables B enables C. Root cause → enabling → exploited → impact.
+
+**Compound weakness**: Two or more weaknesses that are individually benign (or low-severity) but become exploitable in combination. Neither alone is sufficient — the vulnerability exists at their intersection.
+
+```
+Contributing: CWE-59 (Improper Link Resolution Before File Access) [Confirmed]
+Contributing: CWE-693 (Protection Mechanism Failure) [Confirmed]
+→ combined effect: Symlink-following by root in attacker-controlled dir [Best Fit — CWE-59]
+→ Impact: Root privilege escalation
+```
+
+Tag each contributing weakness independently. The "combined effect" CWE describes what becomes possible when both are present. If no single CWE captures the combined effect, note this as a Best Fit situation.
+
+**Independent weaknesses**: Two or more unrelated weaknesses in the same software, reported under the same CVE or advisory. These are not a chain — they don't enable each other. Assign each separately with its own confidence level.
+
+```
+Independent #1: CWE-89 (SQL Injection) [Confirmed]
+Independent #2: CWE-79 (Cross-site Scripting) [Strong]
+```
+
+If independent weaknesses are bundled in a single CVE, note that the CVE covers multiple distinct weaknesses. Some CNAs prefer separate CVEs for separate weaknesses — flag this for the analyst.
+
 ### Step 6: AI Relevance Overlay (if applicable)
 
 **After the chain is established**, annotate each link with AI relevance if the vulnerability involves an AI system:
@@ -57,19 +83,25 @@ This is **annotation**, not chain construction. The chain should be correct rega
 
 ## Output
 
-Present the chain:
+Present the chain using the standardized flat format:
 
 ```
 Root Cause: CWE-XXX (Name) [Confidence]
-  ↓ enables
-Enabling: CWE-YYY (Name) [Confidence]
-  ↓ leads to
-Exploited: CWE-ZZZ (Name) [Confidence]
-  ↓ results in
-Impact: [description of what the attacker achieves]
+→ enables: CWE-YYY (Name) [Confidence]
+→ leads to: CWE-ZZZ (Name) [Confidence]
+→ Impact: [description of what the attacker achieves]
 ```
 
-For each link: CWE ID, Name, role in chain, confidence level, and relationship to adjacent links.
+For compound weaknesses (see Step 5b), use the convergent format:
+
+```
+Contributing: CWE-XXX (Name) [Confidence]
+Contributing: CWE-YYY (Name) [Confidence]
+→ combined effect: [description or CWE] [Confidence]
+→ Impact: [description]
+```
+
+For each link: CWE ID, Name, confidence level, and relationship to adjacent links.
 
 If AI relevance was applied, show annotations separately:
 - CWE-XXX: View1=N, View2=N, Category=...
