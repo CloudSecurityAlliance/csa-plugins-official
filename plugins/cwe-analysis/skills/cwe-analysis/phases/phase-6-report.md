@@ -25,9 +25,17 @@ A concise paragraph (3-5 sentences) explaining why this CWE was selected. Cite s
 **Weakness Chain** (if Phase 4 was completed):
 ```
 Root Cause: CWE-[ID] ([Name]) [Confidence]
-  → Enabling: CWE-[ID] ([Name]) [Confidence]
-    → Exploited: CWE-[ID] ([Name]) [Confidence]
-      → Impact: [description]
+→ enables: CWE-[ID] ([Name]) [Confidence]
+→ leads to: CWE-[ID] ([Name]) [Confidence]
+→ Impact: [description]
+```
+
+For compound weaknesses:
+```
+Contributing: CWE-[ID] ([Name]) [Confidence]
+Contributing: CWE-[ID] ([Name]) [Confidence]
+→ combined effect: CWE-[ID] ([Name]) [Confidence]
+→ Impact: [description]
 ```
 
 **Abstraction Level:**

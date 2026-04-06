@@ -13,6 +13,8 @@ Skip this phase if:
 
 ## Process
 
+With AI-assisted analysis, the default approach is to trace the full code path in depth rather than sampling. Only fall back to sampling if the codebase is too large to fit in context or the analyst directs you to focus on specific components.
+
 ### Step 1: Locate the Entry Point
 
 Find where external input enters the system:
