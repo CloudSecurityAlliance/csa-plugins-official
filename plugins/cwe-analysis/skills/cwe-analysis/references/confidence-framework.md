@@ -2,6 +2,14 @@
 
 Every CWE assignment carries uncertainty. This framework makes that uncertainty explicit and traceable rather than hidden.
 
+## Two Dimensions of Uncertainty
+
+Adapted from intelligence community analytic standards (ICD 203), this framework distinguishes between *evidence quality* (how good is your information?) and *taxonomy precision* (how well does the CWE vocabulary cover this weakness?).
+
+Most confidence levels reflect evidence quality — you have more or less evidence that a specific CWE matches. "Best Fit" is the only level that reflects a taxonomy gap — the evidence about the weakness itself may be strong, but the CWE system doesn't have a precise match.
+
+Don't confuse "we're not sure which CWE" (Uncertain — an evidence problem) with "no CWE precisely fits" (Best Fit — a taxonomy problem).
+
 ## Confidence Levels
 
 | Level | Meaning | When to Use | Example |
@@ -10,7 +18,7 @@ Every CWE assignment carries uncertainty. This framework makes that uncertainty 
 | **Strong** | Multiple evidence types agree on this CWE | Impact matches, description matches, observed examples match | Impact is command execution via user input, CWE-78 description and examples both fit, code shows shell invocation |
 | **Supported** | Evidence supports this CWE but not definitively | Description matches well, but code wasn't available or fully traced | Vulnerability description matches CWE-502 deserialization, but couldn't inspect the loading code directly |
 | **Inferred** | Logical deduction from other confirmed facts | Deduction, not direct evidence | "The attack achieves RCE through model loading" — likely CWE-502, but could be another deserialization path |
-| **Best Fit** | Closest available CWE, but imperfect match | No CWE precisely describes this weakness | Vulnerability involves a novel AI attack pattern; CWE-1039 is closest but doesn't capture the full mechanism |
+| **Best Fit** | The CWE taxonomy doesn't precisely cover this weakness. You've searched children, peers, and siblings; nothing fits better. The gap is in CWE's vocabulary, not in your analysis. | Always accompanied by: what specifically doesn't fit, and what a hypothetical better CWE would describe | Vulnerability involves a novel AI attack pattern where the model's training data is poisoned through a feedback loop; CWE-1039 is closest but doesn't capture the feedback loop mechanism. A better CWE would describe "implicit training data manipulation through adversarial feedback." |
 | **Uncertain** | Multiple CWEs are plausible, can't determine which | Insufficient information to differentiate | Could be CWE-22 (path traversal) or CWE-73 (external control of filename) — need more detail about path construction |
 
 ## Usage Rules
@@ -26,6 +34,17 @@ Every CWE assignment carries uncertainty. This framework makes that uncertainty 
 5. **Uncertain assignments must list competing candidates.** "Uncertain" alone is not enough. List all plausible CWEs and what evidence would distinguish them. Example: "Uncertain — CWE-22 or CWE-73. Need to determine whether the attacker controls the full path or just the filename."
 
 6. **Confidence can be upgraded during analysis.** Start conservative and upgrade as evidence accumulates. A CWE that begins as Inferred can become Strong if additional evidence is found during chain analysis or cross-referencing.
+
+## Justification Guidance
+
+Every confidence tag answers two questions: *what do you know?* and *how do you know it?* State both. The goal is that a reviewer reading your justification can independently assess whether they agree with your confidence level.
+
+- **Confirmed** — You're saying: "I can point to the exact code that proves this." Cite the specific file, line, and mechanism.
+- **Strong** — You're saying: "Multiple independent evidence types all point to the same CWE." Name which types (code, description match, observed examples, patch analysis).
+- **Supported** — You're saying: "The evidence I have points here, but I haven't fully verified it." State what evidence you have and what's missing.
+- **Inferred** — You're saying: "I'm reasoning from confirmed facts to a logical conclusion." State the confirmed facts and the reasoning step.
+- **Best Fit** — You're saying: "I understand the weakness well, but CWE doesn't have an exact match." Describe what the weakness actually is and why the chosen CWE is the closest approximation.
+- **Uncertain** — You're saying: "I have multiple plausible CWEs and can't distinguish between them yet." List the candidates and what information would resolve the ambiguity.
 
 ## Over-Confidence Anti-Patterns
 
