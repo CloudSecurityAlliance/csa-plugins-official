@@ -6,7 +6,5 @@
     "name": "Kurt Seifried",
     "email": "kseifried@cloudsecurityalliance.org"
   },
-  "skills": [
-    "skills/cwe-analysis/SKILL.md"
-  ]
+  "skills": "./skills"
 }
