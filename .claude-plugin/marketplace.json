@@ -39,6 +39,17 @@
       "source": "./plugins/security-knowledge-ingestion",
       "category": "security",
       "homepage": "https://github.com/CloudSecurityAlliance/csa-plugins-official/tree/main/plugins/security-knowledge-ingestion"
+    },
+    {
+      "name": "nist-ir-8477-mapping",
+      "description": "Map relationships between security knowledge sources using the NIST IR 8477 methodology. Supports four relationship styles (crosswalk, supportive, set theory, structural), guided use case documentation, cross-model validation, and multiple output formats including OLIR/CPRT-compatible JSON and Excel.",
+      "author": {
+        "name": "Cloud Security Alliance",
+        "email": "research@cloudsecurityalliance.org"
+      },
+      "source": "./plugins/nist-ir-8477-mapping",
+      "category": "security",
+      "homepage": "https://github.com/CloudSecurityAlliance/csa-plugins-official/tree/main/plugins/nist-ir-8477-mapping"
     }
   ]
 }
