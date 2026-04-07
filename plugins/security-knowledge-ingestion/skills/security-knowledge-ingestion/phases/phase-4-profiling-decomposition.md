@@ -87,8 +87,9 @@ For each leaf-level concept (and meaningful intermediate levels), extract:
 **Rules:**
 - **Preserve source identifiers exactly.** If the source says `A.5.1`, use `A.5.1`. Don't normalize to `A.05.01` or `A-5-1`.
 - **Include all addressable levels.** If the source has both domains and controls, include both as concepts — don't skip the domains.
-- **Don't merge or split concepts.** If the source treats something as one control, it's one concept. If the source has two separate requirements in one article, note that but keep them as one concept matching the source structure.
-- **When in doubt, match the source.** The source document is authoritative on its own structure.
+- **Canonical concepts match the source structure.** If the source treats something as one control, it's one canonical concept. The source document is authoritative on its own structure.
+- **Derived sub-concepts are optional.** When a single source concept contains multiple distinct requirements (common in legal/regulatory text — e.g., one article with 5 sub-paragraphs), you may create derived sub-concepts in addition to the canonical concept. Derived sub-concepts must link back to their canonical parent and be clearly marked as derived (not source-level). This supports downstream mapping precision without misrepresenting the source structure.
+- **When in doubt, match the source.** Canonical concepts always exist. Derived sub-concepts are added only when the user confirms they're useful for their downstream use case.
 
 ### Step 4: Tag with Confidence
 

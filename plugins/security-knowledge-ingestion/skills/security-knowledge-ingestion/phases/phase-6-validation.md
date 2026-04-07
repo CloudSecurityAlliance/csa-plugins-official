@@ -34,10 +34,12 @@ command -v gemini && echo "Gemini available" || echo "Gemini not installed"
 The validation script is at `scripts/validate-decomposition.sh` relative to the plugin root. Resolve the plugin root from this skill's location (up two directories from `skills/security-knowledge-ingestion/`).
 
 ```bash
-<plugin-root>/scripts/validate-decomposition.sh /path/to/structured-output.json
+<plugin-root>/scripts/validate-decomposition.sh /path/to/structured-output.json [/path/to/source-document.md]
 ```
 
-The script sends the structured output along with a review prompt (from `references/validation-prompt.md`) to all available models in parallel. Each model independently reviews for these error patterns:
+The second argument (source document) is optional but strongly recommended — it allows the reviewers to compare the decomposition against the actual source. If the source is available (from Phase 2/3), provide it. The source can be the original markdown, the processed markdown, or any readable format.
+
+The script loads its review prompt from `references/validation-prompt.md` (not hardcoded — edit that file to change validation behavior). It sends the prompt + output + source to all available models in parallel via temp files (no argument-size limits). Each model independently reviews for these error patterns:
 
 - **Completeness**: Did the decomposition miss concepts from the source?
 - **Phantom concepts**: Did it create concepts that don't exist in the source?

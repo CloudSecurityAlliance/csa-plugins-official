@@ -1,6 +1,6 @@
 # Output Formats
 
-The plugin produces structured data in several formats. All formats contain the same information — they're projections of the same internal representation.
+The plugin produces structured data in several formats. **JSON is the canonical lossless format.** Other formats are projections that may lose information — CSV necessarily flattens nested metadata and multi-value fields, YAML-frontmatter markdown may truncate long descriptions. Always keep the JSON as your source of truth; use other formats for specific consumption needs.
 
 ## JSON (Primary)
 
