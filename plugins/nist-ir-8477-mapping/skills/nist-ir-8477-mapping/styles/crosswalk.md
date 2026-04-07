@@ -52,8 +52,11 @@ Per pair:
 {
   "focal_concept": "AC-2",
   "reference_concept": "IAM-12",
-  "relationship": "related",
+  "style": "crosswalk",
+  "relationship_type": null,
   "justification": "Both address account/identity management...",
   "confidence": "High"
 }
 ```
+
+Note: `relationship_type` is null for crosswalk — that's the point. The `style` field identifies this as a crosswalk entry. The justification explains WHY the pair was linked.

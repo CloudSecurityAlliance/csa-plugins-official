@@ -8,7 +8,7 @@ The canonical lossless format. Always produced. All other formats are projection
 {
   "metadata": {
     "methodology": "NIST IR 8477",
-    "style": "supportive",
+    "styles": ["supportive"],
     "focal_document": {
       "title": "NIST SP 800-53 Revision 5",
       "secid": "secid:control/nist.gov/800-53@r5",
@@ -46,6 +46,7 @@ The canonical lossless format. Always produced. All other formats are projection
         "id": "IAM-12",
         "title": "Identity and Access Management"
       },
+      "style": "supportive",
       "relationship_type": "is supported by",
       "relationship_property": "integral to",
       "rationale": null,
@@ -83,6 +84,12 @@ The canonical lossless format. Always produced. All other formats are projection
 
 ## Notes
 
+- **Multiple entries per concept pair are expected.** The same focal/reference pair can appear multiple times when:
+  - Multiple styles are composed (e.g., one supportive entry + one set-theory entry for the same pair)
+  - A pair has both a supportive relationship AND a contrary relationship on different elements (per NIST §4.2)
+  - The same pair is evaluated under different set-theory rationales (syntactic vs semantic)
+- Each mapping entry carries its own `style` field so entries from different styles are distinguishable.
+- `metadata.styles` is an array — lists all styles used in this mapping engagement.
 - `rationale` is null for non-set-theory styles. For set theory, it's "syntactic", "semantic", or "functional".
 - `relationship_property` is null when no property applies (or for styles that don't have properties).
 - `no_relationships` is a separate array — "no relationship" findings are first-class, not buried in the mappings array.

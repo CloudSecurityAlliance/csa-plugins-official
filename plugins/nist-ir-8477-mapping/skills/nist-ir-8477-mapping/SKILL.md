@@ -97,7 +97,7 @@ The user has a partial mapping from a prior session. Ask what they have and whic
 
 1. **Methodology fidelity** — implements NIST IR 8477 exactly as published. Do not invent relationship types, properties, or rationales not defined in the source document.
 2. **Use case before mapping** — Phase 2 must complete before Phase 4. No exceptions. NIST §3.
-3. **Rationale for every relationship** — per NIST §5, every relationship must have documented justification.
+3. **Justification for every relationship** — per NIST §5, every relationship must have documented justification explaining WHY this type was chosen. (Note: "rationale" in set theory means specifically syntactic/semantic/functional — rule 8. "Justification" is the broader requirement for all styles.)
 4. **"No relationship" is a valid, documented result** — pairs considered but found unrelated must be recorded, not silently skipped.
 5. **Sample before full run** — Phase 4 maps a sample, Phase 5 reviews it as a quality gate, then Phase 4b completes the full mapping. This is the NIST-recommended approach.
 6. **Source observations are first-class** — ambiguities, granularity issues, wording problems found during mapping are captured and reported.

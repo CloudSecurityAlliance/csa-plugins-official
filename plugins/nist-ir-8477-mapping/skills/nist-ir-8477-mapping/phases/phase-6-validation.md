@@ -57,6 +57,8 @@ Synthesize:
 2. **One model only** — warrants investigation. Present as: "Flagged by [model] only."
 3. **Contradictions** — note the disagreement.
 
+**If source files were not provided**: Check whether the review outputs acknowledge reduced confidence for completeness and accuracy checks. If a reviewer claims high-confidence completeness findings without source access, flag that to the user — the reviewer may be overconfident.
+
 ### Step 4: Apply Corrections
 
 For validated findings:
