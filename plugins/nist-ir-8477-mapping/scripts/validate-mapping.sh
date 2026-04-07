@@ -182,7 +182,7 @@ fi
 
 if [ "$HAS_GEMINI" = true ]; then
     echo "  Starting Gemini review..."
-    gemini -p "$(cat "$TEMP_PROMPT")" -o text > "$GEMINI_OUTPUT" 2>/dev/null &
+    cat "$TEMP_PROMPT" | gemini -o text > "$GEMINI_OUTPUT" 2>/dev/null &
     GEMINI_PID=$!
     TOOLS_RUNNING="${TOOLS_RUNNING}gemini "
 else

@@ -6,6 +6,20 @@ Map a representative sample of concept pairs to validate the approach before com
 
 Load the appropriate style file(s) from `styles/` before starting. The style file contains the specific relationship types, evaluation guidance, and pitfalls for the selected style.
 
+## Candidate Pair Generation
+
+Before mapping (sample or full), generate the set of candidate pairs to evaluate. Do NOT evaluate every possible combination — for two sources with N and M concepts, N×M pairs is usually impractical and mostly noise.
+
+**Pruning strategies:**
+- **Concept type matching**: Only pair concepts of compatible types (controls with controls, not controls with domain headings) per the use case's concept type specification
+- **Exhaustiveness filter**: If the use case says "strongest direct only," pre-filter to pairs with obvious topical overlap (same security domain, similar keywords, related functions)
+- **Hierarchy-aware pairing**: Match at appropriate hierarchy levels — don't pair a high-level domain with a low-level control unless the use case calls for cross-level mapping
+- **Domain/category pre-filtering**: Group concepts by domain/category and pair within related groups first
+
+**For large sources (100+ concepts each):** Generate candidate pairs in batches by domain/category. Process one batch through the full sample→review→full-run cycle before moving to the next. This provides natural checkpoints for resuming across sessions.
+
+**Document your candidate generation strategy** — it goes into the recipe alongside the mapping itself.
+
 ## Steps
 
 ### Step 1: Select the Sample
