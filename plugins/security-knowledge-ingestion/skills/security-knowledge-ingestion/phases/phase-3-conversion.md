@@ -21,7 +21,7 @@ Skip this phase entirely if the input is already clean markdown or structured da
 
 **If the tool isn't installed:** Inform the user which tool is needed and how to install it. Offer alternatives:
 - "If you can convert the document to markdown yourself, provide the markdown and we'll skip to Phase 4."
-- "You can also try an online converter and paste the result."
+- "You could use an online converter — but **do not upload sensitive, licensed, private, or embargoed documents to third-party online services.** Only use online converters for publicly available, non-restricted content."
 
 Don't block — there's always a path forward.
 

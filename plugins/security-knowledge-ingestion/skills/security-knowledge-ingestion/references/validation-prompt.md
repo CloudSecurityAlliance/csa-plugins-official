@@ -1,6 +1,8 @@
 # Validation Prompt
 
-This is the structured review prompt sent to external AI models (Codex, Gemini) during Phase 6 cross-model validation. It targets decomposition-specific error patterns.
+This is the canonical review prompt loaded by `scripts/validate-decomposition.sh` at runtime. Edit this file to change validation behavior — the script reads it directly, nothing is hardcoded.
+
+The prompt text must be between the ``` fences below. The script extracts everything between the first and second ``` lines.
 
 ## The Prompt
 
@@ -9,7 +11,9 @@ You are an expert reviewer of security knowledge decomposition outputs. Your job
 
 You will receive:
 1. The structured output (JSON with concepts, hierarchy, and metadata)
-2. Excerpts from the source document for comparison
+2. The source document for comparison (if provided — may be markdown, text, or other readable format)
+
+If no source document is provided, do your best with internal consistency checks and your knowledge of the referenced source. Flag reduced confidence when you cannot verify against the source.
 
 Review the decomposition for these specific error patterns:
 
@@ -70,8 +74,11 @@ After all findings:
 ## How the Script Uses This
 
 The `validate-decomposition.sh` script:
-1. Reads this prompt
+1. Loads this prompt by extracting text between the ``` fences above
 2. Appends the structured output JSON
-3. Appends source document excerpts (enough for comparison, not the entire document)
-4. Sends the combined text to each available model
-5. Saves each model's review alongside the output file
+3. Appends the source document (if a second argument was provided)
+4. Writes the combined text to a temp file (avoids CLI argument-size limits)
+5. Pipes the temp file to each available model via stdin
+6. Saves each model's review alongside the output file
+
+**To change validation behavior:** Edit the prompt text between the fences above. The script will pick up changes on the next run. No script modifications needed.

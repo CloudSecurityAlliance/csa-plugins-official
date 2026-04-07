@@ -4,7 +4,7 @@ License checks gate **contribution**, not **processing**. The user provided thei
 
 ## Blocklist
 
-These sources have known license restrictions that prevent public redistribution of full-text structured data. This is a **hard stop for data contribution** — but recipes (prompts, tools, steps) can always be contributed since they contain no copyrighted content.
+These sources have known license restrictions that prevent public redistribution of full-text structured data. This is a **hard stop for data contribution** — but recipes (prompts, tools, conversion steps) are generally safe to contribute as long as they don't contain verbatim copyrighted excerpts. Before contributing a recipe, check that prompts and notes don't quote substantial portions of the source text — paraphrase or reference by section number instead.
 
 | Source | Reason | What CAN be contributed |
 |--------|--------|------------------------|

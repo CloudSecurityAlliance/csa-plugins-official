@@ -6,38 +6,77 @@
 # with a structured review prompt. Each model independently reviews for completeness, phantom
 # concepts, merging/splitting errors, hierarchy accuracy, and metadata fidelity.
 #
-# Using multiple models from different providers reduces the risk of shared blind spots
-# that a single model might have when both creating and reviewing the same work.
+# The review prompt is loaded from references/validation-prompt.md — edit that file to
+# change validation behavior. The prompt is never hardcoded in this script.
 #
 # Usage:
-#   ./validate-decomposition.sh <path-to-structured-output.json>
-#   ./validate-decomposition.sh output/nist-800-53-r5.json
+#   ./validate-decomposition.sh <structured-output.json> [source-document.md]
+#
+#   Both arguments are file paths:
+#     1. (required) The structured decomposition JSON to validate
+#     2. (optional) Source document (markdown, text, or any readable format) for comparison
+#        If omitted, validation runs without source comparison (less effective)
+#
+# Examples:
+#   ./validate-decomposition.sh output/nist-800-53-r5.json source/nist-800-53-r5.md
+#   ./validate-decomposition.sh output/ccm-4.1.json
 #
 # Requirements (at least one must be installed):
-#   - codex CLI (codex-cli) — npm install -g @openai/codex
+#   - codex CLI — npm install -g @openai/codex
 #   - gemini CLI — npm install -g @google/gemini-cli
 #
 # Output:
 #   - Creates <output-name>.codex-review.md and/or <output-name>.gemini-review.md
 #     in the same directory as the input file
-#   - Exit code 0 if at least one review succeeded, 1 if all failed
+#   - Exit code 0 if at least one review succeeded OR if no validators are installed (skipped)
+#   - Exit code 1 only if validators were available but all failed
 
 set -uo pipefail
+
+# --- Resolve script location (for finding prompt file) ---
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+PROMPT_FILE="${PLUGIN_ROOT}/skills/security-knowledge-ingestion/references/validation-prompt.md"
 
 # --- Argument validation ---
 
 if [ $# -lt 1 ]; then
-    echo "Usage: $0 <path-to-structured-output.json>"
+    echo "Usage: $0 <structured-output.json> [source-document.md]"
     echo ""
     echo "Runs cross-model validation on a security knowledge decomposition."
+    echo "Optionally provide the source document for comparison (more effective)."
     echo "Requires at least one of: codex CLI, gemini CLI"
     exit 1
 fi
 
 OUTPUT_PATH="$1"
+SOURCE_PATH="${2:-}"
 
 if [ ! -f "$OUTPUT_PATH" ]; then
-    echo "Error: File not found: $OUTPUT_PATH"
+    echo "Error: Structured output not found: $OUTPUT_PATH"
+    exit 1
+fi
+
+if [ -n "$SOURCE_PATH" ] && [ ! -f "$SOURCE_PATH" ]; then
+    echo "Error: Source document not found: $SOURCE_PATH"
+    exit 1
+fi
+
+# --- Load prompt from file ---
+
+if [ ! -f "$PROMPT_FILE" ]; then
+    echo "Error: Validation prompt not found at: $PROMPT_FILE"
+    echo "Expected at: skills/security-knowledge-ingestion/references/validation-prompt.md"
+    exit 1
+fi
+
+# Extract the prompt from between the ``` fences in the markdown file
+REVIEW_PROMPT="$(sed -n '/^```$/,/^```$/p' "$PROMPT_FILE" | sed '1d;$d')"
+
+if [ -z "$REVIEW_PROMPT" ]; then
+    echo "Error: Could not extract prompt from $PROMPT_FILE"
+    echo "Expected prompt text between \`\`\` fences in the markdown file."
     exit 1
 fi
 
@@ -64,11 +103,13 @@ fi
 
 if [ "$HAS_CODEX" = false ] && [ "$HAS_GEMINI" = false ]; then
     echo ""
-    echo "Error: No validation tools available."
+    echo "No validation tools available. Skipping validation."
     echo "Install at least one of:"
     echo "  npm install -g @openai/codex"
     echo "  npm install -g @google/gemini-cli"
-    exit 1
+    echo ""
+    echo "STATUS: SKIPPED (no validators installed)"
+    exit 0
 fi
 
 # --- Setup ---
@@ -79,76 +120,54 @@ OUTPUT_NAME="$(basename "$OUTPUT_PATH" .json)"
 CODEX_OUTPUT="${OUTPUT_DIR}/${OUTPUT_NAME}.codex-review.md"
 GEMINI_OUTPUT="${OUTPUT_DIR}/${OUTPUT_NAME}.gemini-review.md"
 
-# --- Review prompt ---
-# Same prompt for all models so results are directly comparable.
-# Targets decomposition-specific error patterns.
+# --- Build the full prompt ---
 
-REVIEW_PROMPT="$(cat <<'PROMPT_EOF'
-You are an expert reviewer of security knowledge decomposition outputs. Your job is to verify that a document has been correctly broken down into individually addressable concepts with accurate hierarchy, metadata, and boundaries.
+# Write to a temp file to avoid argument-size limits
+TEMP_PROMPT="$(mktemp)"
+trap 'rm -f "$TEMP_PROMPT"' EXIT
 
-Review the structured decomposition output below. For each finding, provide:
-- The specific concept(s) affected (by ID)
-- Which error pattern applies (see list below)
-- Why it's problematic
-- What the correction should be
+{
+    echo "$REVIEW_PROMPT"
+    echo ""
+    echo "---"
+    echo ""
+    echo "HERE IS THE STRUCTURED DECOMPOSITION TO REVIEW:"
+    echo ""
+    cat "$OUTPUT_PATH"
+} > "$TEMP_PROMPT"
 
-Focus on these specific error patterns:
-
-1. **Completeness**: Are there concepts in the source that are missing from the output? Count concepts and compare. Pay special attention to appendices, annexes, and enhancement sections.
-
-2. **Phantom concepts**: Are there concepts in the output that don't exist in the source? Check that every concept ID corresponds to a real item in the source document.
-
-3. **Merging errors**: Were two distinct concepts merged into one? Look for unusually long descriptions or concepts covering multiple distinct topics.
-
-4. **Splitting errors**: Was one concept split into multiple? Look for concepts that seem to be fragments of a larger whole.
-
-5. **Hierarchy accuracy**: Does the parent-child structure match the source? Are children under the right parents? Is the hierarchy depth correct?
-
-6. **Metadata accuracy**: Are concept types correct (control vs requirement vs recommendation)? Are IDs preserved exactly as the source uses them? Are descriptions faithful to source text?
-
-7. **Boundary accuracy**: Are concept boundaries drawn where the source draws them, not where the AI thinks they should be?
-
-Structure your review as:
-
-## Findings
-
-Number each finding. For each:
-- **Error type**: Which of the 7 patterns above
-- **Severity**: Critical (wrong concepts) / Important (wrong structure) / Minor (wrong metadata)
-- **Location**: Concept ID(s) affected
-- **Evidence**: What the source says vs what the output says
-- **Correction**: What should change
-
-## Summary
-
-After all findings:
-- Total findings by severity
-- Total findings by error type
-- The 3 most important corrections
-- Overall assessment of decomposition quality
-
----
-
-HERE IS THE STRUCTURED DECOMPOSITION TO REVIEW:
-
-PROMPT_EOF
-)"
-
-# Combine prompt and output content
-OUTPUT_CONTENT="$(cat "$OUTPUT_PATH")"
-FULL_PROMPT="${REVIEW_PROMPT}
-
-${OUTPUT_CONTENT}"
+if [ -n "$SOURCE_PATH" ]; then
+    {
+        echo ""
+        echo "---"
+        echo ""
+        echo "HERE IS THE SOURCE DOCUMENT FOR COMPARISON:"
+        echo ""
+        cat "$SOURCE_PATH"
+    } >> "$TEMP_PROMPT"
+else
+    {
+        echo ""
+        echo "---"
+        echo ""
+        echo "NOTE: No source document was provided for comparison. Do your best to validate"
+        echo "the decomposition based on internal consistency, plausibility, and your knowledge"
+        echo "of the referenced source. Flag anything that looks suspicious but note that you"
+        echo "cannot confirm completeness or accuracy without the source."
+    } >> "$TEMP_PROMPT"
+fi
 
 # --- Run reviews ---
 
 echo ""
 echo "Validating decomposition: $OUTPUT_PATH"
+[ -n "$SOURCE_PATH" ] && echo "  Source document: $SOURCE_PATH"
+[ -z "$SOURCE_PATH" ] && echo "  Source document: not provided (reduced accuracy)"
 TOOLS_RUNNING=""
 
 if [ "$HAS_CODEX" = true ]; then
     echo "  Starting Codex review..."
-    codex exec --ephemeral -o "$CODEX_OUTPUT" - <<< "$FULL_PROMPT" &
+    codex exec --ephemeral -o "$CODEX_OUTPUT" - < "$TEMP_PROMPT" &
     CODEX_PID=$!
     TOOLS_RUNNING="${TOOLS_RUNNING}codex "
 else
@@ -157,7 +176,7 @@ fi
 
 if [ "$HAS_GEMINI" = true ]; then
     echo "  Starting Gemini review..."
-    gemini -p "$FULL_PROMPT" -o text > "$GEMINI_OUTPUT" 2>/dev/null &
+    gemini -p "$(cat "$TEMP_PROMPT")" -o text > "$GEMINI_OUTPUT" 2>/dev/null &
     GEMINI_PID=$!
     TOOLS_RUNNING="${TOOLS_RUNNING}gemini "
 else
