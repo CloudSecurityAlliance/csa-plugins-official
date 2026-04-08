@@ -50,6 +50,17 @@
       "source": "./plugins/nist-ir-8477-mapping",
       "category": "security",
       "homepage": "https://github.com/CloudSecurityAlliance/csa-plugins-official/tree/main/plugins/nist-ir-8477-mapping"
+    },
+    {
+      "name": "secid",
+      "description": "SecID — universal security identifier lookup, resolution, and registry research. Resolve CVEs, CWEs, ATT&CK techniques, NIST controls, and 700+ security knowledge sources. Local MCP server calls the SecID REST API with optional --base-url for internal resolvers.",
+      "author": {
+        "name": "Cloud Security Alliance",
+        "email": "research@cloudsecurityalliance.org"
+      },
+      "source": "./plugins/secid",
+      "category": "security",
+      "homepage": "https://github.com/CloudSecurityAlliance/SecID/tree/main/plugins/secid"
     }
   ]
 }
