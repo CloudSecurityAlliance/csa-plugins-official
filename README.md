@@ -17,6 +17,7 @@ A curated directory of Cloud Security Alliance plugins for Claude Code.
 | [cwe-analysis](plugins/cwe-analysis/) | CWE assignment and vulnerability chain analysis for CNAs, security researchers, and vendors. | `/plugin install cwe-analysis@csa-plugins-official` |
 | [security-knowledge-ingestion](plugins/security-knowledge-ingestion/) | Ingest security knowledge documents into structured data with reproducible recipes and SecID integration. | `/plugin install security-knowledge-ingestion@csa-plugins-official` |
 | [nist-ir-8477-mapping](plugins/nist-ir-8477-mapping/) | Map relationships between security knowledge sources using NIST IR 8477 — four relationship styles, use case documentation, cross-model validation. | `/plugin install nist-ir-8477-mapping@csa-plugins-official` |
+| [secid](plugins/secid/) | SecID — resolve CVEs, CWEs, ATT&CK techniques, NIST controls, and 700+ security knowledge sources. Local MCP server with internal resolver support. | `/plugin install secid@csa-plugins-official` |
 
 ## Installation
 
