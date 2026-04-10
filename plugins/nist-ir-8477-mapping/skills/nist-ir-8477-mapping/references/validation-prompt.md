@@ -50,6 +50,27 @@ Review the mapping for these specific error patterns:
 - Is the justification specific or vague?
 - Would a reader understand WHY this relationship type was chosen?
 
+### 8. Chain of Reasoning Completeness
+- Does every positive mapping record include `evaluation_steps[]`?
+- Are evaluation_steps non-trivial? Each step should be a complete sentence with a result and reason — not just "not identical."
+- Does every record include `alternatives_considered[]` with at least one entry?
+- Does every record include `text_evidence[]` citing both sources?
+- B4 (structural) entries: do they have exactly one `evaluation_steps` entry documenting the source location?
+
+### 9. Negative Evidence Completeness
+- Is `no_relationships[]` populated?
+- Does every `no_relationships[]` record include `evaluation_steps[]` and `closest_relationship_considered`?
+- Is `no_relationship_domains[]` populated with at least one domain summary?
+- Do domain summaries include `individual_record_ids[]` as a list (not just a count)?
+- Is `gap_analysis{}` present with non-empty `structural_findings[]`?
+- Are the `coverage_percentage` figures internally consistent with the statistics block?
+
+### 10. Self-Consistency
+- Does `len(mappings) + len(no_relationships)` equal `statistics.total_pairs_evaluated`?
+- Does `coverage_percentage` in `gap_analysis` match the statistics block?
+- Does every ID in every `individual_record_ids[]` list correspond to an entry in `no_relationships[]`?
+- Do the `structural_findings` in `gap_analysis` follow from the individual no_relationship records and domain summaries?
+
 ## Report Format
 
 For each finding:
