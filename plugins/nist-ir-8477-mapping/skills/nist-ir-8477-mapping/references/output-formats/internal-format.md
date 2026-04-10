@@ -167,3 +167,12 @@ The canonical lossless format. Always produced. All other formats are projection
 - `structural_findings` in `gap_analysis` explains systemic patterns (e.g., PE family absent from CCM by design).
 - `source_observations` appear at both the per-mapping and document level.
 - `statistics` are computed from the mappings, not manually entered.
+- `style_selection_rationale`, `candidate_generation_strategy`, `total_pairs_considered` — metadata fields documenting how the mapping was approached. `provenance` captures the model, plugin version, and session type used.
+- `focal_concept_text` and `reference_concept_text` — full verbatim text of each concept. For licensed content, `reference_concept_text` is `"[licensed — not reproduced]"` and excerpts go in `text_evidence[].excerpt`.
+- `evaluation_steps[]` — string array documenting every check performed during evaluation, following `"check: result — reason"` format. Required for all `mappings[]` entries (9 steps for B1/B2/B3 styles).
+- `alternatives_considered[]` — array of `{type, rejected_because}` objects listing relationship types that were considered and rejected. At least one entry required per positive mapping.
+- `text_evidence[]` — array of `{source: "focal"|"reference", excerpt}` objects. Replaces the older flat `source_text_excerpts` field. Source attribution is mandatory.
+- `no_relationships[].id` — unique identifier for each no-relationship record, following the convention `"no_rel_{focal_id}_{reference_id}"`. Required field.
+- `closest_relationship_considered` — object with `{type, considered_because, rejected_because}` on each `no_relationships[]` entry, documenting the closest relationship that was still rejected.
+- `no_relationship_domains[]` — domain-level summaries aggregating no_relationship records. `individual_record_ids` must be the COMPLETE list of record IDs, not a count.
+- `gap_analysis{}` — top-level structural interpretation of all negative evidence. Write `structural_findings[]` before computing `coverage_percentage` statistics.
