@@ -37,6 +37,16 @@ Look for these patterns (and flag them to the user):
 | **Use case alignment** | Sample doesn't serve the documented purpose | Use case says "for auditors" but relationships are characterized for engineers |
 | **Confidence inflation** | Everything tagged High | If every pair is High confidence, the framework isn't being used critically |
 
+### Step 2b: Schema Completeness Check
+
+After the systematic issues check, verify that sample records have all required fields:
+
+- Every positive mapping record has: `focal_concept_text`, `reference_concept_text`, `evaluation_steps[]` (non-empty, covering all 9 steps), `alternatives_considered[]` (at least one entry), `text_evidence[]` (at least one entry), `justification` (substantive prose — not one sentence)
+- Every `no_relationship` record in the sample has: `evaluation_steps[]` (negative pair steps), `closest_relationship_considered`
+- B4 (structural) entries are exempt from `alternatives_considered` and `text_evidence` but must have one `evaluation_steps` entry
+
+If any record is missing required fields: flag it in the sample review presentation. Do not approve the sample until completeness is confirmed.
+
 ### Step 3: User Review
 
 Present findings and ask:
@@ -49,27 +59,10 @@ Present findings and ask:
 ### Step 4: Respond to Feedback
 
 - **Issues found → adjust and re-sample**: Go back to Phase 4, adjust the approach based on feedback, map a new or revised sample. Repeat until the user approves.
-- **Approved → proceed to full run**: Move to Phase 4b (full mapping execution).
+- **Approved → proceed to full run**: Move to Phase 6 (full positive mapping execution) or Phase 4b (negative mapping), as applicable.
 
 ## Output
 
 - Reviewed sample with any corrections
 - Confirmed approach for full run
 - Quality assessment
-
-## Phase 4b: Full Mapping Execution
-
-After the sample is approved, complete the full mapping:
-
-1. Apply the validated approach to all remaining concept pairs
-2. Same per-pair process: evaluate, assign type, document justification, tag confidence
-3. Include the sample pairs already mapped (don't redo them unless corrections changed the approach)
-4. Continue capturing source observations
-5. Record prompts used
-
-**Automation spectrum** (applies here):
-- **Interactive**: Present each pair, discuss, assign together
-- **Semi-automated**: Batch process, pause periodically for review
-- **Fully automated**: Process all remaining pairs, present complete results
-
-**Output**: Complete mapping with typed, justified relationships for all evaluated concept pairs.
