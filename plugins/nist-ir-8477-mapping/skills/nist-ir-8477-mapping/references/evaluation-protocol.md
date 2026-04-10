@@ -115,7 +115,15 @@ What would need to be true for a relationship to exist? Record as an `evaluation
 
 ### Step 5: Tag confidence
 
+- **High**: The absence of a relationship is clear — the two concepts address entirely different security concerns with no substantive overlap
+- **Medium**: The absence is reasonable but there is some thematic similarity that required judgment to dismiss
+- **Low**: The pair is genuinely ambiguous — a different evaluator might find a weak relationship
+
+Record as the `confidence` field of the `no_relationships[]` entry.
+
 ---
+
+Output from the negative pair protocol goes into the `no_relationships[]` array in the output document (not into `mappings[]`). The field names and structure for no_relationship records are defined in `references/output-formats/internal-format.md`.
 
 ## Negative evaluation_steps Format
 
