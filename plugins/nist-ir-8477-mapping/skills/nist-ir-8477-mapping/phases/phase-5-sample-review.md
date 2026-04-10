@@ -59,7 +59,7 @@ Present findings and ask:
 ### Step 4: Respond to Feedback
 
 - **Issues found → adjust and re-sample**: Go back to Phase 4, adjust the approach based on feedback, map a new or revised sample. Repeat until the user approves.
-- **Approved → proceed to full run**: Move to Phase 6 (full positive mapping execution) or Phase 4b (negative mapping), as applicable.
+- **Approved → proceed to full run**: Move to Phase 4a (full positive mapping run) to complete all remaining pairs, then proceed to Phase 4b (negative mapping).
 
 ## Output
 

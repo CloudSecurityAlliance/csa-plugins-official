@@ -74,7 +74,7 @@ Review the mapping for these specific error patterns:
 ## Report Format
 
 For each finding:
-- **Error type**: Which of the 7 patterns above
+- **Error type**: Which check (1-10) applies
 - **Severity**: Critical (wrong relationship type) / Important (wrong direction or property) / Minor (weak justification)
 - **Location**: Concept pair affected (focal ID → reference ID)
 - **Evidence**: What the mapping says vs what the sources say
