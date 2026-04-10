@@ -47,16 +47,6 @@ A crosswalk can be upgraded to a more detailed style later:
 
 ## Output Format
 
-Per pair:
-```json
-{
-  "focal_concept": "AC-2",
-  "reference_concept": "IAM-12",
-  "style": "crosswalk",
-  "relationship_type": null,
-  "justification": "Both address account/identity management...",
-  "confidence": "High"
-}
-```
+Follow the full record format specified in `references/evaluation-protocol.md`. That document defines the required fields for both positive and negative pairs. The canonical schema is in `references/output-formats/internal-format.md`. Do not use a simplified per-pair format — produce the full rich record from pair one.
 
-Note: `relationship_type` is null for crosswalk — that's the point. The `style` field identifies this as a crosswalk entry. The justification explains WHY the pair was linked.
+Note for crosswalk (B1): `relationship_type` is `null` — that is the point of a crosswalk. The `style` field identifies this as a crosswalk entry. Include `evaluation_steps` documenting the decision to pair the concepts, and `justification` explaining why they are related.

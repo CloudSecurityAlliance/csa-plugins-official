@@ -59,14 +59,4 @@ For each concept pair:
 
 ## Output Format
 
-Per pair:
-```json
-{
-  "focal_concept": "PR.AC-1",
-  "reference_concept": "PR.AC-P1",
-  "rationale": "semantic",
-  "relationship_type": "equal",
-  "justification": "Both concepts require identity and credential management for authorized entities. 'Users' (CSF) and 'individuals' (Privacy Framework) have the same meaning in their respective contexts...",
-  "confidence": "High"
-}
-```
+Follow the full record format specified in `references/evaluation-protocol.md`. That document defines the required fields for both positive and negative pairs. The canonical schema is in `references/output-formats/internal-format.md`. Do not use a simplified per-pair format — produce the full rich record from pair one.

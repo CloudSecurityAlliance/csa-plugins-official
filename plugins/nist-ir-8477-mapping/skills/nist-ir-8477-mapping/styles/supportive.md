@@ -54,14 +54,4 @@ Always interpret types and properties in the context of THIS mapping's use case.
 
 ## Output Format
 
-Per pair:
-```json
-{
-  "focal_concept": "AC-2",
-  "reference_concept": "IAM-12",
-  "relationship_type": "supports",
-  "relationship_property": "integral to",
-  "justification": "IAM-12 requires identity lifecycle management which is integral to AC-2's account management requirements...",
-  "confidence": "High"
-}
-```
+Follow the full record format specified in `references/evaluation-protocol.md`. That document defines the required fields for both positive and negative pairs. The canonical schema is in `references/output-formats/internal-format.md`. Do not use a simplified per-pair format — produce the full rich record from pair one.
