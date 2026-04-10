@@ -26,8 +26,19 @@ This format **expands** the internal JSON rather than reducing it. It adds prove
       "direction": "source → target"
     },
     "evidence": {
+      "evaluation_steps": [
+        "identical: no — wording differs",
+        "direction: source supports target — IAM-12 enables AC-2",
+        "property: integral to — AC-2 cannot be achieved without IAM-12"
+      ],
+      "alternatives_considered": [
+        {"type": "is supported by", "rejected_because": "IAM-12 is the enabler, not the target"}
+      ],
+      "text_evidence": [
+        {"source": "focal", "excerpt": "Relevant text from AC-2..."},
+        {"source": "reference", "excerpt": "Relevant text from IAM-12..."}
+      ],
       "justification": "Full justification text...",
-      "source_text_excerpts": ["Relevant text from IAM-12...", "Relevant text from AC-2..."],
       "confidence": "High"
     },
     "perspective": {

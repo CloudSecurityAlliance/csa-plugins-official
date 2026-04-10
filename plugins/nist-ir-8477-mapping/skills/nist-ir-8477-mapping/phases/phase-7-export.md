@@ -38,6 +38,9 @@ If the user doesn't have a preference, suggest:
 Each format is a projection of the internal JSON. Losses are noted:
 
 - **OLIR/CPRT**: Drops justification detail, confidence, source observations. Keeps concept pairs + relationship types.
+
+**`gap_analysis{}` is always exported** to all formats that support it. It is never optional. For lossy formats (OLIR/CPRT) that cannot represent gap_analysis, add a note in the export output: "Gap analysis available in the rich internal JSON format." `no_relationship_domains[]` is always exported alongside `no_relationships[]`.
+
 - **Excel**: One row per concept pair. Multi-value fields (cross-references) are semicolon-delimited. Nested metadata is flattened.
 - **Claims-based**: Adds directional edge metadata, perspective/lens information, provenance chain. May expand the internal format rather than reduce it.
 - **Markdown report**: Summary statistics, relationship type distribution, notable findings, source observations, use case document. Not a complete record — a human-readable overview.
