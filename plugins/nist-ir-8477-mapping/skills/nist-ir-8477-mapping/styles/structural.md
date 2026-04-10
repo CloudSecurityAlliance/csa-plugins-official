@@ -55,6 +55,7 @@ Per relationship:
   "parent_concept": "DE.AE",
   "child_concept": "DE.AE-07",
   "relationship": "parent-child",
+  "evaluation_steps": ["hierarchy captured: parent DE.AE, child DE.AE-07 — verified against section 3.4 'Detect' of source document"],
   "confidence": "High"
 }
 ```
@@ -81,3 +82,5 @@ For a complete hierarchy:
   ]
 }
 ```
+
+**Note on `evaluation_steps` for B4:** B4 entries include a single `evaluation_steps` entry documenting where the hierarchy was verified in the source document. B4 entries are exempt from `alternatives_considered` and `text_evidence` — hierarchy is read from the source, not reasoned about.
