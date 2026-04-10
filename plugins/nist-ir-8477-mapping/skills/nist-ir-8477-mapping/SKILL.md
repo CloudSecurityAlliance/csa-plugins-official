@@ -60,15 +60,24 @@ Walk through all phases start to finish. Read each phase file as you reach it.
 3. **Phase 3 — Style Selection**: Read `phases/phase-3-style-selection.md` and `references/style-selection-guide.md` → recommend style(s)
    - **Pause**: "I recommend [style(s)] because [rationale]. Agree, or prefer something different?"
    - Load the selected style file(s) from `styles/`
-4. **Phase 4 — Mapping Execution (Sample)**: Read `phases/phase-4-mapping-execution.md` and the selected `styles/*.md` → map a representative sample (10-20 pairs)
+4. **Phase 4a — Positive Mapping (Sample)**: Read `phases/phase-4a-positive-mapping.md`, `references/evaluation-protocol.md`, and the selected `styles/*.md` → map 10-20 representative pairs with full rich records
 5. **Phase 5 — Sample Review**: Read `phases/phase-5-sample-review.md` → quality gate before full run
    - **Pause**: "Here's the sample. Does the approach look right before I map the rest?"
-   - If issues: adjust and re-sample (return to Phase 4)
-   - If approved: proceed to Phase 4b (full run)
-6. **Phase 4b — Mapping Execution (Full Run)**: Complete all remaining concept pairs using the validated approach
-7. **Phase 6 — Validation**: Read `phases/phase-6-validation.md` and `references/validation-prompt.md` → cross-model adversarial review
+   - If issues: adjust and re-sample (return to Phase 4a)
+   - If approved: proceed to full run
+6. **Phase 4a — Positive Mapping (Full Run)**: Complete all remaining positive pairs using the validated approach
+7. **Phase 4b — Negative Mapping**: Read `phases/phase-4b-negative-mapping.md` and `references/no-relationship-protocol.md` → systematically document `no_relationships[]`, `no_relationship_domains[]`, and `gap_analysis{}`
+8. **[ENFORCEMENT CHECKPOINT]**: Before Phase 6, verify:
+   - `len(mappings) + len(no_relationships) == statistics.total_pairs_evaluated`
+   - Every `mappings[]` entry has non-empty `evaluation_steps[]`, `alternatives_considered[]`, `text_evidence[]` (B4 entries: one `evaluation_steps` entry only)
+   - Every `no_relationships[]` entry has `evaluation_steps[]` and `closest_relationship_considered`
+   - `no_relationship_domains[]` is non-empty
+   - `gap_analysis{}` is present with non-empty `structural_findings[]`
+   - For large mappings (>300 pairs): verify a stratified sample (5 per domain) rather than every record
+   - If any check fails: return to Phase 4a or 4b as appropriate
+9. **Phase 6 — Validation**: Read `phases/phase-6-validation.md` and `references/validation-prompt.md` → cross-model adversarial review
    - **Pause**: "Here are the validation findings. Review corrections before finalizing?"
-8. **Phase 7 — Export**: Read `phases/phase-7-export.md` → generate outputs in chosen format(s)
+10. **Phase 7 — Export**: Read `phases/phase-7-export.md` → generate outputs in chosen format(s)
 
 ### Option 2: Exploratory (One Source)
 
@@ -99,10 +108,12 @@ The user has a partial mapping from a prior session. Ask what they have and whic
 2. **Use case before mapping** — Phase 2 must complete before Phase 4. No exceptions. NIST §3.
 3. **Justification for every relationship** — per NIST §5, every relationship must have documented justification explaining WHY this type was chosen. (Note: "rationale" in set theory means specifically syntactic/semantic/functional — rule 8. "Justification" is the broader requirement for all styles.)
 4. **"No relationship" is a valid, documented result** — pairs considered but found unrelated must be recorded, not silently skipped.
-5. **Sample before full run** — Phase 4 maps a sample, Phase 5 reviews it as a quality gate, then Phase 4b completes the full mapping. This is the NIST-recommended approach.
+5. **Sample before full run** — Phase 4a maps a sample (10-20 pairs), Phase 5 reviews it as a quality gate, Phase 4a (full run) completes positive mapping, then Phase 4b completes negative mapping. This is the NIST-recommended approach.
 6. **Source observations are first-class** — ambiguities, granularity issues, wording problems found during mapping are captured and reported.
 7. **Prompts in files** — all prompts in references/, loaded at runtime, never hardcoded in scripts.
 8. **Rationale + type are inseparable** (set theory only) — a relationship type without a rationale is invalid.
+9. **Evaluation protocol governs every pair** — read `references/evaluation-protocol.md` before Phase 4a. Do not evaluate any pair before reading it.
+10. **Negative mapping is mandatory** — Phase 4b is not optional. "No relationship" findings are first-class results and must be documented at all three levels (individual records, domain summaries, gap analysis).
 
 ## Important
 
