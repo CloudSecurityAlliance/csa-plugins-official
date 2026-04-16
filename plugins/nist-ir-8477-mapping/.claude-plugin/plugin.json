@@ -6,8 +6,5 @@
     "name": "Kurt Seifried",
     "email": "kseifried@cloudsecurityalliance.org",
     "url": "https://cloudsecurityalliance.org"
-  },
-  "skills": [
-    "skills/nist-ir-8477-mapping/SKILL.md"
-  ]
+  }
 }

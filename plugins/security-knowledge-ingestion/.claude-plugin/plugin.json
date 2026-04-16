@@ -6,8 +6,5 @@
     "name": "Kurt Seifried",
     "email": "kseifried@cloudsecurityalliance.org",
     "url": "https://cloudsecurityalliance.org"
-  },
-  "skills": [
-    "skills/security-knowledge-ingestion/SKILL.md"
-  ]
+  }
 }
