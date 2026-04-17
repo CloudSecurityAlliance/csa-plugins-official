@@ -1,7 +1,6 @@
 {
   "name": "nist-ir-8477-mapping",
   "description": "Map relationships between security knowledge sources using the NIST IR 8477 methodology. Supports four relationship styles (crosswalk, supportive, set theory, structural), guided use case documentation, cross-model validation, and multiple output formats including OLIR/CPRT-compatible JSON and Excel.",
-  "version": "0.1.0",
   "author": {
     "name": "Kurt Seifried",
     "email": "kseifried@cloudsecurityalliance.org",

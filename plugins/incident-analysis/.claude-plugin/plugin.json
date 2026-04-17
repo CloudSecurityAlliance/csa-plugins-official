@@ -1,7 +1,6 @@
 {
   "name": "incident-analysis",
   "description": "Comprehensive security incident analysis with OSINT collection, source cross-referencing, confidence classification, and deep analysis. Teaches analysts the methodology while producing structured reports.",
-  "version": "0.1.0",
   "author": {
     "name": "Kurt Seifried",
     "email": "kseifried@cloudsecurityalliance.org"
