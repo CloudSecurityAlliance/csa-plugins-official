@@ -35,6 +35,17 @@ Then install any plugin:
 
 Or browse for plugins in `/plugin > Discover`
 
+## CSA research programs
+
+Some of the plugins here (like `cwe-analysis`) emerge from CSA's
+internal research programs in CVE assignment, CWE submissions,
+vulnerability scoring (CVSS and AIVSS), CVE enrichment, and
+AI-supported CNA operations. Additional plugins may surface here as
+that work matures.
+
+If you're interested in collaborating or learning more, contact
+[kseifried@cloudsecurityalliance.org](mailto:kseifried@cloudsecurityalliance.org).
+
 ## Contributing
 
 ### Internal Plugins
