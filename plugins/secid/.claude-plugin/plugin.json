@@ -1,7 +1,10 @@
 {
   "name": "secid",
   "description": "SecID \u2014 universal security identifier lookup, resolution, and registry research. Resolve CVEs, CWEs, ATT&CK techniques, NIST controls, and 700+ security knowledge sources.",
-  "author": "Cloud Security Alliance",
+  "author": {
+    "name": "Cloud Security Alliance",
+    "url": "https://cloudsecurityalliance.org"
+  },
   "homepage": "https://github.com/CloudSecurityAlliance/SecID",
   "license": "CC0-1.0"
 }
