@@ -66,6 +66,18 @@
       "source": "./plugins/secid",
       "category": "security",
       "homepage": "https://github.com/CloudSecurityAlliance/SecID/tree/main/plugins/secid"
+    },
+    {
+      "name": "vulnerability-audit",
+      "description": "AI-driven source-code vulnerability audit: a 5-stage methodology (recon, investigate, validate, disclose, learn) with adversarial false-positive filtering and conservative, cooperative disclosure. Static-only; hands off to the defending-code harness for runtime-verified findings.",
+      "author": {
+        "name": "Cloud Security Alliance",
+        "email": "research@cloudsecurityalliance.org"
+      },
+      "version": "0.1.0",
+      "source": "./plugins/vulnerability-audit",
+      "category": "security",
+      "homepage": "https://github.com/CloudSecurityAlliance/csa-plugins-official/tree/main/plugins/vulnerability-audit"
     }
   ]
 }
