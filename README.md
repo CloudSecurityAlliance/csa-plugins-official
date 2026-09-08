@@ -25,6 +25,12 @@ mkdir -p ~/.agents/skills && ln -s "$PWD"/csa-plugins-official/plugins/*/skills/
 
 Outside Claude Code you get the methodology but not the tooling: bundled scripts referenced as `${CLAUDE_PLUGIN_ROOT}/scripts/...` won't resolve, and the `secid` MCP server has to be wired into your client by hand.
 
+## Licensing
+
+Plugins here are **not all under the same licence**, and a directory's own `LICENSE` governs that
+directory. [`LICENSING.md`](LICENSING.md) is the map, and it also explains why the CSA name and
+logo are not licensed by any of them.
+
 ## Structure
 
 - **`/plugins`** - Internal plugins developed and maintained by CSA
