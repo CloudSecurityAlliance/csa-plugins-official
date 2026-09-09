@@ -1,0 +1,22 @@
+CSA Plugins for Claude Code
+Copyright 2025-2026 Cloud Security Alliance
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+This repository carries plugins under more than one licence. The root
+LICENSE applies only where no nearer LICENSE file exists; a directory's
+own LICENSE governs that directory. See LICENSING.md for the map.
+
+"Cloud Security Alliance", "CSA", "SecID" and the CSA logo are trademarks
+of the Cloud Security Alliance. No licence in this repository grants any
+right to use them (Apache License section 6).
