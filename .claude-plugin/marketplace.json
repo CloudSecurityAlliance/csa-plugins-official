@@ -38,7 +38,7 @@
         "name": "Cloud Security Alliance",
         "email": "research@cloudsecurityalliance.org"
       },
-      "version": "0.1.0",
+      "version": "0.2.0",
       "source": "./plugins/cve-analysis",
       "category": "security",
       "homepage": "https://github.com/CloudSecurityAlliance/csa-plugins-official/tree/main/plugins/cve-analysis"
