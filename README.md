@@ -50,11 +50,14 @@ logo are not licensed by any of them.
 
 ## CSA research programs
 
-Some of the plugins here (like `cwe-analysis`) emerge from CSA's
-internal research programs in CVE assignment, CWE submissions,
-vulnerability scoring (CVSS and AIVSS), CVE enrichment, and
-AI-supported CNA operations. Additional plugins may surface here as
-that work matures.
+Some of the plugins here (like `cwe-analysis`, `cve-analysis` and
+`vulnerability-audit`) emerge from CSA's internal research programs in
+CVE assignment, CWE submissions, vulnerability scoring (CVSS and
+AIVSS), CVE enrichment, CVE corpus analysis, and AI-supported CNA
+operations. Those internal repositories remain the source of truth for
+each methodology; the plugins here are their public, distilled face,
+and each names its upstream in its own README. Additional plugins may
+surface here as that work matures.
 
 If you're interested in collaborating or learning more, contact
 [kseifried@cloudsecurityalliance.org](mailto:kseifried@cloudsecurityalliance.org).
