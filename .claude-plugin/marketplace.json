@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "csa-plugins-official",
-  "description": "Official Cloud Security Alliance plugins for Claude Code — security analysis, compliance, and cloud security tools",
+  "description": "Official Cloud Security Alliance plugins for Claude Code \u2014 security analysis, compliance, and cloud security tools",
   "owner": {
     "name": "Cloud Security Alliance",
     "email": "research@cloudsecurityalliance.org"
@@ -32,6 +32,18 @@
       "homepage": "https://github.com/CloudSecurityAlliance/csa-plugins-official/tree/main/plugins/cwe-analysis"
     },
     {
+      "name": "cve-analysis",
+      "description": "Large-N analysis of the CVE corpus: growth attribution, CNA behaviour profiling, record completeness, and CWE assignment quality. Answers whether CVE growth is real, whether CVE data is improving, and why each CNA participates \u2014 with the corpus pitfalls that produce confidently wrong answers.",
+      "author": {
+        "name": "Cloud Security Alliance",
+        "email": "research@cloudsecurityalliance.org"
+      },
+      "version": "0.1.0",
+      "source": "./plugins/cve-analysis",
+      "category": "security",
+      "homepage": "https://github.com/CloudSecurityAlliance/csa-plugins-official/tree/main/plugins/cve-analysis"
+    },
+    {
       "name": "security-knowledge-ingestion",
       "description": "Ingest security knowledge documents (standards, regulations, frameworks, controls, capabilities) into structured, machine-readable data. Checks SecID for existing structured data, handles license verification for contributions, produces reproducible conversion recipes, and guides users toward proper data management.",
       "author": {
@@ -57,7 +69,7 @@
     },
     {
       "name": "secid",
-      "description": "SecID — universal security identifier lookup, resolution, and registry research. Resolve CVEs, CWEs, ATT&CK techniques, NIST controls, and 700+ security knowledge sources. Local MCP server calls the SecID REST API with optional --base-url for internal resolvers.",
+      "description": "SecID \u2014 universal security identifier lookup, resolution, and registry research. Resolve CVEs, CWEs, ATT&CK techniques, NIST controls, and 700+ security knowledge sources. Local MCP server calls the SecID REST API with optional --base-url for internal resolvers.",
       "author": {
         "name": "Cloud Security Alliance",
         "email": "research@cloudsecurityalliance.org"
