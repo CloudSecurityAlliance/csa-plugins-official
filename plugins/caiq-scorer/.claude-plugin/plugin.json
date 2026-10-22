@@ -1,0 +1,11 @@
+{
+  "name": "caiq-scorer",
+  "version": "1.1.0",
+  "description": "Score a completed CAIQ (CCM) or AI-CAIQ (AICM) question by question on a 0\u20134 scale using CSA's Valid-AI-ted methodology, producing a scored workbook and a domain-rollup PDF report. Informational and AI-assisted \u2014 not a CSA certification, audit, or STAR listing.",
+  "author": {
+    "name": "Cloud Security Alliance",
+    "email": "research@cloudsecurityalliance.org"
+  },
+  "homepage": "https://github.com/CloudSecurityAlliance/csa-plugins-official/tree/main/plugins/caiq-scorer",
+  "license": "Apache-2.0"
+}

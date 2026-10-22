@@ -148,6 +148,7 @@ plugins/nist-ir-8477-mapping/scripts/validate-mapping.sh <mapping.json> [focal.j
 | `security-knowledge-ingestion` | Converts standards/regulations to structured data; checks SecID first; license verification before contribution |
 | `nist-ir-8477-mapping` | Four relationship styles in `styles/`; OLIR/CPRT JSON + Excel export; consumes ingestion output |
 | `secid` | MCP server (`server.py`) + slash commands; needs `mcp`/`httpx` |
+| `caiq-scorer` | Single SKILL.md pipeline (not phased); bundles CCM/AICM reference CSVs in `skills/caiq-scorer/reference/`; writes .xlsx + PDF with whatever libraries the host has (e.g. openpyxl, reportlab) |
 | `vulnerability-audit` | Two skills (`audit`, `validate-findings`); `checkpoint.py` state machine; `dependencies` on secid + cwe-analysis; static-only |
 
 ## Other Conventions

@@ -17,6 +17,7 @@ from the rest, and a reader who sees only the root file would get the wrong answ
 | Path | Licence | Notes |
 |---|---|---|
 | repository root | **Apache 2.0** (`LICENSE`) | Covers the marketplace's own material: `README.md`, `CLAUDE.md`, `docs/`, `.claude-plugin/`. |
+| `plugins/caiq-scorer/` | Apache 2.0 | Bundled `skills/caiq-scorer/reference/*.csv` is CSA CCM/AICM content under CSA's own terms for those works; see the plugin's `NOTICE`. |
 | `plugins/cwe-analysis/` | Apache 2.0 | |
 | `plugins/incident-analysis/` | Apache 2.0 | |
 | `plugins/nist-ir-8477-mapping/` | Apache 2.0 | |
