@@ -3,28 +3,53 @@ name: caiq-scorer
 description: Scores a completed CAIQ (CCM) or AI-CAIQ (AICM) questionnaire question-by-question on a 0-4 scale using CSA's Valid-AI-ted scoring methodology, and produces a scored workbook plus a domain-rollup summary report (PDF). Use when the user uploads or references a filled-out CAIQ or AI-CAIQ (for example one downloaded from the CSA STAR Registry) and wants it scored, graded, rated, or wants a Valid-AI-ted style scoring or summary report.
 metadata:
   publisher: Cloud Security Alliance
-  version: "1.1.0"
+  version: "1.1.1"
   prompt-set: "1.0.0"
   frameworks: "CCM 4.0.13, CCM 4.1.0, AICM 1.0.2, AICM 1.1.0"
 ---
 
 # CSA Valid-AI-ted Scorer (CAIQ / AI-CAIQ)
 
-**Package version 1.1.0** · scoring prompt set 1.0.0 · reference data for CCM 4.0.13, CCM 4.1.0, AICM 1.0.2 and AICM 1.1.0.
+**Package version 1.1.1** · scoring prompt set 1.0.0 · reference data for CCM 4.0.13, CCM 4.1.0, AICM 1.0.2 and AICM 1.1.0.
 
 This skill applies the Cloud Security Alliance's Valid-AI-ted scoring methodology to a completed CAIQ or AI-CAIQ. The scoring prompts in `prompts/caiq/` and `prompts/ai-caiq/` and the control reference data in `reference/` are CSA's own methodology files. Follow the pipeline below exactly.
 
 The result is an **informational, AI-assisted assessment** of the quality and internal consistency of the written responses. It does not verify that controls are implemented, and it is not a CSA certification, audit, attestation, STAR Registry listing or Valid-AI-ted badge. Every report must carry the disclaimer in step 9.
 
+## Requirements
+
+Reading and writing the files needs Python 3 and one library for each job below. Before starting, check which are installed and use any one that works:
+
+| Job | Compatible options |
+|---|---|
+| Read the .xlsx questionnaire | `openpyxl`, `python-calamine`, or the standard library (`zipfile` + `xml.etree`, since an .xlsx is zipped XML) |
+| Write the scored .xlsx | `openpyxl`, `XlsxWriter` |
+| Write the PDF report, including the bar chart | `reportlab` (chart via `reportlab.graphics`), `fpdf2`, `matplotlib` (`PdfPages`), `WeasyPrint` (HTML to PDF) |
+
+If no option is available for a job, tell the user which job is blocked and how to install a library for it (for example `pip install openpyxl reportlab`), and ask before installing anything.
+
 ## Pipeline
 
 1. **Detect mode.** Read the uploaded file. If it has CAIQ/CCM-style columns (`CSP CAIQ Answer`, `SSRM Control Ownership`, `CSP Implementation Description...`, `CCM Control ID`, `CCM Domain Title`), the mode is **`caiq`**. If it has AI-CAIQ/AICM-style columns (`Service Provider CAIQ Answer` or AICM-specific guideline columns, `AICM Control ID`/`AICM Domain Title`), the mode is **`ai-caiq`**. If cell A1 contains JSON metadata naming the specification (`"specification_name"`), use it to confirm. If the mode is still ambiguous, ask the user.
 
-2. **Detect the framework version** (CCM 4.0.13 or 4.1.0; AICM 1.0.2 or 1.1.0) from the cell A1 metadata or the filename, then **ask the user to confirm which version applies before enriching. Never silently default to a version.** If the questionnaire declares a version not listed above, tell the user this package does not include reference data for it and that a newer version of the scorer may be available from CSA; do not substitute a different version's guideline text.
+2. **Detect the framework version** (CCM 4.0.13 or 4.1.0; AICM 1.0.2 or 1.1.0), then **ask the user to confirm which version applies before enriching. Never silently default to a version.**
+
+   CAIQ and CCM are versioned separately, so a questionnaire's CAIQ version is often not a reference file's CCM version. Work out the candidate reference file like this:
+   - If cell A1 contains JSON metadata, `specification_version` is the CCM/AICM version; `caiq_version` is the questionnaire's own version.
+   - Otherwise (older files, e.g. CAIQ v4.0.x, which only say `v4.0.2` in A1 or the sheet name), map the questionnaire version to a reference file by release line:
+
+     | Questionnaire | Candidate reference file |
+     |---|---|
+     | CAIQ 4.0.x | CCM 4.0.13 |
+     | CAIQ 4.1.x | CCM 4.1.0 |
+     | AI-CAIQ 1.0.x | AICM 1.0.2 |
+     | AI-CAIQ 1.1.x | AICM 1.1.0 |
+
+   Then **check compatibility**: compare every control ID and control title in the questionnaire (the `CCM/AICM Control ID` and `Control Title` columns) against the candidate file. If they all match exactly, propose that file to the user, say how many controls matched, and ask them to confirm. If any differ, or the version is outside the table, do not use the file: tell the user which controls differ, that this package has no matching reference data, and that a newer version of the scorer may be available from CSA. Never substitute a different version's guideline text.
 
    **AICM only:** control IDs are *not* stable between AICM 1.0.x and 1.1.x. Of the 242 control IDs shared by the two reference files, 65 have a different `Control Title` (for example, `AIS-08` is "Input Validation" in 1.0.2 but "API Security" in 1.1.0). Using the wrong file attaches wrong guideline text with no visible error. Enrich only from the reference file that matches the confirmed version; never mix them.
 
-3. **Normalize.** Treat answers as `Yes`/`No`/`NA` (case- and whitespace-insensitive). Preserve a literal "NA"; never confuse it with a blank or missing answer.
+3. **Normalize.** Only rows whose `Question ID` has the form `<domain code>-<two digits>.<number>` (for example `A&A-01.1` or `MDS-13.2`) are questions. Skip every other row, such as the header, blank rows, "End of Standard" and the copyright notice, and do not count them as questions. Treat answers as `Yes`/`No`/`NA` (case- and whitespace-insensitive). Preserve a literal "NA"; never confuse it with a blank or missing answer.
 
 4. **Enrich each row.** Look up the row's Control ID in the matching `reference/*.csv` by exact match on the `Control ID` column, and attach:
    - **`caiq` mode:** `CSP` as *Cloud Service Provider Implementation Guidelines (CSP)*, `CSC` as *Cloud Service Consumer Implementation Guidelines (CSC)*, and `Auditing Guidelines`.
@@ -70,7 +95,7 @@ The result is an **informational, AI-assisted assessment** of the quality and in
 
    Do not write any "Normalized" column, the `SSRM Control Ownership Score` or its justification, or a numeric CSC/Service Customer score or its justification.
 
-   Add a second sheet named `About` with: `Scorer: CSA Valid-AI-ted Scorer`, `Package version: 1.1.0`, `Prompt set: 1.0.0`, the mode, the confirmed framework version, the date, and the disclaimer text from step 9.
+   Add a second sheet named `About` with: `Scorer: CSA Valid-AI-ted Scorer`, `Package version: 1.1.1`, `Prompt set: 1.0.0`, the mode, the confirmed framework version, the date, and the disclaimer text from step 9.
 
 9. **Write the summary report (PDF)** in this layout and order:
    - **Page 1: title and overview.** Title: `CAIQ / CCM Scoring Report` (`caiq` mode) or `AI-CAIQ / AICM Scoring Report` (`ai-caiq` mode). Two-column metadata: left = Organization (if known), Score (overall %), Status (PASS/FAIL), Date; right = Cloud Service (if known), spec version (`CCM:`/`AICM:` + version), questionnaire version (`CAIQ:`/`AI-CAIQ:` + version). Then 3–4 paragraphs: the overall average and percentage, the highest- and lowest-scoring domains (named, with their %), and constructive, strategic recommendations written from the actual numbers.
@@ -79,9 +104,11 @@ The result is an **informational, AI-assisted assessment** of the quality and in
    - **Final page: disclaimer.** Use exactly this wording:
 
      > **Disclaimer:**
-     > This is an informational scoring report generated with the CSA Valid-AI-ted Scorer (package version 1.1.0), an AI-assisted application of the Cloud Security Alliance's Valid-AI-ted scoring methodology run in the user's own AI assistant. It evaluates a self-submitted CAIQ/AI-CAIQ and is **not an official CSA report, certification, audit, or formal attestation** of compliance with any regulatory, legal, or industry standard requirements (e.g., ISO/IEC 27001, SOC 2, HIPAA, GDPR, etc.). It does not confer, imply, or represent an "AI Verified" badge, a STAR Registry listing or any other CSA-issued status, and does not imply endorsement, approval, or validation by the Cloud Security Alliance of any organization's security posture. Organizations remain solely responsible for ensuring their security, privacy, and compliance obligations are met. This report carries no warranty and no liability is assumed for decisions made based on it.
+     > This is an informational scoring report generated with the CSA Valid-AI-ted Scorer (package version 1.1.1), an AI-assisted application of the Cloud Security Alliance's Valid-AI-ted scoring methodology run in the user's own AI assistant. It evaluates a self-submitted CAIQ/AI-CAIQ and is **not an official CSA report, certification, audit, or formal attestation** of compliance with any regulatory, legal, or industry standard requirements (e.g., ISO/IEC 27001, SOC 2, HIPAA, GDPR, etc.). It does not confer, imply, or represent an "AI Verified" badge, a STAR Registry listing or any other CSA-issued status, and does not imply endorsement, approval, or validation by the Cloud Security Alliance of any organization's security posture. Organizations remain solely responsible for ensuring their security, privacy, and compliance obligations are met. This report carries no warranty and no liability is assumed for decisions made based on it.
 
-   Put `CSA Valid-AI-ted Scorer v1.1.0` in the footer of every page. Build the workbook and PDF with whatever spreadsheet and document tools are available; the content and layout above are what matter, not a particular library.
+   Put `CSA Valid-AI-ted Scorer v1.1.1` in the footer of every page. Build the workbook and PDF with whatever spreadsheet and document tools are available; the content and layout above are what matter, not a particular library.
+
+10. **Save the outputs** next to the input file, named `<input file name without extension>_scored.xlsx` and `<input file name without extension>_scoring_report.pdf`. Keep any working files (scripts, intermediate data) in a temporary directory outside the user's folders, and delete it when done. Leave nothing else behind.
 
 ## Rules
 

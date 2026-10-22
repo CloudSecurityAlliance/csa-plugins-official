@@ -98,7 +98,7 @@
         "name": "Cloud Security Alliance",
         "email": "research@cloudsecurityalliance.org"
       },
-      "version": "1.1.0",
+      "version": "1.1.1",
       "source": "./plugins/caiq-scorer",
       "category": "security",
       "homepage": "https://github.com/CloudSecurityAlliance/csa-plugins-official/tree/main/plugins/caiq-scorer"
