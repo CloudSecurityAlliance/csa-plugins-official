@@ -22,6 +22,7 @@ from the rest, and a reader who sees only the root file would get the wrong answ
 | `plugins/nist-ir-8477-mapping/` | Apache 2.0 | |
 | `plugins/security-knowledge-ingestion/` | Apache 2.0 | |
 | `plugins/vulnerability-audit/` | Apache 2.0 | |
+| `plugins/valid-ai-ted-scorer/` | Apache 2.0, with CSA works included | Apache-2.0 for the plugin's own files, including the sections it adds to `SKILL.md`; the published Valid-AI-ted `SKILL.md` text and the scoring prompts © CSA, all rights reserved; the CCM and AICM reference data under CSA's notices, reproduced in `skills/caiq-scorer/reference/NOTICE-CCM.txt` and `NOTICE-AICM.txt`. See the plugin's `NOTICE`. |
 | `plugins/secid/` | **CC0 1.0** | Deliberate, not an oversight. As understood: what ships *here* is the methodology and identifier data, while the SecID server and client code live in their own repositories under their own terms — and CC0 puts identifier mappings in the public domain, which is the point of a registry. **The precise reasoning is pending confirmation from the plugin's owner — see issue #19.** Correct this row rather than leaving it as an inference. |
 | `external_plugins/` | **per plugin** | Third-party contributions. Each carries its own licence; none is licensed by CSA. |
 | bundled fonts, where present | **OFL / vendor terms** | e.g. `document-pipeline/scripts/fonts/` ships `OFL.txt` and `DejaVu-LICENSE.txt`. Fonts are never covered by a plugin's own licence. |

@@ -47,6 +47,7 @@ logo are not licensed by any of them.
 | [nist-ir-8477-mapping](plugins/nist-ir-8477-mapping/) | Map relationships between security knowledge sources using NIST IR 8477 — four relationship styles, use case documentation, cross-model validation. | `/plugin install nist-ir-8477-mapping@csa-plugins-official` |
 | [secid](plugins/secid/) | SecID — resolve CVEs, CWEs, ATT&CK techniques, NIST controls, and 700+ security knowledge sources. Local MCP server with internal resolver support. | `/plugin install secid@csa-plugins-official` |
 | [vulnerability-audit](plugins/vulnerability-audit/) | AI-driven source-code vulnerability audit: a 5-stage methodology (recon, investigate, validate, disclose, learn) with adversarial false-positive filtering and conservative, cooperative disclosure. | `/plugin install vulnerability-audit@csa-plugins-official` |
+| [valid-ai-ted-scorer](plugins/valid-ai-ted-scorer/) | CSA's Valid-AI-ted scoring method (published package 1.1.0) with documented fixes: scores a completed CAIQ or AI-CAIQ question by question (0–4) into a scored workbook and summary PDF. An informational, AI-assisted assessment of the written responses, not a CSA certification. | `/plugin install valid-ai-ted-scorer@csa-plugins-official` |
 
 ## CSA research programs
 

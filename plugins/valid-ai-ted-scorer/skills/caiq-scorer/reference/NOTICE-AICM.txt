@@ -1,0 +1,43 @@
+AI Controls Matrix (AICM) reference data: CSA's notices
+=======================================================
+
+The AICM reference files in this folder are CSA's AI Controls Matrix text.
+CSA publishes each version of the matrix with its own copyright notice, and its terms say
+that "the trademark, copyright or other notices may not be removed". Each version's notice
+is reproduced below word for word, copied by program from the notice cell of CSA's published
+workbook for that version (the cell's trailing space is not carried). These files are
+Cloud Security Alliance works, © Cloud Security Alliance, all rights reserved; the plugin's
+Apache License 2.0 does not cover them (see the plugin's NOTICE).
+
+Which notice covers which file
+------------------------------
+
+AICM-1.0.2-merged.csv: The published package's data labelled AICM 1.0.2, for an AI-CAIQ 1.0.2 stamped AICM 1.0.2. It is covered here by CSA's AICM 1.0.3 notice: no CSA workbook labelled AICM 1.0.2 was available, and 1.0.3 is the version CSA ships with AI-CAIQ 1.0.2.
+  Notice: AICM 1.0.3, from CSA's workbook AICMv1.0.3-generated_at_2025_11_10.xlsx (SHA-256 0762a3c160857c048df90ceef9eb7332fe65e45309bdda343e5cc894abb86e61).
+
+AICM-1.0.3-merged.csv: Added by this plugin: CSA's AICM 1.0.3, for an AI-CAIQ 1.0.2 stamped AICM 1.0.3, generated from CSA's AICM 1.0.3 workbook (see VERSION.txt). Covered by CSA's AICM 1.0.3 notice.
+  Notice: AICM 1.0.3, from CSA's workbook AICMv1.0.3-generated_at_2025_11_10.xlsx (SHA-256 0762a3c160857c048df90ceef9eb7332fe65e45309bdda343e5cc894abb86e61).
+
+AICM-1.1.0-merged.csv: The published package's data labelled AICM 1.1.0 (a pre-publication text of AICM 1.1.0; see DEVIATIONS.md, A-05). Covered by CSA's AICM 1.1.0 notice.
+  Notice: AICM 1.1.0, from CSA's workbook AICMv1.1.0-generated_at_2026_06_18.xlsx (SHA-256 afebba6d2c9ede424e382711b84a46d0559cd83550765f24c1d435118063bf4d).
+
+AICM-1.1.0-published-merged.csv: Added by this plugin: CSA's published AICM 1.1.0, for an AI-CAIQ 1.1.0 stamped AICM 1.1.0, generated from CSA's AICM 1.1.0 workbook (see VERSION.txt). Covered by CSA's AICM 1.1.0 notice.
+  Notice: AICM 1.1.0, from CSA's workbook AICMv1.1.0-generated_at_2026_06_18.xlsx (SHA-256 afebba6d2c9ede424e382711b84a46d0559cd83550765f24c1d435118063bf4d).
+
+AICM-1.1.1-merged.csv: Added by this plugin: CSA's AICM 1.1.1, for an AI-CAIQ 1.1.0 stamped AICM 1.1.1, generated from CSA's AICM 1.1.1 workbook (see VERSION.txt). Covered by CSA's AICM 1.1.1 notice.
+  Notice: AICM 1.1.1, from CSA's workbook AICMv1.1.1-generated_at_2026_07_22.xlsx (SHA-256 94b2703223f2748a24a5615b050408eb8e01ba4e1b4c844a95d1695d64011410).
+
+AICM 1.0.3 notice (as printed on all 9 sheets of CSA's AICM 1.0.3 workbook)
+---------------------------------------------------------------------------
+
+© Copyright 2025-2026 Cloud Security Alliance - All rights reserved.  You may download, store, display on your computer, view, print, and link to the Cloud Security Alliance “AI Controls Matrix (AICM) Version 1.0.3” at https://cloudsecurityalliance.org subject to the following: (a) the AI Controls Matrix v1.0.3 may be used solely for your personal, informational, non-commercial use; (b) the AI Controls Matrix v1.0.3 may not be modified or altered in any way; (c) the AI Controls Matrix v1.0.3 may not be redistributed; and (d) the trademark, copyright or other notices may not be removed. You may quote portions of the AI Controls Matrix v1.0.3 as permitted by the Fair Use provisions of the United States Copyright Act, provided that you attribute the portions to the Cloud Security Alliance AI Controls Matrix Version 1.0.3. If you are interested in obtaining a license to this #material for other usages not addresses in the copyright notice, please contact info@cloudsecurityalliance.org.
+
+AICM 1.1.0 notice (as printed on all 9 sheets of CSA's AICM 1.1.0 workbook)
+---------------------------------------------------------------------------
+
+© Copyright 2026 Cloud Security Alliance - All rights reserved.  You may download, store, display on your computer, view, print, and link to the Cloud Security Alliance “AI Controls Matrix (AICM) Version 1.1.0” at https://cloudsecurityalliance.org subject to the following: (a) the AI Controls Matrix v1.1.0 may be used solely for your personal, informational, non-commercial use; (b) the AI Controls Matrix v1.1.0 may not be modified or altered in any way; (c) the AI Controls Matrix v1.1.0 may not be redistributed; and (d) the trademark, copyright or other notices may not be removed. You may quote portions of the AI Controls Matrix v1.1.0 as permitted by the Fair Use provisions of the United States Copyright Act, provided that you attribute the portions to the Cloud Security Alliance AI Controls Matrix Version 1.1.0. If you are interested in obtaining a license to this material for other usages not addressed in the copyright notice, please contact info@cloudsecurityalliance.org.
+
+AICM 1.1.1 notice (as printed on all 9 sheets of CSA's AICM 1.1.1 workbook)
+---------------------------------------------------------------------------
+
+© Copyright 2026 Cloud Security Alliance - All rights reserved.  You may download, store, display on your computer, view, print, and link to the Cloud Security Alliance “AI Controls Matrix (AICM) Version 1.1.1” at https://cloudsecurityalliance.org subject to the following: (a) the AI Controls Matrix v1.1.1 may be used solely for your personal, informational, non-commercial use; (b) the AI Controls Matrix v1.1.1 may not be modified or altered in any way; (c) the AI Controls Matrix v1.1.1 may not be redistributed; and (d) the trademark, copyright or other notices may not be removed. You may quote portions of the AI Controls Matrix v1.1.1 as permitted by the Fair Use provisions of the United States Copyright Act, provided that you attribute the portions to the Cloud Security Alliance AI Controls Matrix Version 1.1.1. If you are interested in obtaining a license to this material for other usages not addressed in the copyright notice, please contact info@cloudsecurityalliance.org.
