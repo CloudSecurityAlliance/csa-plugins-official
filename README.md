@@ -3,8 +3,9 @@
 Free add-ons from the [Cloud Security Alliance](https://cloudsecurityalliance.org) (CSA) that give your AI assistant
 new security skills, each one a method that CSA's researchers use, such as investigating a security incident,
 classifying a vulnerability, or scoring a security questionnaire. You install a plugin once and then describe what you
-need in plain English: the plugins work in the Claude app and, on the command line, in Claude Code, Codex and Gemini
-CLI, and you can also add them to ChatGPT, where we have not tested them yet.
+need in plain English. On the command line, we have tested them in Claude Code, and tested installing them in Codex and
+Gemini CLI. You can also add them in the Claude app and in ChatGPT; we have checked those steps against the vendors' documentation
+but have not yet run the plugins there ourselves.
 
 **On this page**
 
@@ -28,10 +29,14 @@ Add the CSA plugin marketplace to Claude once, then add the plugins you want. Th
 > **Who it is for:** anyone on a paid Claude plan. Anthropic says plugins are available on Pro, Max, Team and
 > Enterprise.
 >
+> **Tested?** Not yet in the app. We checked every step below against Anthropic's documentation on 2026-10-23, but
+> have not yet run these plugins in the Claude app ourselves. If a step does not match what you see, please
+> [tell us](#get-help-or-report-a-problem).
+>
 > **What you need first:** **Code execution and file creation** turned on. CSA's plugins are made of skills, and
 > Anthropic says skills need it. On Pro and Max, turn it on in
-> [Settings → Capabilities](https://claude.ai/settings/capabilities). On Team and Enterprise, an Owner turns it on for
-> the organization.
+> [Settings → Capabilities](https://claude.ai/settings/capabilities). On Team plans it is on by default. On Enterprise,
+> an Owner checks it under **Organization settings → Plugins & skills**, on the **Policy** tab.
 >
 > *Steps verified against Anthropic's [Use plugins in Claude](https://support.claude.com/en/articles/13837440-use-plugins-in-claude)
 > and [Plugins](https://claude.com/docs/plugins/overview) documentation on 2026-10-23.* If the menus have moved, follow
@@ -40,7 +45,7 @@ Add the CSA plugin marketplace to Claude once, then add the plugins you want. Th
 
 ### Step 1. Add the CSA marketplace
 
-You only do this once. The repository is public, so you don't need a GitHub account.
+You only do this once. Anthropic asks you to connect a GitHub account only for a private repository; this one is public.
 
 1. Open [Claude](https://claude.ai) in your browser or in the desktop app, and sign in.
 2. Go to **Customize** in the left sidebar, then the **Plugins** tab
@@ -62,8 +67,8 @@ first, then **Customize**.
 2. Select the CSA plugin you want. The [list of plugins](#available-plugins) says what each one does.
 3. Read what it contains, then select **Add**.
 
-Repeat for each plugin you want. `vulnerability-audit` uses `secid` and `cwe-analysis`, so add those two as well:
-Claude Code adds them for you, but Anthropic's pages for the app don't say whether the app does.
+Repeat for each plugin you want. `vulnerability-audit` uses `secid` and `cwe-analysis`: Claude Code adds those two for
+you, but we have not confirmed that the app does, so add them yourself.
 
 ### Use a plugin in the Claude app
 
@@ -138,8 +143,8 @@ plugin it came from. Type the plugin's name to narrow the list, then select the 
 - **Agents and hooks** run only in Cowork and Claude Code, so chat shows them grayed out. Use Cowork or Claude Code
   for those.
 - **If skills are grayed out,** code execution may be off. On Pro and Max, turn on **Code execution and file
-  creation** in [Settings → Capabilities](https://claude.ai/settings/capabilities). On Team and Enterprise, ask your
-  Owner.
+  creation** in [Settings → Capabilities](https://claude.ai/settings/capabilities). On Team plans it is on by default.
+  On Enterprise, an Owner checks it under **Organization settings → Plugins & skills**, on the **Policy** tab.
 - **If you turned the plugin off,** open it in [Customize → Plugins](https://claude.ai/customize/plugins) and turn its
   toggle back on.
 
@@ -486,14 +491,16 @@ six minutes.
 ## Is it safe to install?
 
 Plugins can run programs on your computer, so install only plugins you trust. Every plugin listed here is written and
-maintained by CSA, and its full source is public in this repository. Before anything is installed, Claude Code shows
-you what the plugin adds.
+maintained by CSA, and its full source is public in this repository. Before anything is installed, the Claude app and
+Claude Code show you what the plugin adds.
 
 This marketplace may list third-party plugins in future. CSA does not control what those contain, so check each one's
 homepage before you install it.
 
-**Your data.** Raw evidence never goes to CSA. When the plugin reads your evidence, it is processed by the AI model you run it with, under your agreement with that provider. SecID lookups send what you look up, such as a CVE
-number, to CSA's SecID service.
+**Your data.** "Evidence" below means whatever you give a plugin: a questionnaire, a bug report, source code, a
+document. Raw evidence never goes to CSA. When the plugin reads your evidence, it is processed by the AI model you run it with, under your agreement with that provider. The one thing that does reach CSA is a SecID lookup: `secid`, and
+`vulnerability-audit` and `security-knowledge-ingestion` when they use it, send the identifier you look up, such as a
+CVE number, to CSA's SecID service and nothing else.
 
 ## Keep plugins up to date
 

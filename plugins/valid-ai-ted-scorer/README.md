@@ -172,8 +172,8 @@ them blank.
      - AI-CAIQ: the provider description for every value except `Not Determined`; the customer description only for
        `Owned by AIC`, `Shared AP-AIC` and `Shared Across the Supply Chain`;
      - `Not Determined` requires neither, and a missing or invalid ownership requires both.
-   - **Too short to count.** A required description scores 0 if it is blank, only 1 or 2 characters, or just "yes" or
-     "no". This is why a blank description can score 0 even where CSA's template marks it optional. A description
+   - **Too short to count.** The row scores 0 if a required description is blank, only 1 or 2 characters, or just
+     "yes" or "no". This is why a blank description can zero a row even where CSA's template marks it optional. A description
      that isn't required may be blank without this check: the model then judges the row, and scores empty content 0.
 
    A row that fails gets the justification "Final score based on Implementation Description Score (0)".
@@ -243,7 +243,7 @@ Every page's footer says `CSA Valid-AI-ted Scorer v1.1.0`.
 The assistant keeps its working files in one new folder beside your questionnaire, `<your file>_work/`, and removes
 it at the end or tells you where it is.
 
-### Cost and time
+### Cost
 
 Measured on 2026-10-23 with `claude-opus-5-5` at effort `xhigh` (macOS) and at the default effort (Windows), at
 list-price equivalent:
