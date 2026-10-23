@@ -12,8 +12,9 @@ fits.
 - [Install in Claude Code](#install-in-claude-code)
 - [Available plugins](#available-plugins)
 - [Using a plugin](#using-a-plugin)
-- [Things to know before you start](#things-to-know-before-you-start)
 - [Using the Claude app instead](#using-the-claude-app-instead)
+- [Setting up your computer](#setting-up-your-computer) (only three plugins need this)
+- [Is it safe to install?](#is-it-safe-to-install)
 - [Keep plugins up to date](#keep-plugins-up-to-date)
 - [Get help or report a problem](#get-help-or-report-a-problem)
 - [Using another AI assistant](#using-another-ai-assistant)
@@ -47,19 +48,19 @@ added.
 
 ## Available plugins
 
-Most plugins need nothing else once installed. The three that do are covered in
-[Things to know before you start](#things-to-know-before-you-start).
+Most plugins work as soon as they are installed. Three also need Python on your computer. The table says which ones,
+and [Setting up your computer](#setting-up-your-computer) shows how to get it.
 
 | Plugin | Install command | What it does |
 |--------|-----------------|--------------|
 | [incident-analysis](plugins/incident-analysis/) | `/plugin install incident-analysis@csa-plugins-official` | Investigates a cloud or AI security incident from public reports. It gathers sources, checks how far each one can be trusted, builds a timeline, and writes a report with lessons learned and recommended defenses. |
 | [cwe-analysis](plugins/cwe-analysis/) | `/plugin install cwe-analysis@csa-plugins-official` | Works out which type of weakness is behind a vulnerability, using MITRE's Common Weakness Enumeration (CWE), and explains why. Built for people who publish vulnerability records, security researchers, and software vendors. |
-| [cve-analysis](plugins/cve-analysis/) | `/plugin install cve-analysis@csa-plugins-official` | Studies the whole public list of known vulnerabilities (CVE records) at once. It answers questions such as "Is the number of CVEs really growing?" and "Is the data getting better?" Needs setup first. |
+| [cve-analysis](plugins/cve-analysis/) | `/plugin install cve-analysis@csa-plugins-official` | Studies the whole public list of known vulnerabilities (CVE records) at once. It answers questions such as "Is the number of CVEs really growing?" and "Is the data getting better?" **Needs Python and a copy of the CVE list:** see [Setting up your computer](#setting-up-your-computer). |
 | [security-knowledge-ingestion](plugins/security-knowledge-ingestion/) | `/plugin install security-knowledge-ingestion@csa-plugins-official` | Turns a security standard, regulation, or framework into structured data that you can search, compare, and reuse. It first checks whether [SecID](https://secid.cloudsecurityalliance.org/) already has that data. |
 | [nist-ir-8477-mapping](plugins/nist-ir-8477-mapping/) | `/plugin install nist-ir-8477-mapping@csa-plugins-official` | Maps how two security frameworks or standards relate, for example which controls in one cover which controls in the other. It follows NIST's published mapping method (NIST IR 8477) and exports to Excel or to NIST's own format. |
-| [secid](plugins/secid/) | `/plugin install secid@csa-plugins-official` | Looks up security identifiers, such as a CVE, a CWE, a MITRE ATT&CK technique, or a NIST control, across more than 700 sources, and links you to each one. Needs two Python packages first. |
-| [vulnerability-audit](plugins/vulnerability-audit/) | `/plugin install vulnerability-audit@csa-plugins-official` | Reviews source code for security vulnerabilities, step by step. It challenges every finding to weed out false alarms, and helps you report real ones responsibly to the maintainers. Also installs `secid` and `cwe-analysis`, so it needs secid's Python packages too. |
-| [valid-ai-ted-scorer](plugins/valid-ai-ted-scorer/) | `/plugin install valid-ai-ted-scorer@csa-plugins-official` | Scores a completed CSA security questionnaire (CAIQ or AI-CAIQ) question by question, and produces a scored spreadsheet and a summary PDF. The result is an informational, AI-assisted assessment, not a CSA certification. |
+| [secid](plugins/secid/) | `/plugin install secid@csa-plugins-official` | Looks up security identifiers, such as a CVE, a CWE, a MITRE ATT&CK technique, or a NIST control, across more than 700 sources, and links you to each one. **Needs Python:** see [Setting up your computer](#setting-up-your-computer). |
+| [vulnerability-audit](plugins/vulnerability-audit/) | `/plugin install vulnerability-audit@csa-plugins-official` | Reviews source code for security vulnerabilities, step by step. It challenges every finding to weed out false alarms, and helps you report real ones responsibly to the maintainers. Also installs `secid` and `cwe-analysis`. **Needs Python** (for secid): see [Setting up your computer](#setting-up-your-computer). |
+| [valid-ai-ted-scorer](plugins/valid-ai-ted-scorer/) | `/plugin install valid-ai-ted-scorer@csa-plugins-official` | Scores a completed CSA security questionnaire (CAIQ or AI-CAIQ) question by question, and produces a scored spreadsheet and a summary PDF. The result is an informational, AI-assisted assessment of what was written, not a CSA certification or audit. Read its [README](plugins/valid-ai-ted-scorer/README.md) first: it lists known issues and explains where your questionnaire data goes. |
 
 ## Using a plugin
 
@@ -72,44 +73,6 @@ Ask for what you need. For example:
 
 To choose a plugin yourself, type `/` and pick it from the list. Plugin entries look like `plugin-name:skill-name`,
 for example `/cwe-analysis:cwe-analysis`.
-
-## Things to know before you start
-
-### secid needs two Python packages
-
-The secid plugin runs a small program on your computer. Install its two Python packages once:
-
-```bash
-python3 -m pip install mcp httpx
-```
-
-You need these for `vulnerability-audit` too, because it installs secid for you.
-
-**If you only want secid, you can skip the install.** Connect Claude to SecID's hosted service instead: add
-`https://secid.cloudsecurityalliance.org/mcp` as a remote MCP server (in the Claude app, a custom connector). It gives
-the same results. The [secid README](plugins/secid/README.md) has the details.
-
-### cve-analysis needs Python and a copy of the CVE list
-
-- **Python 3.11 or later, with pandas:** `python3 -m pip install pandas`
-- **A copy of the CVE list,** about 2 GB:
-  `git clone --depth 1 https://github.com/CVEProject/cvelistV5.git`
-- **Time:** each pass over the data takes about six minutes.
-
-### valid-ai-ted-scorer is informational only
-
-It assesses what was written in a questionnaire. It does not check that any control is in place, and it is not a CSA
-certification, audit, or STAR Registry listing. Read its [known issues](plugins/valid-ai-ted-scorer/README.md#known-issues)
-first. Its README also explains where your questionnaire data goes.
-
-### Is it safe to install?
-
-Plugins can run programs on your computer, so install only plugins you trust. Every plugin listed here is written and
-maintained by CSA, and its full source is public in this repository. Before anything is installed, Claude Code shows
-you what the plugin adds.
-
-This marketplace may list third-party plugins in future. CSA does not control what those contain, so check each one's
-homepage before you install it.
 
 ## Using the Claude app instead
 
@@ -128,6 +91,72 @@ account.
 
 **Already installed them in Claude Code?** Plugins you installed in the terminal also work in the desktop app's
 **Code** tab and in VS Code on the same computer. You don't need to install them again.
+
+## Setting up your computer
+
+Only three plugins need this: `secid`, `vulnerability-audit` (because it installs `secid`), and `cve-analysis`. They
+run small Python programs on your computer. The other plugins need nothing extra.
+
+**Claude Code can do these steps for you.** Ask it, for example, "Install the Python packages the secid plugin
+needs," and approve the commands it shows you.
+
+### Step 1. Get Python 3.11 or later
+
+First check whether you already have it. Open a terminal (on a Mac, the **Terminal** app; on Windows, **PowerShell**)
+and type:
+
+```text
+python3 --version
+```
+
+If it shows `Python 3.11` or a higher number, go to step 2. If it shows an older version, says the command is not
+found, or opens the Microsoft Store, install Python:
+
+- **Mac or Windows:** download it from [python.org/downloads](https://www.python.org/downloads/). On Windows, if the
+  installer offers to add Python to your PATH, say yes.
+- **Linux:** use your distribution's package manager, for example `sudo apt install python3 python3-pip` on Ubuntu or
+  Debian.
+
+Then close your terminal, open a new one, and check again.
+
+### Step 2. Install the packages your plugin needs
+
+| Plugin | Type this in your terminal |
+|--------|----------------------------|
+| `secid` or `vulnerability-audit` | `python3 -m pip install mcp httpx` |
+| `cve-analysis` | `python3 -m pip install pandas` |
+
+If pip refuses with a message about an "externally managed environment" (common on Linux, and with Python from
+Homebrew), add `--user --break-system-packages` to the end of the command. Despite the name, `--user` puts the
+packages in your own account and leaves the system's Python alone.
+
+Restart Claude Code afterwards, so that secid can start.
+
+**Only want secid lookups? You can skip steps 1 and 2.** Connect Claude to SecID's hosted service instead: add
+`https://secid.cloudsecurityalliance.org/mcp` as a remote MCP server (in the Claude app, a custom connector). It gives
+the same results. The [secid README](plugins/secid/README.md) has the details. This does not work for
+`vulnerability-audit`, which needs the secid plugin itself.
+
+### Step 3. Download the CVE list (cve-analysis only)
+
+cve-analysis reads the public CVE list from your computer. Download it once (about 2 GB):
+
+```text
+git clone --depth 1 https://github.com/CVEProject/cvelistV5.git
+```
+
+If `git` is not installed, get it from [git-scm.com](https://git-scm.com/downloads). On a Mac, typing `git` offers to
+install it for you. When you start an analysis, tell Claude where the folder is. Each pass over the data takes about
+six minutes.
+
+## Is it safe to install?
+
+Plugins can run programs on your computer, so install only plugins you trust. Every plugin listed here is written and
+maintained by CSA, and its full source is public in this repository. Before anything is installed, Claude Code shows
+you what the plugin adds.
+
+This marketplace may list third-party plugins in future. CSA does not control what those contain, so check each one's
+homepage before you install it.
 
 ## Keep plugins up to date
 
