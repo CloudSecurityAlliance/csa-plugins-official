@@ -1,0 +1,133 @@
+Reference data in this folder: versions, sources and checksums
+================================================================
+
+Plugin valid-ai-ted-scorer 1.0.1. Eight reference files: the four from CSA's published
+Valid-AI-ted Scorer package, unchanged, and four the plugin adds, so that every CAIQ and
+AI-CAIQ release CSA publishes has the reference data it pairs with. SKILL.md's A-02 table says
+which file each questionnaire uses. Their notices are in NOTICE-CCM.txt and NOTICE-AICM.txt,
+beside them.
+
+
+The four files from CSA's published package
+--------------------------------------------
+
+Source:   CSA's Valid-AI-ted Scorer package 1.1.0, caiq-scorer-v1.1.0.zip,
+          https://labs.cloudsecurityalliance.org/valid-ai-ted-scorer/
+          SHA-256 ae37c946e734030d90c30ae911955ed6e3136135715f1b6223fefcacf7770334
+Exported: October 2026 (package 1.1.0, as the package's CHANGELOG.md dates it)
+Copied:   byte for byte from the package's reference/ folder. The same files are
+          byte-identical to engine/data/ in CSA's scoring engine
+          (a private CSA repository) at commit 1cc171b.
+
+  File                    Version      Rows  SHA-256
+  CCM-4.0.13-merged.csv   CCM 4.0.13    197  de28b382bee1a7a771eae474061e3b5e46fcb1e1c09897425d43db5fb11bd4bb
+  CCM-4.1.0-merged.csv    CCM 4.1.0     207  08772e1e2399e3fa947ca667c9a1ba9fc0d0aef3a124a41f5df39440781ec09b
+  AICM-1.0.2-merged.csv   AICM 1.0.2    243  f240304e27d74a3e11b5a2e0d610d34ddf12ff7160b8f1321af5fabf5dbbfe6e
+  AICM-1.1.0-merged.csv   AICM 1.1.0    247  2f93356f0803687647ed253ad02d9707a4994888a976c63712b537e09b6972d2
+
+Known differences from CSA's published workbooks: see DEVIATIONS.md, A-05 and A-25.
+(AICM-1.1.0-merged.csv is a pre-publication text of AICM 1.1.0: 63 cells in 20 controls
+differ from CSA's published 1.1.0 workbook. CCM-4.0.13-merged.csv starts with a UTF-8
+byte-order mark.)
+
+
+The files this plugin adds
+--------------------------
+
+  File                              Version      Rows  SHA-256
+  CCM-4.1.1-merged.csv              CCM 4.1.1     207  693f443d4326d0bb74b8a661fc7fe47494eb22c84b41fc2effd40e0c8d781263
+  AICM-1.0.3-merged.csv             AICM 1.0.3    243  d575b75551da2d197e62496441f35306c87cda0ccb14b717eb36480eb686a6d7
+  AICM-1.1.0-published-merged.csv   AICM 1.1.0    247  c716d5ab5e0aafb29934c66ec4697b3b2ddc5bf4abae5c2782421afa719f595e
+  AICM-1.1.1-merged.csv             AICM 1.1.1    247  c956f62c852d4d1af497fcee1c99f5173c4fa15eef0732e8a863be37fa8fa9bd
+
+Each of the four is built from CSA's own workbook for its version (sheets of controls,
+implementation guidelines and auditing guidelines; each cell's text as stored), in the format
+of the package's newest file of its family, and gated in CSA's internal build records for this
+plugin (not published). The same
+method, applied to the package's own versions, reproduces CCM-4.1.0-merged.csv byte for byte
+and CCM-4.0.13-merged.csv cell for cell, and AICM-1.1.0-merged.csv except A-05's 63 cells.
+
+CCM-4.1.1-merged.csv
+Version:  CCM 4.1.1, for a CAIQ v4.1.0 stamped CCM 4.1.1 (CSA's bundle of 2026-10-02).
+Source:   CSA's CCM 4.1.1 workbook, CCMv4.1.1-generated_at_2026_10_02.xlsx,
+          SHA-256 6ebb2207f805ef952fa8450e6863cd98bc708af76bedd24a536925cdec460205,
+          from https://cloudsecurityalliance.org/artifacts/cloud-controls-matrix-v4-1
+          (bundle "CCM+CAIQv4.1 Bundle", generated 2026-10-02).
+Format:   the same as CCM-4.1.0-merged.csv: UTF-8 without a byte-order mark, CRLF row
+          endings, the same 7 columns, one row per control in the workbook's order.
+Built:    2026-10-22, by a generator in CSA's internal build records for this plugin
+          (not published; standard library only).
+Checked:  207 controls, the same IDs as CCM-4.1.0-merged.csv; against CCM 4.1.0 only
+          specification text differs (101 copy-edits, as the CCM 4.1.1 change log says);
+          zero differences from the workbook; CSA's CAIQ v4.1.0 of 2026-10-02 carries the
+          same 207 controls, titles and specifications. CSA's MCP data service holds no CCM
+          4.1.1 (its "4.1" is CCM 4.1.0's text).
+Notice:   CSA's CCM 4.1.1 notice, in NOTICE-CCM.txt.
+
+AICM-1.0.3-merged.csv
+Version:  AICM 1.0.3, for an AI-CAIQ 1.0.2 stamped AICM 1.0.3 (CSA's bundle of 2025-11-10).
+Source:   CSA's AICM 1.0.3 workbook, AICMv1.0.3-generated_at_2025_11_10.xlsx,
+          SHA-256 0762a3c160857c048df90ceef9eb7332fe65e45309bdda343e5cc894abb86e61,
+          from https://cloudsecurityalliance.org/artifacts/ai-controls-matrix.
+Format:   the same as AICM-1.1.0-merged.csv (15 columns, LF line endings).
+Built:    as CCM-4.1.1-merged.csv.
+Checked:  243 controls, the same IDs as AICM-1.0.2-merged.csv; against it one cell differs
+          (UEM-01's CSP guideline, the typo fix of AICM 1.0.3's change log); zero
+          differences from the workbook; CSA's AI-CAIQ 1.0.2 template carries the same 243
+          controls, titles and specifications. Against CSA's MCP data service, every
+          specification and guideline cell agrees; the service spells 7 domain names with
+          "&" (99 cells) and keeps only the first line of 3 multi-line titles (DSP-24,
+          STA-01, STA-12). The file keeps CSA's workbook text, which the questionnaire uses.
+          Accepted by CSA on 2026-10-22.
+Notice:   CSA's AICM 1.0.3 notice, in NOTICE-AICM.txt.
+
+AICM-1.1.0-published-merged.csv
+Version:  AICM 1.1.0 as CSA published it, for an AI-CAIQ 1.1.0 stamped AICM 1.1.0 (CSA's
+          bundle of 2026-06-18). The package's own AICM-1.1.0-merged.csv is a
+          pre-publication text (DEVIATIONS.md, A-05): it ships unchanged but is not used.
+          CSA chose this on 2026-10-22.
+Source:   CSA's AICM 1.1.0 workbook, AICMv1.1.0-generated_at_2026_06_18.xlsx,
+          SHA-256 afebba6d2c9ede424e382711b84a46d0559cd83550765f24c1d435118063bf4d,
+          from https://cloudsecurityalliance.org/artifacts/ai-controls-matrix-v1-1
+          (the June 2026 bundle).
+Format:   the same as AICM-1.1.0-merged.csv.
+Built:    as CCM-4.1.1-merged.csv; byte-identical to the 1.1.0 file the
+          AICM 1.1.1 build regenerated for its gate 1.
+Checked:  247 controls, the same IDs; against the package's AICM-1.1.0-merged.csv exactly
+          A-05's 63 cells in 20 controls differ; zero differences from the workbook; CSA's
+          AI-CAIQ 1.1.0 template carries the same 247 controls, titles and specifications.
+          Against CSA's MCP data service, every title, specification and guideline cell
+          agrees; the service spells 7 domain names with "&" (101 cells), the difference
+          CSA accepted for AICM 1.1.1 on 2026-10-22.
+Notice:   CSA's AICM 1.1.0 notice, in NOTICE-AICM.txt.
+
+AICM-1.1.1-merged.csv
+Version:  AICM 1.1.1, for an AI-CAIQ 1.1.0 stamped AICM 1.1.1. CSA publishes it under the
+          label "AI Controls Matrix v1.1"; the version shows in its workbook's file name and
+          cell A1 stamp.
+Source:   CSA's AICM 1.1.1 workbook, AICMv1.1.1-generated_at_2026_07_22.xlsx,
+          SHA-256 94b2703223f2748a24a5615b050408eb8e01ba4e1b4c844a95d1695d64011410,
+          from https://cloudsecurityalliance.org/artifacts/ai-controls-matrix-v1-1
+          (sheets AICM, Implementation Guidelines and Auditing Guidelines; each cell's
+          text as stored).
+Format:   the same as AICM-1.1.0-merged.csv: UTF-8 without a byte-order mark, LF line
+          endings, comma-separated, minimal quoting, one row per control in the
+          workbook's order (A&A-01 to UEM-14), the same 15 columns.
+Built:    2026-10-22, by a generator in CSA's internal build records for this plugin
+          (not published; standard library only).
+Checked:  against CSA's MCP data service, https://cloudsecurityalliance.org/mcp
+          (csa-mcp-server 1.0.0, deploy 42823fcc-5026-4edf-844a-b2bf3b64130e, deployed
+          2026-10-01T00:30:39Z), fetched 2026-10-23 UTC with csa_get_controls (family
+          aicm, version 1.1.1, verbosity full) and csa_search_get_artifact (family aicm,
+          version 1.1.1, slug = each control ID); and against CSA's AI-CAIQ 1.1.0
+          question set. The gates and their results, in CSA's internal build records:
+            - regenerating AICM 1.1.0 the same way reproduces AICM-1.1.0-merged.csv
+              except exactly A-05's 63 cells;
+            - 247 controls, the same IDs as AICM-1.1.0-merged.csv, and every AI-CAIQ
+              1.1.0 question's control;
+            - zero differences from CSA's 1.1.1 workbook;
+            - against the service, every title, specification and guideline cell
+              agrees; the service spells 7 domain names with "&" (101 Control
+              Domain cells). The file keeps the workbook's spelling, which the
+              questionnaires use. Accepted by CSA on 2026-10-22.
+Notice:   CSA's AICM 1.1.1 notice, in NOTICE-AICM.txt.

@@ -1,0 +1,49 @@
+Valid-AI-ted Scorer plugin for Claude Code (valid-ai-ted-scorer)
+Copyright 2026 Cloud Security Alliance
+
+This plugin holds files under more than one set of terms.
+
+
+What the Apache License covers
+------------------------------
+
+The plugin's own files are licensed under the Apache License, Version 2.0 (LICENSE):
+
+  - .claude-plugin/plugin.json, README.md, DEVIATIONS.md, FEEDBACK.md,
+    CHANGELOG.md, this NOTICE and LICENSE;
+  - skills/caiq-scorer/reference/VERSION.txt, and the explanatory text of
+    skills/caiq-scorer/reference/NOTICE-CCM.txt and NOTICE-AICM.txt (not the
+    CSA notices they quote);
+  - the sections the plugin adds to skills/caiq-scorer/SKILL.md: each block
+    from a "<!-- valid-ai-ted-scorer: begin ... -->" line to its
+    "<!-- valid-ai-ted-scorer: end ... -->" line.
+
+
+What it does not cover
+----------------------
+
+The Apache License does not cover the Cloud Security Alliance works this
+plugin includes. They remain (c) Cloud Security Alliance, all rights reserved:
+
+  - CSA's published Valid-AI-ted Scorer text, from CSA's package 1.1.0:
+    skills/caiq-scorer/SKILL.md outside the marked blocks,
+    skills/caiq-scorer/VERSION and skills/caiq-scorer/CHANGELOG.md;
+  - the Valid-AI-ted scoring prompts, skills/caiq-scorer/prompts/;
+  - the Cloud Controls Matrix (CCM) and AI Controls Matrix (AICM) reference
+    data, skills/caiq-scorer/reference/*.csv, including the four files the
+    plugin adds from CSA's own workbooks: CCM-4.1.1-merged.csv (CCM 4.1.1),
+    AICM-1.0.3-merged.csv (AICM 1.0.3), AICM-1.1.0-published-merged.csv
+    (CSA's published AICM 1.1.0) and AICM-1.1.1-merged.csv (AICM 1.1.1).
+    Each file is under CSA's notice for its version, reproduced
+    word for word in skills/caiq-scorer/reference/NOTICE-CCM.txt and
+    skills/caiq-scorer/reference/NOTICE-AICM.txt. CSA's terms say that "the
+    trademark, copyright or other notices may not be removed": keep those
+    files with the data.
+
+
+Trademarks
+----------
+
+"Cloud Security Alliance", "CSA" and the CSA logo are trademarks of the Cloud
+Security Alliance. No licence in this plugin grants any right to use them
+(Apache License, section 6).

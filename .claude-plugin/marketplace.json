@@ -90,6 +90,18 @@
       "source": "./plugins/vulnerability-audit",
       "category": "security",
       "homepage": "https://github.com/CloudSecurityAlliance/csa-plugins-official/tree/main/plugins/vulnerability-audit"
+    },
+    {
+      "name": "valid-ai-ted-scorer",
+      "description": "CSA's Valid-AI-ted scoring method (published package 1.1.0) with seven documented fixes, and reference data for every current CAIQ and AI-CAIQ version: scores a completed CAIQ (CCM) or AI-CAIQ (AICM) question by question on a 0-4 scale and writes a scored workbook and a summary PDF. An informational, AI-assisted assessment of the written responses, produced by your AI assistant. Read the README's known issues first.",
+      "author": {
+        "name": "Cloud Security Alliance",
+        "email": "research@cloudsecurityalliance.org"
+      },
+      "version": "1.0.1",
+      "source": "./plugins/valid-ai-ted-scorer",
+      "category": "security",
+      "homepage": "https://github.com/CloudSecurityAlliance/csa-plugins-official/tree/main/plugins/valid-ai-ted-scorer"
     }
   ]
 }

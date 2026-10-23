@@ -1,0 +1,37 @@
+Cloud Controls Matrix (CCM) reference data: CSA's notices
+=========================================================
+
+The CCM reference files in this folder are CSA's Cloud Controls Matrix text.
+CSA publishes each version of the matrix with its own copyright notice, and its terms say
+that "the trademark, copyright or other notices may not be removed". Each version's notice
+is reproduced below word for word, copied by program from the notice cell of CSA's published
+workbook for that version (the cell's trailing space is not carried). These files are
+Cloud Security Alliance works, © Cloud Security Alliance, all rights reserved; the plugin's
+Apache License 2.0 does not cover them (see the plugin's NOTICE).
+
+Which notice covers which file
+------------------------------
+
+CCM-4.0.13-merged.csv: Used for CAIQ v4.0.1, v4.0.2 and v4.0.3 questionnaires. Covered by CSA's CCM 4.0.13 notice.
+  Notice: CCM 4.0.13, from CSA's workbook CCMv4.0.13_Generated-at_2024-10-31.xlsx (SHA-256 15ed2749457430197e18d134f2c4d09e1fd432ec4942cbea2105f5ff9ac0ae80).
+
+CCM-4.1.0-merged.csv: Used for CAIQ v4.1.0 stamped CCM 4.1.0, and for CAIQ-Lite v4.1.0. Covered by CSA's CCM 4.1.0 notice.
+  Notice: CCM 4.1.0, from CSA's workbook CCMv4.1.0-generated_at_2026_01_13.xlsx (SHA-256 5e721628c8ab297bdbd355afa4c01699971fcbb9cb16802ccb9d42c7176ab32b).
+
+CCM-4.1.1-merged.csv: Added by this plugin: CSA's CCM 4.1.1, for a CAIQ v4.1.0 stamped CCM 4.1.1, generated from CSA's CCM 4.1.1 workbook (see VERSION.txt). Covered by CSA's CCM 4.1.1 notice.
+  Notice: CCM 4.1.1, from CSA's workbook CCMv4.1.1-generated_at_2026_10_02.xlsx (SHA-256 6ebb2207f805ef952fa8450e6863cd98bc708af76bedd24a536925cdec460205).
+
+CCM 4.0.13 notice (as printed on all 8 sheets of CSA's CCM 4.0.13 workbook)
+---------------------------------------------------------------------------
+
+© Copyright 2024-2025 Cloud Security Alliance - All rights reserved.  You may download, store, display on your computer, view, print, and link to the Cloud Security Alliance “Cloud Controls Matrix (CCM) Version 4.0.13” at http://www.cloudsecurityalliance.org subject to the following: (a) the Cloud Controls Matrix v4.0.13 may be used solely for your personal, informational, non-commercial use; (b) the Cloud Controls Matrix v4.0.13 may not be modified or altered in any way; (c) the Cloud Controls Matrix v4.0.13 may not be redistributed; and (d) the trademark, copyright or other notices may not be removed. You may quote portions of the Cloud Controls Matrix v4.0.13 as permitted by the Fair Use provisions of the United States Copyright Act, provided that you attribute the portions to the Cloud Security Alliance Cloud Controls Matrix Version 4.0.13. If you are interested in obtaining a license to this #material for other usages not addresses in the copyright notice, please contact info@cloudsecurityalliance.org.
+
+CCM 4.1.0 notice (as printed on all 7 sheets of CSA's CCM 4.1.0 workbook)
+-------------------------------------------------------------------------
+
+© Copyright 2026 Cloud Security Alliance - All rights reserved.  You may download, store, display on your computer, view, print, and link to the Cloud Security Alliance “Cloud Controls Matrix (CCM) Version 4.1.0” at https://cloudsecurityalliance.org subject to the following: (a) the Cloud Controls Matrix v4.1.0 may be used solely for your personal, informational, non-commercial use; (b) the Cloud Controls Matrix v4.1.0 may not be modified or altered in any way; (c) the Cloud Controls Matrix v4.1.0 may not be redistributed; and (d) the trademark, copyright or other notices may not be removed. You may quote portions of the Cloud Controls Matrix v4.1.0 as permitted by the Fair Use provisions of the United States Copyright Act, provided that you attribute the portions to the Cloud Security Alliance Cloud Controls Matrix Version 4.1.0. If you are interested in obtaining a license to this #material for other usages not addresses in the copyright notice, please contact info@cloudsecurityalliance.org.
+
+CCM 4.1.1 notice (as printed on all 9 sheets of CSA's CCM 4.1.1 workbook)
+-------------------------------------------------------------------------
+
+© Copyright 2026-2027 Cloud Security Alliance - All rights reserved.  You may download, store, display on your computer, view, print, and link to the Cloud Security Alliance “Cloud Controls Matrix (CCM) Version 4.1.1” at https://cloudsecurityalliance.org subject to the following: (a) the Cloud Controls Matrix v4.1.1 may be used solely for your personal, informational, non-commercial use; (b) the Cloud Controls Matrix v4.1.1 may not be modified or altered in any way; (c) the Cloud Controls Matrix v4.1.1 may not be redistributed; and (d) the trademark, copyright or other notices may not be removed. You may quote portions of the Cloud Controls Matrix v4.1.1 as permitted by the Fair Use provisions of the United States Copyright Act, provided that you attribute the portions to the Cloud Security Alliance Cloud Controls Matrix Version 4.1.1. If you are interested in obtaining a license to this material for other usages not addressed in the copyright notice, please contact info@cloudsecurityalliance.org.

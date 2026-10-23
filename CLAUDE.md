@@ -149,6 +149,7 @@ plugins/nist-ir-8477-mapping/scripts/validate-mapping.sh <mapping.json> [focal.j
 | `nist-ir-8477-mapping` | Four relationship styles in `styles/`; OLIR/CPRT JSON + Excel export; consumes ingestion output |
 | `secid` | MCP server (`server.py`) + slash commands; needs `mcp`/`httpx` |
 | `vulnerability-audit` | Two skills (`audit`, `validate-findings`); `checkpoint.py` state machine; `dependencies` on secid + cwe-analysis; static-only |
+| `valid-ai-ted-scorer` | CSA's published Valid-AI-ted Scorer skill kept byte for byte, with marked fix blocks (`DEVIATIONS.md`); one teaching `SKILL.md`, no phases; CCM and AICM reference data under CSA's notices, not Apache; no scripts |
 
 ## Other Conventions
 
