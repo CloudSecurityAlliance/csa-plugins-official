@@ -9,17 +9,20 @@ fits.
 
 **On this page**
 
-- [Install](#install)
+- [Install in Claude Code](#install-in-claude-code)
 - [Available plugins](#available-plugins)
+- [Using a plugin](#using-a-plugin)
 - [Things to know before you start](#things-to-know-before-you-start)
+- [Using the Claude app instead](#using-the-claude-app-instead)
 - [Keep plugins up to date](#keep-plugins-up-to-date)
 - [Get help or report a problem](#get-help-or-report-a-problem)
 - [Using another AI assistant](#using-another-ai-assistant)
 - [For developers and contributors](#for-developers-and-contributors)
 
-## Install
+## Install in Claude Code
 
-### In Claude Code (two steps)
+It takes two steps. (Using the Claude app on the web or desktop? See
+[Using the Claude app instead](#using-the-claude-app-instead).)
 
 **Step 1. Add the CSA plugin marketplace.** You only do this once. Type this into Claude Code:
 
@@ -42,34 +45,6 @@ the plugin in every project.
 To browse instead, run `/plugin` and open the **Discover** tab. It lists every plugin from the marketplaces you have
 added.
 
-Plugins you install in the terminal also work in the Claude desktop app's **Code** tab and in VS Code on the same
-computer.
-
-### In the Claude app (claude.ai or desktop)
-
-1. Open [Customize > Plugins](https://claude.ai/customize/plugins).
-2. Select **Add**, then **Add marketplace**.
-3. Enter `CloudSecurityAlliance/csa-plugins-official`.
-4. Find the plugin you want and select **Add**.
-
-On Team and Enterprise plans, your organization's Owner decides whether members can add marketplaces. If you don't see
-**Add marketplace**, ask your Owner.
-
-Plugins you add here are saved to your Claude account. They also appear in Claude Code when you sign in with the same
-account.
-
-### Using a plugin
-
-Ask for what you need. For example:
-
-- "Help me pick the right CWE for this bug report."
-- "Investigate this cloud security incident and build a timeline: (paste a link to a news report)"
-- "Map NIST CSF 2.0 to ISO 27001 and tell me where they differ."
-- "Score this completed AI-CAIQ questionnaire."
-
-To choose a plugin yourself, type `/` and pick it from the list. Plugin entries look like `plugin-name:skill-name`,
-for example `/cwe-analysis:cwe-analysis`.
-
 ## Available plugins
 
 Most plugins need nothing else once installed. The three that do are covered in
@@ -85,6 +60,18 @@ Most plugins need nothing else once installed. The three that do are covered in
 | [secid](plugins/secid/) | `/plugin install secid@csa-plugins-official` | Looks up security identifiers, such as a CVE, a CWE, a MITRE ATT&CK technique, or a NIST control, across more than 700 sources, and links you to each one. Needs two Python packages first. |
 | [vulnerability-audit](plugins/vulnerability-audit/) | `/plugin install vulnerability-audit@csa-plugins-official` | Reviews source code for security vulnerabilities, step by step. It challenges every finding to weed out false alarms, and helps you report real ones responsibly to the maintainers. Also installs `secid` and `cwe-analysis`, so it needs secid's Python packages too. |
 | [valid-ai-ted-scorer](plugins/valid-ai-ted-scorer/) | `/plugin install valid-ai-ted-scorer@csa-plugins-official` | Scores a completed CSA security questionnaire (CAIQ or AI-CAIQ) question by question, and produces a scored spreadsheet and a summary PDF. The result is an informational, AI-assisted assessment, not a CSA certification. |
+
+## Using a plugin
+
+Ask for what you need. For example:
+
+- "Help me pick the right CWE for this bug report."
+- "Investigate this cloud security incident and build a timeline: (paste a link to a news report)"
+- "Map NIST CSF 2.0 to ISO 27001 and tell me where they differ."
+- "Score this completed AI-CAIQ questionnaire."
+
+To choose a plugin yourself, type `/` and pick it from the list. Plugin entries look like `plugin-name:skill-name`,
+for example `/cwe-analysis:cwe-analysis`.
 
 ## Things to know before you start
 
@@ -123,6 +110,24 @@ you what the plugin adds.
 
 This marketplace may list third-party plugins in future. CSA does not control what those contain, so check each one's
 homepage before you install it.
+
+## Using the Claude app instead
+
+You can also add these plugins in the Claude app, on the web at claude.ai or in the desktop app:
+
+1. Open [Customize > Plugins](https://claude.ai/customize/plugins).
+2. Select **Add**, then **Add marketplace**.
+3. Enter `CloudSecurityAlliance/csa-plugins-official`.
+4. Find the plugin you want and select **Add**.
+
+On Team and Enterprise plans, your organization's Owner decides whether members can add marketplaces. If you don't see
+**Add marketplace**, ask your Owner.
+
+Plugins you add here are saved to your Claude account. They also appear in Claude Code when you sign in with the same
+account.
+
+**Already installed them in Claude Code?** Plugins you installed in the terminal also work in the desktop app's
+**Code** tab and in VS Code on the same computer. You don't need to install them again.
 
 ## Keep plugins up to date
 
