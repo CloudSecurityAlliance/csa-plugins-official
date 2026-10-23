@@ -18,7 +18,8 @@ Almost all content is Markdown. There is no build step, no package manager, and 
 - `plugins/` — Internal plugins developed by CSA.
 - `external_plugins/` — Third-party plugins (placeholder; submission process TBD).
 - `docs/superpowers/{specs,plans}/` — Repo-level design specs and implementation plans, date-prefixed (`YYYY-MM-DD-<topic>-design.md`). Per-plugin design docs live in `plugins/{name}/docs/` using the same naming.
-- `.superpowers/sdd/` — Spec-driven-development scratch state (review diffs, progress notes). Working artifacts, not documentation.
+- `.superpowers/sdd/` — Spec-driven-development scratch state (review diffs, progress notes). Working artifacts, not documentation; untracked (its own `.gitignore` is `*`).
+- `LICENSING.md` — map of which licence governs which directory. Licences differ per plugin, and a directory's own `LICENSE` beats the root one.
 - `.claude/` is **gitignored** — local permissions in `.claude/settings.local.json` are not shared.
 
 ## Plugin Anatomy
@@ -51,7 +52,19 @@ Adding or changing a plugin touches three files. All three drift silently — th
 | `version` | required | required | — |
 | `author` | may be an individual (e.g. Kurt Seifried) | always Cloud Security Alliance | — |
 
-Only `description` and `version` must match exactly. `source` paths in marketplace.json are relative (`./plugins/{name}`).
+Only `description` and `version` must match exactly. `source` paths in marketplace.json are relative (`./plugins/{name}`). Quick check:
+
+```bash
+python3 - <<'EOF'   # prints nothing when in sync
+import json, glob
+m = {p['name']: p for p in json.load(open('.claude-plugin/marketplace.json'))['plugins']}
+for f in sorted(glob.glob('plugins/*/.claude-plugin/plugin.json')):
+    p = json.load(open(f)); mp = m.get(p['name'])
+    if not mp: print(p['name'], 'not in marketplace.json'); continue
+    for k in ('version', 'description'):
+        if p.get(k) != mp.get(k): print(p['name'], k, 'differs')
+EOF
+```
 
 ## Skill Architecture
 
@@ -94,8 +107,8 @@ So prompt changes are edits to a reference file a reviewer can read, not to shel
 
 Worth knowing before editing, because the failure modes differ:
 
-- **Methodology plugins** (`incident-analysis`, `cwe-analysis`, `security-knowledge-ingestion`, `nist-ir-8477-mapping`, `vulnerability-audit`) — Markdown workflows plus stdlib-only helper scripts. Nothing to install; bugs are analytical, and are caught by review and cross-model validation.
-- **Code plugins** (`secid`) — a real runtime. `server.py` is a FastMCP server wrapping the SecID REST API, launched via `.mcp.json` as `python3 ${CLAUDE_PLUGIN_ROOT}/server.py`, and it **requires `pip install mcp httpx`** (the only external dependency in the repo). Accepts `--base-url` for internal resolvers. Its `skills/` and `agents/` hold only placeholder READMEs.
+- **Methodology plugins** (`incident-analysis`, `cwe-analysis`, `cve-analysis`, `security-knowledge-ingestion`, `nist-ir-8477-mapping`, `vulnerability-audit`, `valid-ai-ted-scorer`) — Markdown workflows plus helper scripts. Nothing to install except `pandas` for `cve-analysis`'s analyzers; bugs are analytical, and are caught by review and cross-model validation.
+- **Code plugins** (`secid`) — a real runtime. `server.py` is a FastMCP server wrapping the SecID REST API, launched via `.mcp.json` as `python3 ${CLAUDE_PLUGIN_ROOT}/server.py`, and it **requires `pip install mcp httpx`**. Accepts `--base-url` for internal resolvers. Its `skills/` and `agents/` hold only placeholder READMEs.
 
 ## Testing and Validation
 
@@ -123,6 +136,8 @@ The two cwe-analysis runners are hand-rolled — a hardcoded list of plain funct
 
 Query the bundled CWE data with `python3 plugins/cwe-analysis/scripts/cwe-tool.py {lookup,search,candidates,children,chain,ai-relevant,version,similar}`. Data version is pinned in `data/VERSION.txt` (currently CWE 4.16, 944 rows).
 
+**cve-analysis has no tests.** Its scripts need a `cvelistV5` clone (~2 GB; each extractor is a ~6 min pass), and the analyzers need `pandas` (extractors are stdlib). Every script takes `--help`, which is the only cheap check. They read and write `./data` and `./reports` under the **current directory**, not the script's, so run them from a scratch workspace. Run from `plugins/cve-analysis/`, the extracts would land beside the bundled CWE CSV in `data/`.
+
 Cross-model validators (require `codex` and/or `gemini` CLIs installed):
 ```bash
 plugins/incident-analysis/scripts/validate-report.sh <report.md>
@@ -134,7 +149,7 @@ plugins/nist-ir-8477-mapping/scripts/validate-mapping.sh <mapping.json> [focal.j
 
 1. `plugins/{name}/.claude-plugin/plugin.json` — name, version, description, author.
 2. Component directories (`skills/`, `commands/`, `agents/`) — no manifest registration needed.
-3. `FEEDBACK.md` and `LICENSE`.
+3. `FEEDBACK.md`, `LICENSE` and `NOTICE`. An Apache 2.0 `LICENSE` must be the verbatim upstream text (md5 `3b83ef96387f14655fc854ddc3c6bd57`; check with `md5 -q`, don't eyeball it). Copyright goes in `NOTICE`, never in the licence body. Any other licence needs a row in `LICENSING.md` saying why.
 4. Register in `.claude-plugin/marketplace.json` under `plugins` (name, description, author, version, source, category, homepage).
 5. Add a row to the README "Available Plugins" table.
 6. Verify description and version match across plugin.json and marketplace.json.
@@ -145,14 +160,16 @@ plugins/nist-ir-8477-mapping/scripts/validate-mapping.sh <mapping.json> [focal.j
 |---|---|
 | `incident-analysis` | 10 phases, cloud/AI incidents; older heredoc-style validator |
 | `cwe-analysis` | Bundles MITRE CWE 4.16 data + `cwe-tool.py`; the only plugin with real unit tests over data |
+| `cve-analysis` | Large-N cvelistV5 corpus analysis, 6 phases (1 and 6 mandatory, 2–5 independent); bundles its own CWE **4.19.1**, separate from cwe-analysis's 4.16; pitfall defences (bucket on `datePublished`, key CNAs on `assignerOrgId`) live in the scripts, so don't reimplement them ad hoc; `scripts/archetypes.json` holds hand-assigned CNA archetypes |
 | `security-knowledge-ingestion` | Converts standards/regulations to structured data; checks SecID first; license verification before contribution |
 | `nist-ir-8477-mapping` | Four relationship styles in `styles/`; OLIR/CPRT JSON + Excel export; consumes ingestion output |
 | `secid` | MCP server (`server.py`) + slash commands; needs `mcp`/`httpx` |
 | `vulnerability-audit` | Two skills (`audit`, `validate-findings`); `checkpoint.py` state machine; `dependencies` on secid + cwe-analysis; static-only |
-| `valid-ai-ted-scorer` | CSA's published Valid-AI-ted Scorer skill kept byte for byte, with marked fix blocks (`DEVIATIONS.md`); one teaching `SKILL.md`, no phases; CCM and AICM reference data under CSA's notices, not Apache; no scripts |
+| `valid-ai-ted-scorer` | CSA's published Valid-AI-ted Scorer skill kept byte for byte; one teaching `SKILL.md`, no phases, no scripts; uses `reference/` and `prompts/`, not `references/`. Changes go **only** inside `<!-- valid-ai-ted-scorer: begin … -->` / `end` blocks placed after the published sentence they amend (removing every block must give back the published file), each with an entry in `DEVIATIONS.md`. Prompts and reference CSVs are never edited; checksums are in `reference/VERSION.txt`. CCM and AICM data are under CSA's notices, not Apache |
 
 ## Other Conventions
 
-- Scripts use only Python stdlib or POSIX shell. The single exception is `secid/server.py`. Keep it that way — users install plugins, they don't run `pip install -r`.
+- Scripts use only Python stdlib or POSIX shell. The exceptions are `secid/server.py` (`mcp`, `httpx`) and `cve-analysis`'s analyzers (`pandas`). Don't add more: users install plugins, they don't run `pip install -r`.
+- Some plugins are the public face of an internal CSA repo that stays the **source of truth**: `cve-analysis` (`CINO-CVE-research`) and `vulnerability-audit` (`Security-Vulnerability-Research-with-AI`), both under `CloudSecurityAlliance-Internal`. Each plugin's README names its upstream. Methodology changes flow downstream from there, so a fix made only here will diverge from it. Flag that rather than assuming the plugin is the master copy.
 - Bundled data carries the upstream license file alongside it (`data/MITRE-CWE-LICENSE.txt`) plus a `VERSION.txt` recording version, export date, row count, and source URL.
 - Plugins reference each other by name in prose to chain workflows (ingestion → mapping; audit → cwe-analysis). Prefer suggesting a sibling plugin over duplicating its methodology.
