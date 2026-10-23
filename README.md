@@ -5,7 +5,8 @@ security skills. Each plugin teaches Claude a method that CSA's researchers use,
 incident, classifying a vulnerability, or scoring a security questionnaire.
 
 You install a plugin once. After that, describe what you need in plain English, and Claude uses the plugin when it
-fits.
+fits. The plugins also work in Codex, Gemini CLI, and ChatGPT: see
+[Using Codex, Gemini, or ChatGPT](#using-codex-gemini-or-chatgpt).
 
 **On this page**
 
@@ -17,7 +18,7 @@ fits.
 - [Is it safe to install?](#is-it-safe-to-install)
 - [Keep plugins up to date](#keep-plugins-up-to-date)
 - [Get help or report a problem](#get-help-or-report-a-problem)
-- [Using another AI assistant](#using-another-ai-assistant)
+- [Using Codex, Gemini, or ChatGPT](#using-codex-gemini-or-chatgpt)
 - [For developers and contributors](#for-developers-and-contributors)
 
 ## Install in Claude Code
@@ -181,26 +182,51 @@ Tell us what happened and what you expected to happen.
 If something felt confusing, that is worth reporting too. If you disagree with how a plugin does its analysis, report
 that as well: we treat a disagreement about method the same as a bug.
 
-## Using another AI assistant
+## Using Codex, Gemini, or ChatGPT
 
-The plugins are built on the open `SKILL.md` format, so their methods work in other AI assistants too. Only Claude
-gets the one-step marketplace install.
+The plugins are written in the open `SKILL.md` format, so they work outside Claude too. We tested the Codex and Gemini
+steps below in October 2026, with Codex CLI 0.163 and Gemini CLI 0.61.
 
-Outside Claude Code you get the method but not the tooling. Bundled scripts, referenced as
-`${CLAUDE_PLUGIN_ROOT}/scripts/...`, won't run, and you have to connect the secid server to your assistant yourself.
+Two things work differently outside Claude Code:
 
-**Codex CLI:** clone this repository, then link the skills into `~/.agents/skills/`. Codex needs each skill to sit
-directly inside that folder, and it follows links.
+- **The secid lookup server doesn't start.** Connect SecID's hosted server instead, with the command for your app
+  below. There is nothing to install.
+- **Some bundled helper scripts may not be found.** They are written for Claude Code. The plugins' methods still work.
 
-```bash
-git clone https://github.com/CloudSecurityAlliance/csa-plugins-official.git
-mkdir -p ~/.agents/skills && ln -s "$PWD"/csa-plugins-official/plugins/*/skills/*/ ~/.agents/skills/
+### Codex (CLI and desktop app)
+
+```text
+codex plugin marketplace add CloudSecurityAlliance/csa-plugins-official
+codex plugin add cwe-analysis@csa-plugins-official
 ```
 
-**Gemini CLI:** clone the repository as above, then link each skill you want, for example
-`/skills link <repo>/plugins/cwe-analysis/skills/cwe-analysis --scope user`. Check with `/skills list`.
+Then start a new Codex session. In the Codex desktop app, install plugins from **Plugins** once the marketplace is
+added. Codex does not install a plugin's dependencies for you: for `vulnerability-audit`, also add `cwe-analysis` and
+connect SecID.
 
-**ChatGPT (desktop or web):** zip a single skill folder, for example
+To connect SecID: `codex mcp add secid --url https://secid.cloudsecurityalliance.org/mcp`
+
+### Gemini CLI
+
+Gemini installs skills one at a time:
+
+```text
+gemini skills install https://github.com/CloudSecurityAlliance/csa-plugins-official.git --path plugins/cwe-analysis/skills/cwe-analysis
+```
+
+For another plugin, change both `cwe-analysis` parts to its name. Three plugins differ: `vulnerability-audit` has two
+skills (`skills/audit` and `skills/validate-findings`), `valid-ai-ted-scorer`'s skill is `skills/caiq-scorer`, and
+`secid` has no skill (connect SecID's server instead). Check what is installed with `gemini skills list`.
+
+To connect SecID: `gemini mcp add --transport http --scope user secid https://secid.cloudsecurityalliance.org/mcp`
+
+**Antigravity CLI** replaced Gemini CLI for unpaid and Google One users in June 2026. Put skill folders in
+`~/.gemini/antigravity-cli/skills/`, as Google's [migration guide](https://antigravity.google/docs/cli/gcli-migration/)
+describes. We have not tested Antigravity.
+
+### ChatGPT (web or desktop)
+
+Zip a single skill folder, for example
 `plugins/cwe-analysis/skills/cwe-analysis/`, and upload it under **Skills > Create > Upload from your computer**.
 Personal skills need a Business, Enterprise, Edu, or Healthcare plan, and the desktop and web apps don't share
 skills.
