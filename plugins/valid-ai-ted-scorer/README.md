@@ -75,8 +75,12 @@ codex plugin add valid-ai-ted-scorer@csa-plugins-official
 gemini skills install https://github.com/CloudSecurityAlliance/csa-plugins-official.git --path plugins/valid-ai-ted-scorer/skills/caiq-scorer
 ```
 
-The [main README](../../README.md#codex-and-gemini-cli) says what works differently in Codex and Gemini, and when its
-steps were tested. **This plugin's scoring has not been tested in Codex or Gemini.**
+**Antigravity CLI** (which replaced Gemini CLI for personal Google accounts): copy the
+`plugins/valid-ai-ted-scorer/skills/caiq-scorer` folder into `~/.gemini/antigravity-cli/skills/`.
+
+The [main README](../../README.md#codex-antigravity-and-gemini-cli) says what works differently in Codex, Antigravity
+and Gemini, and when its steps were tested. **This plugin's scoring has not been tested in Codex, Antigravity or
+Gemini.**
 
 ## Use it
 
