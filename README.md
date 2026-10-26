@@ -11,7 +11,7 @@ but have not yet run the plugins there ourselves.
 
 - [Install in the Claude app](#install-in-the-claude-app-web-or-desktop) (web or desktop)
 - [Install in ChatGPT](#install-in-chatgpt-web-or-desktop) (web or desktop)
-- [Install from the command line](#install-from-the-command-line): Claude Code, Codex, Gemini CLI
+- [Install from the command line](#install-from-the-command-line): Claude Code, Codex, Antigravity, Gemini CLI
 - [Available plugins](#available-plugins)
 - [Using a plugin](#using-a-plugin)
 - [Setting up your computer](#setting-up-your-computer) (only three plugins need this)
@@ -325,7 +325,7 @@ has screenshots of the ZIP download.
 
 ## Install from the command line
 
-For Claude Code, Codex and Gemini CLI. (Using the Claude app or ChatGPT instead? See the two sections above.)
+For Claude Code, Codex, Antigravity, and Gemini CLI. (Using the Claude app or ChatGPT instead? See the two sections above.)
 
 ### Claude Code
 
@@ -355,7 +355,7 @@ added.
 Plugins you install in the terminal also work in the Claude desktop app's **Code** tab and in VS Code on the same
 computer. You don't need to install them again.
 
-### Codex and Gemini CLI
+### Codex, Antigravity, and Gemini CLI
 
 The plugins are written in the open `SKILL.md` format, so they work outside Claude too. We tested the Codex and Gemini
 steps below in October 2026, with Codex CLI 0.163 and Gemini CLI 0.61.
@@ -379,9 +379,25 @@ connect SecID.
 
 To connect SecID: `codex mcp add secid --url https://secid.cloudsecurityalliance.org/mcp`
 
-#### Gemini CLI
+#### Antigravity CLI (Google's replacement for Gemini CLI)
 
-Gemini installs skills one at a time:
+Since 18 June 2026, Gemini CLI no longer works with free Google accounts or with Google AI Pro and Ultra
+subscriptions. Google moved those users to [Antigravity CLI](https://antigravity.google/download) (the `agy`
+command), which keeps Gemini CLI's skills. Copy each skill you want into Antigravity's skills folder, for example:
+
+```text
+git clone https://github.com/CloudSecurityAlliance/csa-plugins-official.git
+mkdir -p ~/.gemini/antigravity-cli/skills
+cp -R csa-plugins-official/plugins/cwe-analysis/skills/cwe-analysis ~/.gemini/antigravity-cli/skills/
+```
+
+That folder comes from Google's [migration guide](https://antigravity.google/docs/cli/gcli-migration/). The skill
+folders are the same as for Gemini CLI below. We have not tested Antigravity yet.
+
+#### Gemini CLI (paid API key or enterprise licence)
+
+Gemini CLI still works with a paid Gemini API key or an enterprise Gemini Code Assist licence. It installs skills one
+at a time:
 
 ```text
 gemini skills install https://github.com/CloudSecurityAlliance/csa-plugins-official.git --path plugins/cwe-analysis/skills/cwe-analysis
@@ -392,10 +408,6 @@ skills (`skills/audit` and `skills/validate-findings`), `valid-ai-ted-scorer`'s 
 `secid` has no skill (connect SecID's server instead). Check what is installed with `gemini skills list`.
 
 To connect SecID: `gemini mcp add --transport http --scope user secid https://secid.cloudsecurityalliance.org/mcp`
-
-**Antigravity CLI** replaced Gemini CLI for unpaid and Google One users in June 2026. Put skill folders in
-`~/.gemini/antigravity-cli/skills/`, as Google's [migration guide](https://antigravity.google/docs/cli/gcli-migration/)
-describes. We have not tested Antigravity.
 
 ## Available plugins
 
