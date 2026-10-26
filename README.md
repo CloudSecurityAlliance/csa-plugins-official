@@ -451,6 +451,10 @@ run small Python programs on your computer. The other plugins need nothing extra
 **Claude Code can do these steps for you.** Ask it, for example, "Install the Python packages the secid plugin
 needs," and approve the commands it shows you.
 
+**On a CSA laptop, run [CSA DesktopSetup](https://github.com/CloudSecurityAlliance/DesktopSetup) first.** One
+command on macOS or Windows installs Python, Git, Claude Code, Codex and the desktop AI apps, and adds this plugin
+marketplace for you. After that, you only need steps 2 and 3 below.
+
 ### Step 1. Get Python 3.11 or later
 
 First check whether you already have it. Open a terminal (on a Mac, the **Terminal** app; on Windows, **PowerShell**)
